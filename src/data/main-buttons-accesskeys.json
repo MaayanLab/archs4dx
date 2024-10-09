@@ -1,0 +1,31 @@
+{
+  "buttons": [
+    {
+      "id": "44",
+      "name": "create",
+      "text": "Create",
+      "icon_url": "/image/create-icon.svg",
+      "action": "create",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "45",
+      "name": "delete",
+      "text": "Delete",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "delete",
+      "separator": true,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    },
+    {
+      "id": "46",
+      "name": "Unselect All",
+      "text": "Unselect All",
+      "icon_url": "/image/unselect-icon.svg",
+      "action": "unselect",
+      "separator": false,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    }
+  ]
+}

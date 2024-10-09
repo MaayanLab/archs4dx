@@ -1,0 +1,94 @@
+{
+  "buttons": [
+    {
+      "id": "1",
+      "name": "refresh",
+      "text": "",
+      "icon_url": "/image/refresh-icon.svg",
+      "action": "refresh",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "2",
+      "name": "filters",
+      "text": "View Filters",
+      "icon_url": "/image/filter-icon.svg",
+      "action": "filter",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "3",
+      "name": "View Details",
+      "text": "View Details",
+      "icon_url": "/image/view-icon.svg",
+      "action": "view_details",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "4",
+      "name": "Copy Link",
+      "text": "Copy Link",
+      "icon_url": "/image/copy-icon.svg",
+      "action": "copy_link",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "5",
+      "name": "Download File",
+      "text": "Download file",
+      "icon_url": "/image/download-file-icon.svg",
+      "action": "download_file",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "6",
+      "name": "Download Selection",
+      "text": "Download Selection",
+      "icon_url": "/image/download-selection.svg",
+      "action": "download_selection",
+      "separator": false,
+      "show_for": "MULTIPLE"
+    },
+    {
+      "id": "10",
+      "name": "Download Results",
+      "text": "Download Results",
+      "icon_url": "/image/download-results.svg",
+      "action": "download_results",
+      "separator": false,
+      "show_for": "FILTERED"
+    },
+    {
+      "id": "7",
+      "name": "download metadata",
+      "text": "Download Metadata",
+      "icon_url": "/image/download-meta-icon.svg",
+      "action": "download_metadata",
+      "separator": true,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    },
+    {
+      "id": "8",
+      "name": "Download Collection",
+      "text": "Download Collection",
+      "icon_url": "/image/download-collection-2.svg",
+      "action": "download_collection",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "9",
+      "name": "Unselect All",
+      "text": "Unselect All",
+      "icon_url": "/image/unselect-icon.svg",
+      "action": "unselect",
+      "separator": false,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    }
+  ]
+}

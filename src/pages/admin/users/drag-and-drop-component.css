@@ -1,0 +1,14 @@
+.dropZone {
+  width: 100%;
+  min-height: 137px;
+  box-shadow: 0px 4px 39px rgba(0, 81, 99, 0.04);
+  border: 2px solid #b0c9cb;
+  border-radius: 12px;
+  padding: 20px 8px;
+}
+
+.clickText {
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.17px;
+}

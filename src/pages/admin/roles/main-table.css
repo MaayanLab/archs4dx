@@ -1,0 +1,17 @@
+.styled-select {
+  overflow: hidden;
+  overflow: -moz-hidden-unscrollable;
+  display: inline-block;
+  position: relative;
+  background-image: url("../../../image/line-select.svg");
+  background-repeat: no-repeat;
+  background-position: 81px;
+}
+
+.MuiSelect-icon {
+  background-image: url("../../../image/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-color: white;
+  background-position: 6px;
+  color: rgba(255, 255, 255, 0) !important;
+}

@@ -1,0 +1,32 @@
+.sidebarLink {
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: 0.46px;
+  letter-spacing: 0.46px;
+  text-transform: capitalize;
+  background: linear-gradient(90deg, #0f7f90 -8.75%, #00b08a 113.12%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+  margin: 0;
+}
+
+.userButton {
+  margin: 5px 0;
+  padding: 8px 15px;
+  width: fit-content;
+}
+
+.userButton:hover {
+  background: #eff4f5;
+  border-radius: 80px;
+}
+
+.userButtonActive {
+  background: #eff4f5;
+  margin: 5px 0;
+  border-radius: 80px;
+  padding: 8px 15px;
+  width: fit-content;
+}

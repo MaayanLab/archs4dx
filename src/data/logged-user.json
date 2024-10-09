@@ -1,0 +1,15 @@
+{
+    "id": 1,
+    "admin": false,
+    "uploader": true,	
+    "first_name": "Alexander",
+    "last_name": "Lachmann",
+    "email": "alexander.lachmann@gmail.com",
+    "image_url": "image/alex.jpg",
+    "roles": [1, 4, 5],
+    "collections": [],
+    "files": [],
+    "affiliation": "Mount Sinai Hospital",
+    "creation_date": "Mon, 11 Jul 2022 13:23:44 GMT",
+    "uuid": "36jhghddzZRvg"
+}

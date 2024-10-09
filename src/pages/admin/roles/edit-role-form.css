@@ -1,0 +1,16 @@
+
+.MuiOutlinedInput-root input {
+  padding: 5.5px 12px;
+}
+
+.MuiAutocomplete-root .MuiOutlinedInput-root .MuiAutocomplete-input {
+  padding: 0 !important;
+}
+
+.MuiAutocomplete-popupIndicator {
+  background-image: url("../../../image/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-color: white;
+  background-position: 9px;
+  color: rgba(255, 255, 255, 0) !important;
+}

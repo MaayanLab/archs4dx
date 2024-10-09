@@ -1,0 +1,28 @@
+{
+  "buttons": [
+    {
+      "id": "1",
+      "name": "refresh",
+      "text": "",
+      "icon_url": "/image/refresh-icon.svg",
+      "action": "function_name",
+      "separator": true
+    },
+    {
+      "id": "2",
+      "name": "download collection",
+      "text": "Download collection",
+      "icon_url": "/image/download-collection-icon.svg",
+      "action": "function_name",
+      "separator": false
+    },
+    {
+      "id": "3",
+      "name": "download metadata",
+      "text": "Download Metadata",
+      "icon_url": "/image/download-meta-icon.svg",
+      "action": "function_name",
+      "separator": true
+    }
+  ]
+}

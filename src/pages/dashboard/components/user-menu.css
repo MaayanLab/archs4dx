@@ -1,0 +1,70 @@
+.userLink {
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: 0.46px;
+  letter-spacing: 0.46px;
+  text-transform: capitalize;
+  color: #003541;
+  margin: 0 25px;
+  text-decoration: none;
+}
+
+.userLink:hover {
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: 0.46px;
+  letter-spacing: 0.46px;
+  text-transform: capitalize;
+  background: linear-gradient(90deg, #0f7f90 -8.75%, #00b08a 113.12%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+}
+
+.userLinkActive {
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: 0.46px;
+  letter-spacing: 0.46px;
+  text-transform: capitalize;
+  background: linear-gradient(90deg, #0f7f90 -8.75%, #00b08a 113.12%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 25px;
+  text-decoration: none;
+}
+
+.exitLink {
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: 0.46px;
+  letter-spacing: 0.46px;
+  text-transform: capitalize;
+  color: #003541;
+  margin: 0 25px;
+  text-decoration: none;
+}
+
+.modalLinks {
+  width: 50%;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 21px;
+  letter-spacing: 0.46px;
+  letter-spacing: 0.46px;
+  text-transform: capitalize;
+  margin: 12px 0;
+  padding: 0 30px;
+  padding: 0 15px;
+  text-decoration: none;
+  background: linear-gradient(90deg, #0f7f90 -8.75%, #00b08a 113.12%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.MuiDialog-paperWidthSm {
+  max-width: 654px !important;
+}

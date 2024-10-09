@@ -1,0 +1,36 @@
+{
+  "buttons": [
+    {
+      "id": "1",
+      "name": "refresh",
+      "text": "",
+      "icon_url": "/image/refresh-icon.svg",
+      "action": "function_name",
+      "separator": true
+    },
+    {
+      "id": "2",
+      "name": "Copy Collection Link",
+      "text": "Copy Collection Link",
+      "icon_url": "/image/copy-icon.svg",
+      "action": "function_name",
+      "separator": true
+    },
+    {
+      "id": "3",
+      "name": "Download Collection",
+      "text": "Download Collection",
+      "icon_url": "/image/download-collection-2.svg",
+      "action": "function_name",
+      "separator": true
+    },
+    {
+      "id": "4",
+      "name": "download metadata",
+      "text": "Download Metadata",
+      "icon_url": "/image/download-meta-icon.svg",
+      "action": "function_name",
+      "separator": false
+    }
+  ]
+}

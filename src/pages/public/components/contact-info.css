@@ -1,0 +1,11 @@
+.buttonsPros:hover {
+  background-color: #f38841 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+.buttonsWrapper:hover > .buttonsPros {
+  background-color: #f38841 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}

@@ -1,0 +1,103 @@
+{
+  "buttons": [
+    {
+      "id": "1",
+      "name": "refresh",
+      "text": "",
+      "icon_url": "/image/refresh-icon.svg",
+      "action": "refresh",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "2",
+      "name": "filters",
+      "text": "View Filters",
+      "icon_url": "/image/filter-icon.svg",
+      "action": "filter",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "3",
+      "name": "View Details",
+      "text": "View Details",
+      "icon_url": "/image/view-icon.svg",
+      "action": "edit",
+      "separator": false,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "4",
+      "name": "delete",
+      "text": "Delete",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "delete",
+      "separator": true,
+      "show_for": "SINGLE_REMOVE"
+    },
+    {
+      "id": "5",
+      "name": "delete",
+      "text": "Delete Files",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "delete",
+      "separator": true,
+      "show_for": "MULTIPLE_REMOVE"
+    },
+    {
+      "id": "7",
+      "name": "Copy Link",
+      "text": "Copy Link",
+      "icon_url": "/image/copy-icon.svg",
+      "action": "copy_link",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "8",
+      "name": "Download File",
+      "text": "Download file",
+      "icon_url": "/image/download-file-icon.svg",
+      "action": "download_file",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "9",
+      "name": "Download Selection",
+      "text": "Download Selection",
+      "icon_url": "/image/download-selection.svg",
+      "action": "download_selection",
+      "separator": false,
+      "show_for": "MULTIPLE"
+    },
+    {
+      "id": "10",
+      "name": "Download Results",
+      "text": "Download Results",
+      "icon_url": "/image/download-results.svg",
+      "action": "download_results",
+      "separator": false,
+      "show_for": "FILTERED"
+    },
+    {
+      "id": "17",
+      "name": "download metadata files",
+      "text": "Download Metadata",
+      "icon_url": "/image/download-meta-icon.svg",
+      "action": "download_files_select_metadata",
+      "separator": true,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    },
+    {
+      "id": "14",
+      "name": "Unselect All",
+      "text": "Unselect All",
+      "icon_url": "/image/unselect-icon.svg",
+      "action": "unselect",
+      "separator": false,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    }
+  ]
+}

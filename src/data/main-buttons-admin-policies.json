@@ -1,0 +1,67 @@
+{
+    "buttons": [
+      {
+        "id": "1",
+        "name": "refresh",
+        "text": "",
+        "icon_url": "/image/refresh-icon.svg",
+        "action": "refresh",
+        "separator": true,
+        "show_for": "ALL"
+      },
+      {
+        "id": "2",
+        "name": "filters",
+        "text": "View Filters",
+        "icon_url": "/image/filter-icon.svg",
+        "action": "filter",
+        "separator": true,
+        "show_for": "ALL"
+      },
+      {
+        "id": "6",
+        "name": "add policy",
+        "text": "Add New Policy",
+        "icon_url": "/image/create-icon.svg",
+        "action": "create",
+        "separator": false,
+        "show_for": "NONE"
+      },
+      {
+        "id": "3",
+        "name": "View Details",
+        "text": "View Details",
+        "icon_url": "/image/view-icon.svg",
+        "action": "view_details",
+        "separator": false,
+        "show_for": "SINGLE"
+      },
+      {
+        "id": "4",
+        "name": "delete",
+        "text": "Delete",
+        "icon_url": "/image/remove-icon.svg",
+        "action": "delete",
+        "separator": true,
+        "show_for": "SINGLE_REMOVE"
+      },
+      {
+        "id": "4",
+        "name": "delete policies",
+        "text": "Delete Policies",
+        "icon_url": "/image/remove-icon.svg",
+        "action": "delete",
+        "separator": true,
+        "show_for": "MULTIPLE"
+      },
+      {
+        "id": "14",
+        "name": "Unselect All",
+        "text": "Unselect All",
+        "icon_url": "/image/unselect-icon.svg",
+        "action": "unselect",
+        "separator": false,
+        "show_for": "SINGLE_OR_MULTIPLE"
+      }
+    ]
+  }

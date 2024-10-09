@@ -1,0 +1,184 @@
+{
+  "buttons": [
+    {
+      "id": "1",
+      "name": "refresh",
+      "text": "",
+      "icon_url": "/image/refresh-icon.svg",
+      "action": "refresh",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "2",
+      "name": "filters",
+      "text": "View Filters",
+      "icon_url": "/image/filter-icon.svg",
+      "action": "filter",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "18",
+      "name": "View Details  files",
+      "text": "View Details",
+      "icon_url": "/image/view-icon.svg",
+      "action": "view_details",
+      "separator": false,
+      "show_for": "SINGLE_FILES_COLLECTION"
+    },
+    {
+      "id": "3",
+      "name": "edit",
+      "text": "Edit",
+      "icon_url": "/image/edit-icon.svg",
+      "action": "edit",
+      "separator": false,
+      "show_for": "SINGLE_FILES"
+    },
+    {
+      "id": "4",
+      "name": "delete",
+      "text": "Delete",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "delete",
+      "separator": true,
+      "show_for": "SINGLE_OR_MULTIPLE_FILES"
+    },
+    {
+      "id": "24",
+      "name": "single remove",
+      "text": "Remove From Collection",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "remove",
+      "separator": true,
+      "show_for": "SINGLE_REMOVE"
+    },
+    {
+      "id": "21",
+      "name": "remove collections",
+      "text": "Remove From Collection",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "remove",
+      "separator": true,
+      "show_for": "MULTIPLE_COLLECTION"
+    },
+    {
+      "id": "5",
+      "name": "add to collection",
+      "text": "Add To Collection",
+      "icon_url": "/image/add-collection-icon.svg",
+      "action": "add_collection",
+      "separator": true,
+      "show_for": "SINGLE_OR_MULTIPLE_FILES"
+    },
+    {
+      "id": "6",
+      "name": "View Details",
+      "text": "View Details",
+      "icon_url": "/image/view-icon.svg",
+      "action": "view_details",
+      "separator": true,
+      "show_for": "SINGLE_SEARCH"
+    },
+    {
+      "id": "7",
+      "name": "Copy Link",
+      "text": "Copy Link",
+      "icon_url": "/image/copy-icon.svg",
+      "action": "copy_link",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "8",
+      "name": "Download File",
+      "text": "Download file",
+      "icon_url": "/image/download-file-icon.svg",
+      "action": "download_file",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "9",
+      "name": "Download Selection",
+      "text": "Download Selection",
+      "icon_url": "/image/download-selection.svg",
+      "action": "download_selection",
+      "separator": false,
+      "show_for": "MULTIPLE"
+    },
+    {
+      "id": "10",
+      "name": "Download Results",
+      "text": "Download Results",
+      "icon_url": "/image/download-results.svg",
+      "action": "download_results",
+      "separator": false,
+      "show_for": "FILTERED"
+    },
+    {
+      "id": "12",
+      "name": "Download Collection",
+      "text": "Download Collection",
+      "icon_url": "/image/download-collection-2.svg",
+      "action": "download_collection",
+      "separator": true,
+      "show_for": "ALL_SEARCH"
+    },
+    {
+      "id": "13",
+      "name": "Copy collection link",
+      "text": "Copy Collection Link",
+      "icon_url": "/image/copy-icon.svg",
+      "action": "copy_collection_link",
+      "separator": true,
+      "show_for": "NONE_COLLECTION_FILE"
+    },
+    {
+      "id": "15",
+      "name": "Upload File",
+      "text": "Upload File",
+      "icon_url": "/image/upload-icon.svg",
+      "action": "upload_files",
+      "separator": false,
+      "show_for": "UNSELECT_FILE"
+    },
+    {
+      "id": "16",
+      "name": "Download Collection files",
+      "text": "Download Collection",
+      "icon_url": "/image/download-collection-2.svg",
+      "action": "download_collection_files",
+      "separator": true,
+      "show_for": "NONE_COLLECTION_FILE"
+    },
+    {
+      "id": "11",
+      "name": "download metadata",
+      "text": "Download Metadata",
+      "icon_url": "/image/download-meta-icon.svg",
+      "action": "download_metadata",
+      "separator": true,
+      "show_for": "NONE_META"
+    },
+    {
+      "id": "17",
+      "name": "download metadata files",
+      "text": "Download Metadata",
+      "icon_url": "/image/download-meta-icon.svg",
+      "action": "download_files_select_metadata",
+      "separator": true,
+      "show_for": "SELECT_META"
+    },
+    {
+      "id": "14",
+      "name": "Unselect All",
+      "text": "Unselect All",
+      "icon_url": "/image/unselect-icon.svg",
+      "action": "unselect",
+      "separator": false,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    }
+  ]
+}

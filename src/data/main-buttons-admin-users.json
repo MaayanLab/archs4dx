@@ -1,0 +1,94 @@
+{
+  "buttons": [
+    {
+      "id": "1",
+      "name": "refresh",
+      "text": "",
+      "icon_url": "/image/refresh-icon.svg",
+      "action": "refresh",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "2",
+      "name": "filters",
+      "text": "View Filters",
+      "icon_url": "/image/filter-icon.svg",
+      "action": "filter",
+      "separator": true,
+      "show_for": "ALL"
+    },
+    {
+      "id": "3",
+      "name": "create user",
+      "text": "Create New User",
+      "icon_url": "/image/create-user-icon.svg",
+      "action": "create",
+      "separator": false,
+      "show_for": "NONE"
+    },
+    {
+      "id": "4",
+      "name": "Upload Bulk Users",
+      "text": "Upload Bulk Users",
+      "icon_url": "/image/upload-users-icon.svg",
+      "action": "upload_bulk",
+      "separator": false,
+      "show_for": "NONE"
+    },
+    {
+      "id": "11",
+      "name": "Add Role to this user",
+      "text": "Add Role To This User",
+      "icon_url": "/image/add-role-icon.svg",
+      "action": "add_role",
+      "separator": true,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "5",
+      "name": "View Details",
+      "text": "View Details",
+      "icon_url": "/image/view-icon.svg",
+      "action": "view_details",
+      "separator": false,
+      "show_for": "SINGLE"
+    },
+    {
+      "id": "6",
+      "name": "delete",
+      "text": "Delete",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "delete",
+      "separator": true,
+      "show_for": "SINGLE_REMOVE"
+    },
+    {
+      "id": "11",
+      "name": "Add Role to these users",
+      "text": "Add Role To These Users",
+      "icon_url": "/image/add-role-icon.svg",
+      "action": "add_role",
+      "separator": true,
+      "show_for": "MULTIPLE"
+    },
+    {
+      "id": "7",
+      "name": "delete",
+      "text": "Delete",
+      "icon_url": "/image/remove-icon.svg",
+      "action": "delete",
+      "separator": true,
+      "show_for": "MULTIPLE"
+    },
+    {
+      "id": "8",
+      "name": "Unselect All",
+      "text": "Unselect All",
+      "icon_url": "/image/unselect-icon.svg",
+      "action": "unselect",
+      "separator": false,
+      "show_for": "SINGLE_OR_MULTIPLE"
+    }
+  ]
+}

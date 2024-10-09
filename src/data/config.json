@@ -1,0 +1,142 @@
+{
+  "general": {
+    "projectname": "Innovative Health Data Hub",
+    "project_logo": "/image/logo.png",
+    "project_title": "Innovative Health Data Hub: Explore Available Research Related Datasets",
+    "project_icon": "/favicon.ico",
+    "socialmedia": [
+      {
+        "name": "issues",
+        "icon_url": "/image/github-icon.svg",
+        "alt_name": "Submit Issue",
+        "url": "https://github.com/MaayanLab/datacrossways/issues"
+      },
+      {
+        "name": "github",
+        "icon_url": "/image/github-icon.svg",
+        "alt_name": "Source Code",
+        "url": "https://github.com/MaayanLab/datacrossways"
+      }
+    ],
+    "general_contact": {
+      "adress": "One Gustave L. Levi Place, Box 1603, New York, NY 10029, USA",
+      "phone": "212-731-7071",
+      "email": "lymemind@mssm.edu"
+    },
+    "footer": {
+      "image_url": "/image/footer-logo.png",
+      "description": "The development of the Innovative Health Data Hub (IHDH) is made possible by generous support from the Steven & Alexandra Cohen Foundation. Launched in 2015, the initiative initially sought to advance research for tickborne illnesses, but since then expanded to cover other disease areas were there is an unmet need for investment.",
+      "links": [
+        {
+          "text": "Home",
+          "url": "https://ihdh.io/"
+        },
+        {
+          "text": "Documentation",
+          "url": "https://ihdh.io/user_guide.pdf"
+        },
+        {
+          "text": "Research Projects",
+          "url": "https://lymemind.org/research-projects"
+        },
+        {
+          "text": "Consortium",
+          "url": "https://lymemind.org/consortium"
+        },
+        {
+          "text": "Team",
+          "url": "https://lymemind.org/team"
+        },
+        {
+          "text": "About",
+          "url": "https://lymemind.org/about"
+        }
+      ]
+    }
+  },
+  "startpage": {
+    "title": "Innovative Health Data Hub",
+    "subtitle": "Innovative Health Data Hub (IHDH) provides a unified resource to deposit, archive, and share data collected by researchers funded by the Steven & Alexandra Cohen Foundation.",
+    "about": "Explore Available Research Related Datasets and Connect with other Researchers",
+    "news": {
+      "name": "IHDH",
+      "username": "LymeMind",
+      "profile_image_url": "https://pbs.twimg.com/profile_images/1284208844802076674/exJsbO5w_normal.png"
+    },
+    "contacts": [
+      {
+        "firstname": "Bennett",
+        "lastname": "Nemser",
+        "url_photo": "https://www.steveandalex.org/wp-content/uploads/2020/02/Ben_Out_DSC01277.jpg",
+        "email": "",
+        "role": "Chief Program Officer",
+        "bio": "Ben manages the foundation’s various health portfolios including the Cohen Psychedelic Research & Health Initiative and the Cohen Lyme & Tickborne Disease Initiative.  Dr. Nemser has a PhD in Public Health with extensive experience in global health systems in developing countries and related research.  Prior to joining the Foundation, Ben was a Senior Monitoring and Evaluation (M&E) Consultant for UNICEF and the World Health Organization (WHO).  After receiving a Master of Public Health from Columbia University, Ben worked for Columbia University as an Epidemiologist and Data Systems Manager.  In addition to his public health experience, Ben has a Master’s in Business Administration and a background in governmental finance and budgeting."
+      },
+      {
+        "firstname": "Alexander",
+        "lastname": "Lachmann",
+        "url_photo": "https://labs.icahn.mssm.edu/maayanlab/wp-content/uploads/sites/75/2020/06/lachmann_a.png",
+        "email": "alexander.lachmann@mssm.edu",
+        "role": "Data Scientist",
+        "bio": "Dr. Lachmann is a Research Assistant Professor in the Ma’ayan Laboratory of Computational Systems Biology and a member of the leadership team in the Mount Sinai Center for Bioinformatics at the Icahn School of Medicine at Mount Sinai. Dr. Lachmann earned his PhD in Biomedical Informatics from Columbia University and a Master’s degree in Computer Science from University of Aachen. Dr. Lachmann’s expertise is in the areas of systems biology and bioinformatics."
+      },
+      {
+        "firstname": "Avi",
+        "lastname": "Ma'ayan",
+        "url_photo": "https://labs.icahn.mssm.edu/maayanlab/wp-content/uploads/sites/75/2014/10/a_maayan_wide.png",
+        "email": "avi.maayan@mssm.edu",
+        "role": "Principal Investigator",
+        "bio": "Dr. Ma’ayan is a Mount Sinai Endowed Professor in Bioinformatics, Director of the Mount Sinai Center for Bioinformatics, Professor in the Department of Pharmacological Sciences, Professor in the Department of Artificial Intelligence and Human Health, and faculty member of the Icahn Genomics Institute. Dr. Ma'ayan is also a Principal Investigator of the NIH Common Fund Data Resource Center (DRC) for the Common Fund Data Ecosystem (CFDE), a NCI-funded ITCR resource center, a NIDDK-funded diabetes hypothesis platform, and the NCI-funded Mount Sinai Proteogenomic Data Analysis Center. The Ma'ayan Laboratory applies computational methods to study the inner workings of regulatory networks in mammalian cells. His research team applies machine learning and other statistical mining techniques to study how intracellular regulatory systems function as networks to control cellular processes such as differentiation, dedifferentiation, apoptosis and proliferation. The Ma'ayan Laboratory develops bioinformatics software applications to enable experimental biologists to form novel hypotheses from high-throughput omics datasets, while aiming to better understand the structure and function of regulatory networks in mammalian cellular and multi-cellular complex systems."
+      },
+      {
+        "firstname": "Heesu",
+        "lastname": "Kim",
+        "url_photo": "https://labs.icahn.mssm.edu/maayanlab/wp-content/uploads/sites/75/2022/11/c_kim.png",
+        "email": "heesu.kim@mssm.edu",
+        "role": "Systems Analyst",
+        "bio": "Ms. Kim is a Systems Analyst in the Ma’ayan Laboratory of Computational Systems Biology and Mount Sinai Center for Bioinformatics at the Icahn School of Medicine at Mount Sinai. Ms. Kim earned a Bachelor of Science in Computer Science and Information Engineering at Inha University (South Korea), and her MS in Business Analytics and MBA at Hult International Business School."
+      }
+    ],
+    "collections_highlight": {
+      "title": "Innovative Health Data Hub (IHDH) supports the inclusion of diverse data types including genomics, transcriptomics, and other omics as well as phenotypic data collected from patients, model organisms, and pathogens.",
+      "ids_list": [2]
+    },
+    "general_contact": {
+      "adress": "One Gustave L. Levi Place, Box 1603, New York, NY 10029, USA",
+      "phone": "212-731-7071",
+      "email": "support@ihdh.io"
+    },
+    "sso": [
+      {
+        "service": "Google",
+        "icon_service": "/image/google-icon.svg",
+        "url": "https://BASE_URL/api/user/login/google"
+      },
+      {
+        "service": "ORCID",
+        "icon_service": "/image/orcid-icon.svg",
+        "url": "https://BASE_URL/api/user/login/orcid"
+      }
+    ],
+    "twitter": {
+      "username": "lymemind"
+    }
+  },
+  "request_data": {
+    "instructions": "To request data access, please contact the admin by email. We will then work with you to provide all the required permissions, if appropriate. Remember to declare which collections you would like to access.",
+    "contact": {
+      "name": "Alexander Lachmann",
+      "email": "alexander.lachmann@mssm.edu"
+    }
+  },
+  "my_files_page": {
+    "upload_files": {
+      "max_n_files": 5,
+      "max_size": 42949672960,
+      "large_size": 10485760,
+      "chunk_size": 5242880
+    }
+  },
+  "n_files_download": 5,
+  "date_format": "MM/dd/yyyy"
+}
