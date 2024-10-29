@@ -82,7 +82,7 @@ export const MainHeader = ({ user }) => {
                 }}
               >
                 <img src={backIcon} alt="Back icon" />
-                My Files
+                My Files 1
               </Link>
               <Typography color="#005163">
                 {collection.id === 1 ? "Unassigned" : collection.name}

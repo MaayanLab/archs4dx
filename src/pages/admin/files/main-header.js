@@ -51,7 +51,7 @@ export const MainFilesHeader = ({ user }) => {
                 }}
               >
                 <img src={backIcon} alt="Back icon" />
-                My Files
+                My Files 4
               </Link>
               <Typography color="#005163">{collection.name}</Typography>
             </Breadcrumbs>

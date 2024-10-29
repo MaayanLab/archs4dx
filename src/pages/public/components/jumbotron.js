@@ -318,14 +318,14 @@ export const Jumbotron = () => {
                       />
 
                       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                      <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" sx={{
-                        fontSize: "14px",
-                        color: "black"
-                      }}
+                      <IconButton color="primary" aria-label="directions" sx={{
+                          fontSize: "14px",
+                          color: "black",
+                          p: '10px' 
+                        }}
                         className="btn btn-info my-2 my-sm-0"
                         type="button"
                         onClick={addEmail}
-                        color="primary"
                       >
                         Keep Me Updated
                       </IconButton>

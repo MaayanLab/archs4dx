@@ -28,6 +28,7 @@ import { useQuery } from "react-query";
 import { getLoggedUser } from "../../../api/user";
 import { deepOrange } from '@mui/material/colors';
 import data from "../../../data/config.json";
+import { styled } from "@mui/system";
 
 const style = {
   position: "absolute",
@@ -41,6 +42,14 @@ const style = {
   borderRadius: "4px",
   boxShadow: "0px 0px 6px rgba(0, 43, 52, 0.25)",
 };
+
+const MButton = styled(Button)(({ theme }) => ({
+  transition: 'color 0.3s ease, background-color 0.3s ease',
+  '&:hover': {
+    color: '#fff',
+    backgroundColor: '#0F7F90', // Hover color
+  }}))
+
 
 export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
   
@@ -78,6 +87,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
   if (error) return "There was a problem loading this page";
   const roles = user.roles.map((entry) => entry.name);
   return (
+    <>
     <Toolbar
       sx={{
         position: "relative",
@@ -131,28 +141,46 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
         )}
         {!sidebarOpen && (
           <>
-            <Typography component="div" sx={{ marginLeft: "99px", width: "216px" }}>
+            <Typography component="div" sx={{ marginLeft: "30px", width: "150px" }}>
               <Link to="/">
                 <img src={logo} alt="logo" />
               </Link>
             </Typography>
-
-            
           </>
         )}
       </Box>
-      <Link className="userLink" to="/">
-        Home
-      </Link>
-      <Link
-        to="/search"
-        className={
-          splitLocation[1] === "search" ? "userLinkActive" : "userLink"
-        }
-      >
-        Search
-      </Link>
+      
+      <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="searchButton mbutton"
+          >
+            Search
+          </MButton>
+          <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="visualizeButton mbutton"
+          >
+            Visualize
+          </MButton>
+          <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="downloadButton mbutton"
+          >
+            Download
+          </MButton>
 
+          <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="helpButton mbutton"
+          >
+            Help
+          </MButton>
+
+        {/*
       {(roles.includes("uploader") || roles.includes("admin")) && (
         <Link
           to="/myfiles"
@@ -163,6 +191,8 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
           My files
         </Link>
       )}
+        */}
+
       {roles.includes("admin") && (
         <Link
           to="/admin/users"
@@ -343,5 +373,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
         </Box>
       </Modal>
     </Toolbar>
+  
+    </>
   );
 };
