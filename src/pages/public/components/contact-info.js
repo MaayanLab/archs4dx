@@ -36,26 +36,7 @@ const Container = styled("div")(({ theme }) => ({
 export const ContactInformation = () => {
   return (
     <Container maxWidth="false" disableGutters={true}>
-      <Box
-        className="blobContact"
-        sx={{
-          position: "absolute",
-          top: "-241px",
-        }}
-      >
-        <img src={blobContat} alt="blob gradient" />
-      </Box>
-      <Box
-        className="blobContact"
-        sx={{
-          position: "absolute",
-          top: "-146px",
-          zIndex: "2",
-        }}
-      >
-        <img src={blobContat2} alt="blob gradient" />
-      </Box>
-
+     
       <Typography variant="subtitle1" className="titleSection">
         Contact information
       </Typography>
@@ -63,7 +44,7 @@ export const ContactInformation = () => {
         className="boxCarousel"
         sx={{
           maxWidth: "1116px",
-          margin: "80px auto",
+          margin: "0px auto",
         }}
       >
         <Carousel
@@ -107,11 +88,11 @@ export const ContactInformation = () => {
                   <Grid item xs={1}></Grid>
                   <Grid
                     item
-                    xs={12}
-                    lg={3}
+                    sm={12}
+                    lg={1}
                     sx={{
-                      marginTop: "45px",
-                      marginRight: "22px",
+                      marginTop: "100px",
+                      marginRight: "0px",
                       zIndex: 1,
                     }}
                   >
@@ -119,7 +100,7 @@ export const ContactInformation = () => {
                       className="contactsAvatar"
                       src={url_photo}
                       alt="Personal"
-                      sx={{ width: 347, height: 347 }}
+                      sx={{ width: 147, height: 147 }}
                     />
                   </Grid>
                   <Grid
@@ -128,7 +109,7 @@ export const ContactInformation = () => {
                     lg={7}
                     sx={{
                       background: "#FAFAFA",
-                      padding: "60px 96px",
+                      padding: "40px 96px",
                       width: "636px",
                     }}
                   >

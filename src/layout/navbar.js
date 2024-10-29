@@ -14,6 +14,15 @@ import data from "../data/config.json";
 import { Link, useNavigate } from "react-router-dom";
 import { TermsConditionsModal } from "./terms-and-conditions";
 import { styled } from "@mui/system";
+import { keyframes } from '@mui/system';
+
+const CustomStyles = styled('div')({ 
+  '@media (max-width: 900px)': {
+    '.hide-on-small': {
+      display: 'none',
+    },
+  },
+});
 
 const loginModalStyle = {
   position: "absolute",
@@ -29,15 +38,32 @@ const loginModalStyle = {
   borderRadius: "8px",
 };
 
+const MButton = styled(Button)(({ theme }) => ({
+  transition: 'color 0.3s ease, background-color 0.3s ease',
+  '&:hover': {
+    color: '#fff',
+    backgroundColor: '#0F7F90', // Hover color
+  }}))
+
+
 const Toolbar = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   position: "relative",
   "& .navbarLogo": {
-    width: "216px",
+    width: "160px",
   },
-  [theme.breakpoints.down("md")]: {
+  [theme.breakpoints.down("sm")]: {
+    margin: "auto 10px",
+    "& .navbarLogo": {
+      width: "80px",
+    },
+    "& .termsButton": {
+      display: "none",
+    },
+  },
+  [theme.breakpoints.up("sm")]: {
     margin: "auto 20px",
     "& .navbarLogo": {
       width: "140px",
@@ -47,9 +73,9 @@ const Toolbar = styled("div")(({ theme }) => ({
     },
   },
   [theme.breakpoints.up("md")]: {
-    margin: "auto 160px",
+    margin: "auto 30px",
     "& .navbarLogo": {
-      width: "216px",
+      width: "160px",
     },
   },
 }));
@@ -85,7 +111,7 @@ export const NavBar = () => {
         }}
       >
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1}}>
             <Link to="/">
               <img
                 src={data.general.project_logo}
@@ -94,14 +120,47 @@ export const NavBar = () => {
               />
             </Link>
           </Typography>
-          <Button
+          <MButton
             variant="text"
             onClick={handleOpenTerms}
-            className="termsButton"
+            className="searchButton mbutton"
           >
-            Terms and Conditions
-          </Button>
-          <TermsConditionsModal isOpen={openTerms} onClose={handleCloseTerms} />
+            Search
+          </MButton>
+          <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="visualizeButton mbutton"
+          >
+            Visualize
+          </MButton>
+          <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="downloadButton mbutton"
+          >
+            Download
+          </MButton>
+
+          
+          <CustomStyles>
+          <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="chromeButton mbutton hide-on-small"
+          >
+            Chrome Extension
+          </MButton>
+          </CustomStyles>
+          
+
+          <MButton
+            variant="text"
+            onClick={handleOpenTerms}
+            className="helpButton mbutton"
+          >
+            Help
+          </MButton>
           {data.startpage.sso.length > 1 ? (
             <Button variant="primary" onClick={handleOpen}>
               Log In
@@ -143,7 +202,7 @@ export const NavBar = () => {
                     variant="body2"
                     sx={{ color: "#0F7F90" }}
                   >
-                    Login with one of this options
+                    Login with one of these options
                   </Typography>
                 </Grid>
                 <Grid item justifyContent="flex-end" marginRight="-10px">
@@ -167,9 +226,9 @@ export const NavBar = () => {
                 ))}
               </Box>
               <Typography id="modal-modal-description" variant="body4">
-                Note: IHDH uses Google for authentication purposes
-                only. The application will not have access to your private data,
-                and will not send you any e-mails.
+                Note: ARCHS4 uses OAuth for authentication purposes only.
+            The application will not have access to your private data, and will
+            not send you any e-mails.
               </Typography>
             </Box>
           </Modal>

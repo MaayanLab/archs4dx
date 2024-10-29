@@ -55,32 +55,38 @@ export const FooterSection = () => {
             height: "100%",
           }}
         >
-          <Grid item xs={12} lg={1} className="imageFooter">
+          <Grid item 
+            xs={12} 
+            md={2} 
+            className="imageFooter">
             <img
               src={data.general.footer.image_url}
               alt="footer logo"
               style={{ width: "111px" }}
             />
           </Grid>
-          <Grid item xs={12} lg={5} sx={{ padding: "0 25px" }}>
+          <Grid item xs={8} md={6} sx={{ padding: "0 25px", textAlign: "center"}}>
             <Typography>{data.general.footer.description}</Typography>
           </Grid>
-          <Grid item xs={0} lg={1}></Grid>
           <Grid
             item
             xs={1}
-            sx={{ borderLeft: "1px solid #B0C9CB", height: "100%" }}
+            sm={1}
+            md={1}
+            lg={1}
+            sx={{ borderLeft: "1px solid #B0C9CB", height: "120px" }}
           ></Grid>
           <Grid
             item
-            xs={7}
-            lg={2}
+            xs={3}
+            md={3}
             sx={{
               display: "flex",
               flexDirection: "column",
               padding: "25px 0",
               margin: "auto 0",
               justifyContent: "center",
+              
             }}
           >
             {data.general.footer.links.map(({ text, url }) => (
@@ -89,37 +95,7 @@ export const FooterSection = () => {
               </Link>
             ))}
           </Grid>
-          <Grid
-            item
-            xs={3}
-            lg={1}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              margin: "auto 15px",
-              position: "relative",
-            }}
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "-154px",
-              }}
-              className="blobBox"
-            >
-              <img src={blobImg} alt="Blob grandient" />
-            </Box>
-            <Box
-              sx={{
-                width: 106,
-                height: 93,
-                marginTop: "30px",
-              }}
-            >
-              
-            </Box>
-          </Grid>
+          
         </Grid>
       </Box>
       <Box
@@ -132,24 +108,36 @@ export const FooterSection = () => {
         }}
       >
         <Grid container>
-          <Grid item xs={12} lg={8}>
+          <Grid item xs={3} lg={3} className="rightsLogo">
+            <img
+              src={data.general.lab_logo}
+              alt="logo"
+              style={{ width: "140px", height: "auto"}}
+            />
+          </Grid>
+          <Grid item xs={6} lg={6} className="rightsLogo"></Grid>
+          <Grid item xs={3} lg={3} className="rightsLogo">
+            <img
+              src={data.general.mssm_logo}
+              alt="logo"
+              style={{ width: "140px", height: "auto" }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Typography
               className="rightsText"
               sx={{
-                fontWeight: 500,
+                textAlign: "center",
+                fontWeight: 400,
               }}
             >
               © 2024 {data.general.projectname}. All rights reserved.
             </Typography>
           </Grid>
-          <Grid item xs={12} lg={4} className="rightsLogo">
-            <img
-              src={data.general.project_logo}
-              alt="logo"
-              style={{ width: "182px", height: "auto" }}
-            />
-          </Grid>
+
         </Grid>
+
       </Box>
     </Container>
   );

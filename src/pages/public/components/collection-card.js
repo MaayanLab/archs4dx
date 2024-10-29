@@ -176,7 +176,7 @@ export const CollectionCard = ({ id }) => {
                 variant="body2"
                 sx={{ color: "#0F7F90" }}
               >
-                Login with one of this options
+                Login with one of these options
               </Typography>
             </Grid>
             <Grid item justifyContent="flex-end" marginRight="-10px">
@@ -192,6 +192,7 @@ export const CollectionCard = ({ id }) => {
                 key={i}
                 onClick={() => handleLoginRedirection(url)}
               >
+
                 <Box marginRight="13px" marginTop="5px">
                   <img src={icon_service} alt="icon service" />
                 </Box>
@@ -200,10 +201,11 @@ export const CollectionCard = ({ id }) => {
             ))}
           </Box>
           <Typography id="modal-modal-description" variant="body4">
-            Note: IHDH uses Google for authentication purposes only.
+            Note: ARCHS4 uses OAuth for authentication purposes only.
             The application will not have access to your private data, and will
             not send you any e-mails.
           </Typography>
+
         </Box>
       </Modal>
     </Grid>

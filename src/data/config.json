@@ -1,47 +1,45 @@
 {
   "general": {
-    "projectname": "Innovative Health Data Hub",
+    "projectname": "ARCHS4",
     "project_logo": "/image/logo.png",
-    "project_title": "Innovative Health Data Hub: Explore Available Research Related Datasets",
+    "mssm_logo": "/image/mssm_logo.png",
+    "lab_logo": "/image/lab_logo.png",
+    "project_title": "Massive Mining of Publicly Available RNA-seq Data from Human and Mouse",
     "project_icon": "/favicon.ico",
     "socialmedia": [
       {
         "name": "issues",
         "icon_url": "/image/github-icon.svg",
         "alt_name": "Submit Issue",
-        "url": "https://github.com/MaayanLab/datacrossways/issues"
+        "url": "https://github.com/MaayanLab/archs4dx/issues"
       },
       {
         "name": "github",
         "icon_url": "/image/github-icon.svg",
         "alt_name": "Source Code",
-        "url": "https://github.com/MaayanLab/datacrossways"
+        "url": "https://github.com/MaayanLab/archs4dx"
       }
     ],
     "general_contact": {
       "adress": "One Gustave L. Levi Place, Box 1603, New York, NY 10029, USA",
       "phone": "212-731-7071",
-      "email": "lymemind@mssm.edu"
+      "email": "alexander.lachmann@mssm.edu"
     },
     "footer": {
-      "image_url": "/image/footer-logo.png",
-      "description": "The development of the Innovative Health Data Hub (IHDH) is made possible by generous support from the Steven & Alexandra Cohen Foundation. Launched in 2015, the initiative initially sought to advance research for tickborne illnesses, but since then expanded to cover other disease areas were there is an unmet need for investment.",
+      "image_url": "/image/logo.png",
+      "description": "The development of the ARCHS4 project is made possible by NCI grant xxx. ",
       "links": [
         {
           "text": "Home",
-          "url": "https://ihdh.io/"
+          "url": "https://maayanlab.cloud/archs4/"
         },
         {
           "text": "Documentation",
-          "url": "https://ihdh.io/user_guide.pdf"
+          "url": "https://maayanlab.cloud/archs4/user_guide.pdf"
         },
         {
           "text": "Research Projects",
-          "url": "https://lymemind.org/research-projects"
-        },
-        {
-          "text": "Consortium",
-          "url": "https://lymemind.org/consortium"
+          "url": "https://maayanlab.cloud/archs4/research-projects"
         },
         {
           "text": "Team",
@@ -49,29 +47,21 @@
         },
         {
           "text": "About",
-          "url": "https://lymemind.org/about"
+          "url": "https://maayanlab.cloud/archs4/about"
         }
       ]
     }
   },
   "startpage": {
-    "title": "Innovative Health Data Hub",
-    "subtitle": "Innovative Health Data Hub (IHDH) provides a unified resource to deposit, archive, and share data collected by researchers funded by the Steven & Alexandra Cohen Foundation.",
-    "about": "Explore Available Research Related Datasets and Connect with other Researchers",
+    "title": "ARCHS4",
+    "subtitle": "Massive Mining of Publicly Available RNA-seq Data from Human and Mouse",
+    "about": "Machine learning ready RNA-seq data from publically available gene expression repositories.",
     "news": {
-      "name": "IHDH",
-      "username": "LymeMind",
+      "name": "ARCHS4",
+      "username": "ARCHS4",
       "profile_image_url": "https://pbs.twimg.com/profile_images/1284208844802076674/exJsbO5w_normal.png"
     },
     "contacts": [
-      {
-        "firstname": "Bennett",
-        "lastname": "Nemser",
-        "url_photo": "https://www.steveandalex.org/wp-content/uploads/2020/02/Ben_Out_DSC01277.jpg",
-        "email": "",
-        "role": "Chief Program Officer",
-        "bio": "Ben manages the foundation’s various health portfolios including the Cohen Psychedelic Research & Health Initiative and the Cohen Lyme & Tickborne Disease Initiative.  Dr. Nemser has a PhD in Public Health with extensive experience in global health systems in developing countries and related research.  Prior to joining the Foundation, Ben was a Senior Monitoring and Evaluation (M&E) Consultant for UNICEF and the World Health Organization (WHO).  After receiving a Master of Public Health from Columbia University, Ben worked for Columbia University as an Epidemiologist and Data Systems Manager.  In addition to his public health experience, Ben has a Master’s in Business Administration and a background in governmental finance and budgeting."
-      },
       {
         "firstname": "Alexander",
         "lastname": "Lachmann",
@@ -98,13 +88,13 @@
       }
     ],
     "collections_highlight": {
-      "title": "Innovative Health Data Hub (IHDH) supports the inclusion of diverse data types including genomics, transcriptomics, and other omics as well as phenotypic data collected from patients, model organisms, and pathogens.",
+      "title": "ARCHS4 data repository with series file downloads and machine learning ready bulk downloads.",
       "ids_list": [2]
     },
     "general_contact": {
       "adress": "One Gustave L. Levi Place, Box 1603, New York, NY 10029, USA",
       "phone": "212-731-7071",
-      "email": "support@ihdh.io"
+      "email": "alexander.lachmann@mssm.edu"
     },
     "sso": [
       {
@@ -119,7 +109,7 @@
       }
     ],
     "twitter": {
-      "username": "lymemind"
+      "username": "archs4"
     }
   },
   "request_data": {

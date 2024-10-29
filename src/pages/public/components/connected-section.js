@@ -3,7 +3,7 @@ import data from "../../../data/config.json";
 import { styled } from "@mui/system";
 
 const Container = styled("div")(({ theme }) => ({
-  padding: "120px 0",
+  padding: "80px 0",
   textAlign: "center",
   [theme.breakpoints.down("lg")]: {
     padding: "40px 0",

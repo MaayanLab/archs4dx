@@ -7,6 +7,7 @@ import { StayConnected } from "./components/connected-section";
 import { ContactInformation } from "./components/contact-info";
 import { ContactUs } from "./components/contact-us";
 import { Jumbotron } from "./components/jumbotron";
+
 import { NewsSection } from "./components/news-section";
 import data from "../../data/config.json";
 import { UserMenu } from "../dashboard/components/user-menu";
@@ -77,7 +78,7 @@ export const PublicPage = () => {
         <link rel="icon" type="image/png" href={data.general.project_icon} />
         <meta
           name="description"
-          content="Innovative Health Data Hub: IHDH provides a unified resource to deposit, archive, and share data collected by researchers funded by the Cohen Lyme & Tickborne Disease Initiative."
+          content="ARCHS4"
         />
       </Helmet>
       {hasUserId ? (
@@ -87,12 +88,12 @@ export const PublicPage = () => {
       ) : (
         <NavBar />
       )}
-      <Jumbotron />
-      <AvailableData />
-      {hasUserId && <DataCollections />}
+      <Jumbotron sx={{boxShadow: 'none'}}/>
+      {/* <AvailableData /> */}
+      {/*hasUserId && <DataCollections /> */}
       {/*<NewsSection /> */}
       {/*<ContactInformation />*/}
-      <ContactUs />
+      {/*<ContactUs />*/}
       <StayConnected />
       <FooterSection />
     </>
