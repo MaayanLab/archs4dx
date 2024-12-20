@@ -1,0 +1,82 @@
+/* Base menu styling */
+.menu-v2, .menu-v2 ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: block;
+    position: relative;
+    z-index: 9;
+    font-size: 0;
+}
+
+.menu-v2 li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.3s ease;
+    align-items: center;
+    height: 28px;
+}
+
+.menu-v2 li a {
+    display: block;
+    font-size: 16px;
+    line-height: 26px;
+    padding-left: 16px;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+/* Top level menu items */
+.menu-v2 {
+    width: 260px;
+    border-radius: 5px;
+}
+
+.menu-v2 li:hover > a {
+    background-color: #efefef;
+}
+
+.menu-v2 a
+{
+    background-image:url('../../../image/arrow.png');
+    background-repeat: no-repeat;
+    background-position: 97% 50%;
+}
+
+.menu-v2 ul li a
+{
+    background-image: none;
+}
+
+.menu-v2 li ul li:hover a {
+    background-color: #9cfbd1; /* Green highlight for second-level items */
+}
+
+/* Sub level menu items */
+.menu-v2 li ul {
+    position: absolute;
+    width: 160px; /* Sub Menu Items width */
+    margin-top: -32px;
+    margin-left: 260px;
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 4px 0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.menu-v2 li ul li {
+    background: rgba(255, 255, 255, 0.86);
+}
+
+.menu-v2 ul li:hover, .menu-v2 ul li.onhover {
+    background-color: #FFF;
+}
+
+/* Removing redundant properties */
+.menu-v2 li, .menu-v2 a {
+    zoom: 1; /* Hacks for IE6, IE7 */
+}

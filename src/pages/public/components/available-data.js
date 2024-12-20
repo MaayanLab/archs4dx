@@ -1,6 +1,5 @@
 import { Grid, Box, Typography } from "@mui/material";
-import blobAv from "../../../image/blob-available-02.svg";
-import minBlobAv from "../../../image/blob-available-03.svg";
+
 import avaIcon from "../../../image/available-icon.svg";
 import avaIcon1 from "../../../image/available-icon-1.svg";
 import avaIcon2 from "../../../image/available-icon-2.svg";
@@ -65,13 +64,13 @@ export const AvailableData = () => {
           sx={{ position: "absolute", right: "22%", top: "-195px" }}
           className="boxImage1"
         >
-          <img src={blobAv} alt="Blob with grandient" />
+
         </Box>
         <Box
           sx={{ position: "absolute", right: "15%", top: "-37px" }}
           className="boxImage2"
         >
-          <img src={minBlobAv} alt="Blob with grandient" />
+
         </Box>
       </Box>
 

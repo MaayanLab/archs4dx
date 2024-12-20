@@ -1,7 +1,7 @@
 import { Grid, Box, Link, Typography } from "@mui/material";
-import blobImg from "../image/footer-blob-gradient.svg";
 import data from "../data/config.json";
 import { styled } from "@mui/system";
+import { CookieBanner } from "./cookie";
 
 const Container = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("lg")]: {
@@ -42,7 +42,7 @@ export const FooterSection = () => {
         sx={{
           background: "#FAFAFA",
           position: "relative",
-          height: "276px",
+          height: "200px",
           bottom: 0,
         }}
       >
@@ -50,7 +50,7 @@ export const FooterSection = () => {
           container
           className="gridContainer"
           sx={{
-            padding: "0px 80px 0 160px",
+            padding: "0px 20px 0 160px",
             alignItems: "center",
             height: "100%",
           }}
@@ -101,7 +101,7 @@ export const FooterSection = () => {
       <Box
         className="rightsBox"
         sx={{
-          height: "181px",
+          height: "141px",
           margin: "auto 160px",
           display: "flex",
           alignItems: "center",
@@ -124,7 +124,7 @@ export const FooterSection = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "30px" }}>
             <Typography
               className="rightsText"
               sx={{
@@ -139,6 +139,7 @@ export const FooterSection = () => {
         </Grid>
 
       </Box>
+      <CookieBanner/>
     </Container>
   );
 };

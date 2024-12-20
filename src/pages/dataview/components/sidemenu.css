@@ -1,0 +1,103 @@
+.scatterselection {
+    cursor: pointer;
+    width: 70px;
+    height: 70px;
+    border: 4px solid black; 
+    border-radius: 5px;
+    background-color: yellow;
+    transition: 0.4;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    flex-direction: column;
+}
+
+.scatterselection:hover {
+    box-shadow: 0 0 5px rgb(255, 236, 140), 0 0 5px rgb(255, 236, 140), 0 0 30px rgb(255, 236, 140);
+}
+
+
+.scatterselection:hover img{
+    transition: all 0.65s;
+    transform: rotateY(360deg);
+  }
+
+  .dtoggle {
+    z-index: 1;
+    background-color: rgb(232, 225, 225, 0.8);
+    border-radius: 10px;
+    border: 0px solid rgba(205, 205, 205, 0.7);
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: -50px;
+    backdrop-filter: blur(4px);
+  }
+
+  .downloadexp {
+    background-color: rgb(42, 205, 105);
+    border-radius: 5px;
+    height: 20px;
+    width: 80px;
+    display: flex;
+    color: white;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+  }
+
+  .downloadexp:hover {
+    background-color: rgb(46, 226, 133);
+  }
+
+  .nodecor {
+    text-decoration: none !important;
+  }
+
+  .colorpicker {
+    width: 200px;
+    color: white;
+    font-weight: 800;
+    height: 34px;
+    border-radius: 5px;
+    background-color: #55b4d1;
+    
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.8s ease-out;
+    border: 0px solid grey;
+  }
+
+  .colorpicker:hover{
+    background-color: #3794b1;
+  }
+
+  .queryrow {
+    transition: background-color 0.2s ease;
+  }
+
+  .queryrow:hover {
+    background-color: #dff8ff;
+  }
+
+  .querytableheader {
+    background-color: #dff8ff;
+    border-radius: 8px;
+  }
+
+  .querytableheader th:first-child{
+    border-radius:10px 0 0 10px;
+  }
+  
+  .querytableheader th:last-child{
+    border-radius:0 10px 10px 0;
+  }
+

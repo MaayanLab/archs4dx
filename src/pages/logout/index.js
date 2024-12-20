@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Paper, Typography, Box, Grid, Avatar } from "@mui/material";
-import blobContat from "../../image/blob-available-02.svg";
-import blobContat2 from "../../image/blob-contact.svg";
 import { styled } from "@mui/system";
 import { FooterSection } from "../../layout/compactfooter";
 
@@ -53,7 +51,7 @@ export const LogoutPage = () => {
               top: "-241px",
             }}
           >
-            <img src={blobContat} alt="blob gradient" />
+            
           </Box>
           <Box
             className="blobContact"
@@ -63,7 +61,7 @@ export const LogoutPage = () => {
               zIndex: "2",
             }}
           >
-            <img src={blobContat2} alt="blob gradient" />
+            
           </Box>
     
           <Typography variant="subtitle1" className="titleSection">

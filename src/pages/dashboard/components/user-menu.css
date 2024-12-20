@@ -68,3 +68,18 @@
 .MuiDialog-paperWidthSm {
   max-width: 654px !important;
 }
+
+.icon-spacing {
+  margin-right: 8px; /* Adjust the margin value as needed */
+}
+
+.custom-menu ul {
+  display: flex; /* to set it horizontally if needed */
+  flex-direction: column; /* to force vertical stacking */
+  list-style: none; /* reset list styles */
+  /* other properties as needed */
+}
+
+.custom-menu ul::before {
+  content: none; /* remove the vertical line */
+}

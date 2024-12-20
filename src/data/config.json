@@ -1,10 +1,10 @@
 {
   "general": {
     "projectname": "ARCHS4",
-    "project_logo": "/image/logo.png",
+    "project_logo": "/image/archs4vector.svg",
     "mssm_logo": "/image/mssm_logo.png",
     "lab_logo": "/image/lab_logo.png",
-    "project_title": "Massive Mining of Publicly Available RNA-seq Data from Human and Mouse",
+    "project_title": "ARCHS4",
     "project_icon": "/favicon.ico",
     "socialmedia": [
       {

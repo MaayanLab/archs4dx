@@ -1,0 +1,74 @@
+[
+    {
+      "title": "Bone",
+      "examples": ["MG63", "K562"]
+    },
+    {
+      "title": "Brain",
+      "examples": ["DAOY", "IMR32", "SKNSH"]
+    },
+    {
+      "title": "Breast / Mammary",
+      "examples": ["MCF7", "MCF10", "MDAMB231", "MDAMB468", "SKBR3", "T47D"]
+    },
+    {
+      "title": "Cervix",
+      "examples": ["HELA"]
+    },
+    {
+      "title": "Colon",
+      "examples": ["HCT116", "HT29", "RKO"]
+    },
+    {
+      "title": "Connective",
+      "examples": ["HT1080", "NHDF"]
+    },
+    {
+      "title": "Endothelial",
+      "examples": ["HUVEC"]
+    },
+    {
+      "title": "Kidney",
+      "examples": ["293F", "FLPIN TREX 293", "HEK293"]
+    },
+    {
+      "title": "Liver",
+      "examples": ["HEPG2"]
+    },
+    {
+      "title": "Lung",
+      "examples": ["A549", "H1299", "IMR90", "MRC5", "NCIH460", "NHBE"]
+    },
+    {
+      "title": "Lymphoid",
+      "examples": ["JURKAT", "MT4", "NALM6", "REH", "RPMI8226"]
+    },
+    {
+      "title": "Muscle",
+      "examples": ["LHCNM2"]
+    },
+    {
+      "title": "Myeloid",
+      "examples": ["THP1", "U937"]
+    },
+    {
+      "title": "Ovary",
+      "examples": ["ES2", "SKOV3"]
+    },
+    {
+      "title": "Pancreas",
+      "examples": ["PANC1"]
+    },
+    {
+      "title": "Placenta",
+      "examples": ["JEG3"]
+    },
+    {
+      "title": "Prostate",
+      "examples": ["C42", "DU145", "LNCAP", "PC3"]
+    },
+    {
+      "title": "Skin",
+      "examples": ["A431", "HACAT", "HNSCC"]
+    }
+  ]

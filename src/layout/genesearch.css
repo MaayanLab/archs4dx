@@ -1,0 +1,25 @@
+
+.genesearchform {
+    justify-content: right !important;
+}
+
+.suggestionsList {
+    background-color: rgb(69, 129, 161) !important;
+    backdrop-filter: blur(10px) !important;
+    opacity: 0.95;
+    font-weight: 700;
+    color: "white" !important;
+}
+
+
+.suggestionsItem {
+    cursor: "pointer";
+    color: "white" !important;
+    
+}
+
+.suggestionsItem:hover {
+    background-color: rgb(130, 218, 193) !important;
+    opacity: 1 !important;
+    
+}

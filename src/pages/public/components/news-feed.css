@@ -44,7 +44,7 @@ h1 {
   }
 }
 
-ul {
+#newsfeed-v1 {
   --col-gap: 1rem;
   --row-gap: 1rem;
   --line-w: 0.25rem;
@@ -57,23 +57,21 @@ ul {
   margin-inline: auto;
 }
 
-/* line */
-ul::before {
+/* Line */
+#newsfeed-v1::before {
   content: "";
   grid-column: 1;
   grid-row: 1 / span 20;
   background: rgb(225, 225, 225);
 }
 
-/* columns*/
-
-/* row gaps */
-ul li:not(:last-child) {
+/* Row gaps */
+#newsfeed-v1 li:not(:last-child) {
   margin-bottom: var(--row-gap);
 }
 
-/* card */
-ul li {
+/* Card */
+#newsfeed-v1 li {
   grid-column: 2;
   --inlineP: 0.0rem;
   margin-inline: var(--inlineP);
@@ -82,8 +80,8 @@ ul li {
   grid-template-rows: min-content min-content min-content;
 }
 
-/* date */
-ul li .date {
+/* Date */
+#newsfeed-v1 li .date {
   --dateH: 2rem;
   height: var(--dateH);
   margin-inline: calc(var(--inlineP) * -1);
@@ -98,19 +96,16 @@ ul li .date {
   display: grid;
   place-content: center;
   position: relative;
-
 }
 
-/* date flap */
-ul li .date::before {
+/* Date flap */
+#newsfeed-v1 li .date::before {
   content: "";
-
   right: 0;
 }
 
-
-/* circle */
-ul li .date::after {
+/* Circle */
+#newsfeed-v1 li .date::after {
   content: "";
   position: absolute;
   width: 1rem;
@@ -124,51 +119,51 @@ ul li .date::after {
   right: calc(100% + var(--col-gap) + var(--line-w) / 2);
 }
 
-ul li .descr {
+#newsfeed-v1 li .descr {
   padding-top: 5px;
   padding-block-end: 1.0rem;
   font-weight: 100;
 }
 
-/* shadows */
-
-ul li .title::before {
+/* Shadows */
+#newsfeed-v1 li .title::before {
   bottom: calc(100% + 0.125rem);
 }
 
-ul li .descr::before {
+#newsfeed-v1 li .descr::before {
   z-index: -1;
   bottom: 0.25rem;
 }
 
 @media (min-width: 40rem) {
-  ul {
+  #newsfeed-v1 {
     grid-template-columns: 1fr var(--line-w) 1fr;
   }
-  ul::before {
+  
+  #newsfeed-v1::before {
     grid-column: 2;
   }
-  ul li:nth-child(odd) {
+  
+  #newsfeed-v1 li:nth-child(odd) {
     grid-column: 1;
   }
-  ul li:nth-child(even) {
+  
+  #newsfeed-v1 li:nth-child(even) {
     grid-column: 3;
   }
 
-  /* start second card */
-  ul li:nth-child(2) {
+  /* Start second card */
+  #newsfeed-v1 li:nth-child(2) {
     grid-row: 2/4;
   }
 
-  ul li:nth-child(odd) .date::before {
+  #newsfeed-v1 li:nth-child(odd) .date::before {
     clip-path: polygon(0 0, 100% 0, 100% 100%);
     left: 0;
   }
 
-  ul li:nth-child(odd) .date::after {
+  #newsfeed-v1 li:nth-child(odd) .date::after {
     transform: translate(-50%, -50%);
     left: calc(100% + var(--col-gap) + var(--line-w) / 2);
   }
-
 }
-

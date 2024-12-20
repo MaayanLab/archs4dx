@@ -10,8 +10,6 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import Carousel from "react-material-ui-carousel";
-import blobImg from "../../../image/blob-news.svg";
-import blobImg2 from "../../../image/blob-news2.svg";
 import twitterIcon from "../../../image/twitter-icon.svg";
 import data from "../../../data/config.json";
 import { getNews } from "../../../api/public";
@@ -172,10 +170,10 @@ export const NewsSection = () => {
             zIndex: "2",
           }}
         >
-          <img src={blobImg} alt="blob gradient" />
+
         </Box>
         <Box sx={{ position: "absolute", top: "-102px", right: "-162px" }}>
-          <img src={blobImg2} alt="blob gradient" />
+
         </Box>
         {data.general.projectname} In the News
       </Typography>

@@ -1,0 +1,18 @@
+.shortcut span:hover {
+    color:rgb(33, 203, 144) !important;
+}
+
+.shortcut > div ul li span:hover {
+    color: aqua;
+    font-weight: 800;
+}
+
+.subpoint {
+    margin-top: 30px;
+}
+
+.citation {
+    border-radius: 8px;
+    background-color: rgb(191, 226, 255);
+    padding: 12px;
+}

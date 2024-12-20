@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import { SidebarContent } from "./components/sidebar-content";
-import { UserMenu } from "./components/user-menu";
+import { UserMenu } from "../dashboard/components/user-menu";
 import data from "../../data/config.json";
 import { MainHeader } from "./components/main-header";
 import { MainTable } from "./components/main-table";
@@ -14,6 +14,8 @@ import { FooterSection } from "../../layout/compactfooter";
 import { useNavigate } from 'react-router-dom';
 import { getLoggedUser } from "../../api/user";
 import { useQuery } from "react-query";
+import logo from "../../image/archs4vector.svg";
+import { CookieBanner } from "../../layout/cookie";
 
 const drawerWidth = 344;
 
@@ -122,11 +124,14 @@ export const Dashboard = () => {
             open={open}
           >
             <DrawerHeader>
-              <img
-                src={data.general.project_logo}
-                alt="project logo"
-                style={{ width: "216px", margin: "40px auto" }}
-              />
+                <a href="/" style={{margin: "30px auto" }}>
+                  <img
+                    style={{ width: "240px" }}
+                    src={logo}
+                    alt="ARCHS4"
+                    
+                  />
+                </a>
             </DrawerHeader>
             <SidebarContent toggleSidebar={toggle} />
           </Drawer>
@@ -139,7 +144,7 @@ export const Dashboard = () => {
           </Main>
         </Box>
       </FilterContextProvider>
-
+          
     </>
   );
 };

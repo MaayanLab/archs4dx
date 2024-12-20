@@ -1,0 +1,10 @@
+.fade-in {
+    opacity: 0 !important;
+    transform: translateY(20px) !important; /* Start from below */
+    transition: opacity 2.0s ease-out, transform 2.0s ease-out !important;
+  }
+  
+  .fade-in.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }

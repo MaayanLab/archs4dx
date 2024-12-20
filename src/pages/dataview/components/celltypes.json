@@ -1,0 +1,261 @@
+[
+    {
+      "title": "Cardiovascular System",
+      "subcategories": [
+        {
+          "title": "Heart",
+          "examples": [
+            "Heart (Bulk Tissue)",
+            "Atrium",
+            "Cardiac Muscle Fiber",
+            "Pericardium",
+            "Valve",
+            "Ventricle"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Connective Tissue",
+      "subcategories": [
+        {
+          "title": "Adipose Tissue",
+          "examples": [
+            "Adipose (Bulk Tissue)",
+            "Adipocyte"
+          ]
+        },
+        {
+          "title": "Bone",
+          "examples": [
+            "Myofibroblast",
+            "Osteoblast",
+            "Stromal Cell"
+          ]
+        },
+        {
+          "title": "Bone Marrow",
+          "examples": [
+            "Bone Marrow (Bulk Tissue)"
+          ]
+        },
+        {
+          "title": "Cartilage",
+          "examples": [
+            "Chondrocyte"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Digestive System",
+      "subcategories": [
+        {
+          "title": "Esophagus",
+          "examples": [
+            "Esophagus (Bulk Tissue)"
+          ]
+        },
+        {
+          "title": "Intestine",
+          "examples": [
+            "Colon (Bulk Tissue)",
+            "Colonic Mucosa",
+            "Intestinal Epithelial Cell",
+            "Small Intestine (Bulk Tissue)"
+          ]
+        },
+        {
+          "title": "Liver",
+          "examples": [
+            "Liver (Bulk Tissue)",
+            "Hepatic Stellate Cell",
+            "Hepatocyte",
+            "Primary Liver Cell"
+          ]
+        },
+        {
+          "title": "Pancreas",
+          "examples": [
+            "Alpha Cell",
+            "Beta Cell",
+            "Pancreatic Islet"
+          ]
+        },
+        {
+          "title": "Stomach",
+          "examples": [
+            "Gastric Epithelial Cell"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Immune System",
+      "subcategories": [
+        {
+          "title": "Granulocytic",
+          "examples": [
+            "Granulocyte",
+            "Neutrophil"
+          ]
+        },
+        {
+          "title": "Lymphiod",
+          "examples": [
+            "Blymphocyte",
+            "Plasma Cell",
+            "Plasmacytoid Dendritic Cell",
+            "Tlymphocyte"
+          ]
+        },
+        {
+          "title": "Myeloid",
+          "examples": [
+            "Alveolar Macrophage",
+            "Dendritic Cell",
+            "Kupffer Cell",
+            "Macrophage",
+            "Macroglia"
+          ]
+        },
+        {
+          "title": "Spleen",
+          "examples": [
+            "Spleen (Bulk Tissue)"
+          ]
+        },
+        {
+          "title": "Thymus",
+          "examples": [
+            "Thymus (Bulk Tissue)",
+            "Thymocyte"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Integumentary System",
+      "subcategories": [
+        {
+          "title": "Skin",
+          "examples": [
+            "Skin (Bulk Tissue)",
+            "Basal Cell",
+            "Fibroblast",
+            "Hair Follicle",
+            "Keratinocyte",
+            "Melanocyte"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Muscular System",
+      "subcategories": [
+        {
+          "title": "Skeletal Muscle",
+          "examples": [
+            "Skeletal Muscle (Bulk Tissue)",
+            "Myoblast"
+          ]
+        },
+        {
+          "title": "Smooth Muscle",
+          "examples": [
+            "Airway Smooth Muscle",
+            "Myofibroblast",
+            "Respiratory Smooth Muscle",
+            "Vascular Smooth Muscle"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Nervous System",
+      "subcategories": [
+        {
+          "title": "CNS",
+          "examples": [
+            "Astrocyte",
+            "Cerebellum",
+            "Cerebral Cortex",
+            "Hypothalamus",
+            "Medula",
+            "Midbrain",
+            "Neuron",
+            "Oligodendrocyte",
+            "Pons",
+            "Spinal Cord",
+            "Thalamus"
+          ]
+        },
+        {
+          "title": "Eye",
+          "examples": [
+            "Retina"
+          ]
+        },
+        {
+          "title": "PNS",
+          "examples": [
+            "Motor Neuron",
+            "Sensory Neuron"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Respiratory System",
+      "subcategories": [
+        {
+          "title": "Lung",
+          "examples": [
+            "Alveolar Cell Type II",
+            "Lung (Bulk Tissue)",
+            "Lung Epithelial Cell"
+          ]
+        },
+        {
+          "title": "Trachea",
+          "examples": [
+            "Trachea (Bulk Tissue)"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Urogenital System",
+      "subcategories": [
+        {
+          "title": "Breast",
+          "examples": [
+            "Breast (Bulk Tissue)",
+            "Mammary Gland"
+          ]
+        },
+        {
+          "title": "Kidney",
+          "examples": [
+            "Kidney (Bulk Tissue)",
+            "Podocyte",
+            "Renal Cortex"
+          ]
+        },
+        {
+          "title": "Ovary",
+          "examples": [
+            "Ovary (Bulk Tissue)",
+            "Granulosa Cell",
+            "Oocyte"
+          ]
+        },
+        {
+          "title": "Testis",
+          "examples": [
+            "Testis (Bulk Tissue)"
+          ]
+        }
+      ]
+    }
+  ]

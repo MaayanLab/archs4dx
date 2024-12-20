@@ -6,7 +6,7 @@ import archs4zoo from "../../../image/archs4zoo.png";
 import natcom from "../../../image/naturecomm.png";
 import data from "../../../data/config.json";
 import { fontSize, styled } from "@mui/system";
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
@@ -25,6 +25,7 @@ import { DonutCharts } from "./donut2";
 import { addLabels, balanceSheet } from './netflixBalanceSheet';
 import { keyframes } from "@mui/system";
 import {Sun} from "./RotatingSun"
+import './fade.css';
 
 
 const Container = styled("div")(({ theme }) => ({
@@ -93,6 +94,42 @@ const AnimatedButton = styled("button")`
 
 
 export const Jumbotron = () => {
+
+  
+  const itemRefs = useRef([]); // Create ref array for each element
+
+  const callbackFunction = useCallback(entries => {
+    entries.forEach(entry => {
+      const target = entry.target;
+      if (entry.isIntersecting) {
+        target.classList.add('visible');
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(callbackFunction, {
+      threshold: 0.1, // Adjust the threshold as needed
+    });
+
+    // Observe each ref
+    itemRefs.current.forEach(ref => {
+      if (ref) {
+        observer.observe(ref);
+      }
+    });
+
+    return () => {
+      itemRefs.current.forEach(ref => {
+        if (ref) {
+          observer.unobserve(ref);
+        }
+      });
+    };
+  }, [callbackFunction]);
+
+
+
   const [email, setEmail] = useState('');
 
   const addEmail = () => {
@@ -228,10 +265,10 @@ export const Jumbotron = () => {
             </Typography>
 
               <Grid Container xs={12} sx={{ display: "flex", marginY: "40px", alignItems: 'stretch'}}>
-                <Grid item xs={6} sm={7} lg={7} sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <Grid item xs={12} sm={12} lg={7} sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                 <Typography  variant="body1" component="div">
                   <h2>About</h2>
-                  All RNA-seq and ChIP-seq sample and signature search (ARCHS4) (https://maayanlab.cloud/archs4/) is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from the
+                  All RNA-seq and ChIP-seq sample and signature search (ARCHS4) <a href="https://maayanlab.cloud/archs4" target="_blank">(https://maayanlab.cloud/archs4)</a> is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from the
                   <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank"> Gene Expression Omnibus (GEO) </a>
                   and the
                   <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank"> Sequence Read Archive (SRA) </a>
@@ -251,7 +288,7 @@ export const Jumbotron = () => {
                   </a>
                   </Typography>
                 </Grid>
-                <Grid  item xs={6} sm={5} md={5} sx={{ marginLeft: "14px",  flex: 1, display: 'flex', flexDirection: 'column' }}><h2>News</h2>
+                <Grid  item xs={12} sm={12} md={5} sx={{ marginLeft: "14px",  flex: 1, display: 'flex', flexDirection: 'column' }}><h2>News</h2>
                   <Grid component={Paper} elevation={3} sx={{ marginTop: "0px", flexDirection: 'column' }}>
                     <NewsFeed />
                   </Grid>
@@ -269,7 +306,11 @@ export const Jumbotron = () => {
                                 }}>
 
           <Grid item lg={4} md={6} sm={12}>
-            <Paper sx={{ margin: "20px", padding: "20px",
+            <Paper 
+              key={0}
+              ref={el => (itemRefs.current[0] = el)}
+              className="fade-in"
+              sx={{ margin: "20px", padding: "20px",
               transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition
               '&:hover': {
                 transform: 'translateY(-5px)', // Lift effect
@@ -339,7 +380,11 @@ export const Jumbotron = () => {
           <Grid item lg={4} md={6} sm={12}>
             
 
-          <Paper sx={{ margin: "20px", padding: "20px",
+          <Paper 
+            key={1}
+            ref={el => (itemRefs.current[1] = el)}
+            className="fade-in"
+            sx={{ margin: "20px", padding: "20px",
             transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition
             '&:hover': {
               transform: 'translateY(-5px)', // Lift effect
@@ -385,7 +430,11 @@ export const Jumbotron = () => {
           <Grid item lg={4} md={6} sm={12}>
             
 
-          <Paper sx={{ margin: "20px", padding: "20px",
+          <Paper 
+           key={2}
+           ref={el => (itemRefs.current[2] = el)}
+           className="fade-in"
+            sx={{ margin: "20px", padding: "20px",
             transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition
             '&:hover': {
               transform: 'translateY(-5px)', // Lift effect
@@ -396,7 +445,7 @@ export const Jumbotron = () => {
             <Box sx={{ overflow: "hidden" }}>
               <Box
                 component="a"
-                href="/archs4zoo"
+                href="/zoo"
                 sx={{
                   float: "left",
                   marginRight: "10px",
@@ -428,7 +477,11 @@ export const Jumbotron = () => {
 
           </Grid>
 
-        <Paper sx={{
+        <Paper 
+            key={3}
+            ref={el => (itemRefs.current[3] = el)}
+            className="fade-in"
+            sx={{
             height: "460px",
             width: "100%",
             margin: "20px"}}>
@@ -438,7 +491,6 @@ export const Jumbotron = () => {
           }}>
             <Grid container>
               <Grid item xs={12} sx={{
-                backgroundColor: "green",
                 height: "400px",
               }}>
                 <iframe src="/heatmap.html" style={{
@@ -530,7 +582,6 @@ export const Jumbotron = () => {
           </Grid>
         </Grid>
         </Grid>
-
     </Container>
   );
 };

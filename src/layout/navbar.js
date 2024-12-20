@@ -52,12 +52,12 @@ const Toolbar = styled("div")(({ theme }) => ({
   alignItems: "center",
   position: "relative",
   "& .navbarLogo": {
-    width: "160px",
+    width: "360px",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "auto 10px",
     "& .navbarLogo": {
-      width: "80px",
+      width: "280px",
     },
     "& .termsButton": {
       display: "none",
@@ -66,7 +66,7 @@ const Toolbar = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
     margin: "auto 20px",
     "& .navbarLogo": {
-      width: "140px",
+      width: "320px",
     },
     "& .termsButton": {
       display: "none",
@@ -75,7 +75,7 @@ const Toolbar = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     margin: "auto 30px",
     "& .navbarLogo": {
-      width: "160px",
+      width: "340px",
     },
   },
 }));

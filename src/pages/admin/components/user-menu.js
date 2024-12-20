@@ -155,7 +155,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar }) => {
             splitLocation[1] === "myfiles" ? "userLinkActive" : "userLink"
           }
         >
-          My files 3
+          My files
         </Link>
       )}
       {roles.includes("admin") && (

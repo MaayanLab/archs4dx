@@ -1,10 +1,10 @@
 import React from 'react';
-import './news-feed.css'; // Import your CSS file
+import './news-feed.css';
 
 export const NewsFeed = () => {
   return (
     <div id="newsfeed">
-      <ul>
+      <ul id="newsfeed-v1">
         <li style={{ '--accent-color': '#4CADAD' }}>
           <div className="date">Update: 2024-9-4</div>
           <div className="descr">Transcript level data is now available for data release v9.</div>

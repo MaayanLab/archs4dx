@@ -1,7 +1,6 @@
 import Carousel from "react-material-ui-carousel";
 import { Paper, Typography, Box, Grid, Avatar } from "@mui/material";
-import blobContat from "../../../image/blob-available-02.svg";
-import blobContat2 from "../../../image/blob-contact.svg";
+
 import data from "../../../data/config.json";
 import "./contact-info.css";
 import { styled } from "@mui/system";

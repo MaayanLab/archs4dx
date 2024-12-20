@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import { useReducer } from "react";
-import logo from "../../../image/logo.png";
+import logo from "../../../image/archs4vector.svg";
 import exitIcon from "../../../image/exit-icon.svg";
 import profileIcon from "../../../image/profile-icon.svg";
 import conditionsIcon from "../../../image/conditions-icon.svg";
@@ -27,8 +27,26 @@ import { EditProfileForm } from "./edit-profile-form";
 import { useQuery } from "react-query";
 import { getLoggedUser } from "../../../api/user";
 import { deepOrange } from '@mui/material/colors';
-import data from "../../../data/config.json";
 import { styled } from "@mui/system";
+import { useState } from "react";
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCaretUp, faUnlock, faUpload, faFolderTree } from '@fortawesome/free-solid-svg-icons';
+
+import { useNavigate } from 'react-router-dom';
+import { IconButton, Drawer, List, ListItem,ListItemIcon, ListItemText, Hidden } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+import SearchIcon from '@mui/icons-material/Search';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DownloadIcon from '@mui/icons-material/Download';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HomeIcon from '@mui/icons-material/Home';
+
+import { GeneSearch } from "../../../layout/genesearch";
 
 const style = {
   position: "absolute",
@@ -47,12 +65,68 @@ const MButton = styled(Button)(({ theme }) => ({
   transition: 'color 0.3s ease, background-color 0.3s ease',
   '&:hover': {
     color: '#fff',
-    backgroundColor: '#0F7F90', // Hover color
+    backgroundColor: '#0F7F90',
   }}))
+
+  const theme = createTheme({
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        custom: 750,
+        lg: 1200,
+        xl: 1536,
+      },
+    },
+  });
+
+  const AnimatedButton = styled("button")`
+    
+  `;
 
 
 export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
   
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setDrawerOpen(!isDrawerOpen);
+  };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isMenuOpen = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+  
+  const navigate = useNavigate();
+  
+  const navDataView = () => {
+    navigate('/data');
+  };
+
+  const navDownloads = () => {
+    navigate('/download');
+  };
+
+  const navHelp = () => {
+    navigate('/help');
+  };
+
+  const navGenePage = () => {
+    navigate('/gene');
+  };
+
+  const navHome = () => {
+    navigate('/');
+  };
+
   const {
     data: user,
     isLoading,
@@ -141,68 +215,181 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
         )}
         {!sidebarOpen && (
           <>
-            <Typography component="div" sx={{ marginLeft: "30px", width: "150px" }}>
+            <Typography component="div" sx={{ marginLeft: "30px", width: "130px" }}>
               <Link to="/">
-                <img src={logo} alt="logo" />
+              <Box
+                component="img"
+                src={logo}
+                alt="logo"
+                sx={{
+                  width: {
+                    xs: '160px',  // width for extra-small devices
+                    sm: '180px',  // width for small devices
+                    md: '200px',  // width for medium devices
+                    lg: '220px',  // width for large devices
+                    xl: '240px',  // width for extra-large devices
+                  },
+                  transition: 'width 0.3s ease-in-out', 
+                }}
+              />
               </Link>
             </Typography>
           </>
         )}
       </Box>
       
-      <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="searchButton mbutton"
-          >
-            Search
+        <Hidden mdDown>
+          <MButton variant="text" onClick={navHome} className="visualizeButton mbutton">
+            Home
           </MButton>
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="visualizeButton mbutton"
-          >
-            Visualize
+          <MButton variant="text" onClick={navDataView} className="visualizeButton mbutton">
+            Data Explorer
           </MButton>
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="downloadButton mbutton"
-          >
+          <MButton variant="text" onClick={navDownloads} className="downloadButton mbutton">
             Download
           </MButton>
-
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="helpButton mbutton"
-          >
+          <MButton variant="text" onClick={navHelp} className="helpButton mbutton">
             Help
           </MButton>
+          <GeneSearch/>
+        </Hidden>
 
-        {/*
+        {/* Drawer containing the menu items */}
+        <Hidden mdUp>
+        <IconButton color="inherit" aria-label="menu" onClick={toggleDrawer} sx={{color: "black", fontSize: "20px"}}>
+          <MenuIcon />
+        </IconButton>
+        <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer} PaperProps={{
+          sx: {
+            color: "black",
+          }}}>
+          <List>
+          <ListItem button onClick={navHome}>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem button onClick={handleOpenTerms}>
+            <ListItemIcon>
+              <SearchIcon />
+            </ListItemIcon>
+            <ListItemText primary="Search" />
+          </ListItem>
+          <ListItem button onClick={navDataView}>
+            <ListItemIcon>
+              <VisibilityIcon />
+            </ListItemIcon>
+            <ListItemText primary="Visualize" />
+          </ListItem>
+          <ListItem button onClick={navDownloads}>
+            <ListItemIcon>
+              <DownloadIcon />
+            </ListItemIcon>
+            <ListItemText primary="Download" />
+          </ListItem>
+          <ListItem button onClick={handleOpenTerms}>
+            <ListItemIcon>
+              <HelpOutlineIcon />
+            </ListItemIcon>
+            <ListItemText primary="Help" />
+          </ListItem>
+          </List>
+        </Drawer>
+        </Hidden>
+
+        
       {(roles.includes("uploader") || roles.includes("admin")) && (
-        <Link
-          to="/myfiles"
-          className={
-            splitLocation[1] === "myfiles" ? "userLinkActive" : "userLink"
-          }
-        >
-          My files
-        </Link>
-      )}
-        */}
+      
+<>
+      <MButton
+        variant="text"
+        className="intraButton mbutton"
+        id="basic-button"
+        aria-controls={isMenuOpen ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={isMenuOpen ? 'true' : undefined}
+        onClick={handleClick}
+        sx={{marginLeft: "10px"}}
+      >
+        <FontAwesomeIcon icon={isMenuOpen ? faCaretUp : faCaretDown} style={{ marginRight: '6px' }} />
+        Access
+      </MButton>
 
-      {roles.includes("admin") && (
-        <Link
-          to="/admin/users"
-          className={
-            splitLocation[1] === "admin" ? "userLinkActive" : "userLink"
+
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={isMenuOpen}
+        onClose={handleCloseMenu}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+        PaperProps={{
+          sx: {
+            display: 'flex',
+            flexDirection: 'row',  // Two-column layout
+            width: '400px',         // Define sufficient width for two panels
+            padding: 1,
           }
-        >
-          Admin
-        </Link>
+        }}
+      >
+        {/* Left Panel */}
+        <Box sx={{paddingLeft: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'start' }}>
+          Access and interact with ARCHS4 resources and pipeline.
+        </Box>
+
+        {/* Right Panel */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'start' }}>
+        <MenuItem onClick={handleCloseMenu}>
+            <Link to="/search" style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+              <FontAwesomeIcon icon={faFolderTree} style={{ marginRight: '14px', color: "#1ebcbb" }} />
+              Access Files
+            </Link>
+          </MenuItem>
+
+          <MenuItem onClick={handleCloseMenu}>
+            <Link to="/myfiles" style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+              <FontAwesomeIcon icon={faUpload} style={{ marginRight: '14px', color: "#1ebcbb" }} />
+              Upload Files
+            </Link>
+          </MenuItem>
+          {roles.includes("admin") && (
+            <MenuItem onClick={handleCloseMenu}>
+              <Link to="/admin/users" style={{ color: "darkred", fontWeight: 'bold', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                <FontAwesomeIcon icon={faUnlock} style={{ marginRight: '14px', color: "#1ebcbb" }} />
+                Admin Dashboard
+              </Link>
+            </MenuItem>
+          )}
+
+          {/*
+          <AnimatedButton
+                type="button"
+                className="btn btn-info"
+                onClick={() => window.location.href = 'subscription'}
+                style={{
+                    width: "100%", fontSize: "16px", height: "40px", backgroundColor: "#5bc0de", color: "white",
+                    border: "1px solid transparent",
+                    borderRadius: "5px", fontweight: "800",
+                    cursor: "pointer",
+                    transition: "background-color 0.3s ease"
+                }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#48a9c7"} // Hover color
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#5bc0de"}
+                sx={{
+                    backgroundColor: "#5bc0de"
+                }}
+            >Subscribe</AnimatedButton>
+            */}
+        </Box>
+      </Menu>
+      
+    </>
+
       )}
+
+      
       <Button onClick={handleOpen}>
         <Avatar sx={{ bgcolor: deepOrange[500] }}>
         {`${user.first_name.charAt(0)}${user.last_name.charAt(0)}`.toUpperCase()}
@@ -312,7 +499,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
                       {" "}
                       <img src={requestIcon} alt="Request icon" />
                     </Grid>
-                    <Grid item>Request Contributor Role</Grid>
+                    <Grid item>Request Data Access</Grid>
                   </Grid>
                 </Button>
               )}
@@ -334,7 +521,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
               )}
             <a
               className="modalLinks"
-              href="https://ihdh.io/api/docs/"
+              href="https://archs4.org/api/docs/"
               target="_blank"
               rel="noreferrer"
             >
@@ -348,7 +535,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
             </a>
             <a
               className="modalLinks"
-              href="https://ihdh.io/user_guide.pdf"
+              href="https://archs4.org/user_guide.pdf"
               target="_blank"
               rel="noreferrer"
             >

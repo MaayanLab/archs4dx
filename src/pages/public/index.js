@@ -15,6 +15,7 @@ import React, { useState, useEffect } from 'react';
 import MuiAppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from 'react-router-dom';
+import { CookieBanner } from "../../layout/cookie";
 
 const drawerWidth = 344;
 
@@ -99,6 +100,7 @@ export const PublicPage = () => {
       {/*<ContactUs />*/}
       <StayConnected />
       <FooterSection />
+      
     </>
   );
 };
