@@ -34,6 +34,7 @@ import { SignatureSearch } from "./components/signaturesearch";
 
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
+import {NavBar} from "../../layout/navbar";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -141,7 +142,8 @@ const LinkContainer = styled('div')({
   });
 
 export const DataView = () => {
-    const textFieldRef = useRef(null); 
+    const textFieldRef = useRef(null);
+    const [hasUserId, setHasUserId] = useState(false);
     const [open, setOpen] = useState(false); // Assuming you have a state for the sidebar
     const itemRefs = useRef([]); // Create ref array for each element
     const [species, setSpecies] = useState('human');
@@ -150,6 +152,22 @@ export const DataView = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [newSearchResult, setNewSearchResult] = useState();
+
+    useEffect(() => {
+      const checkUserId = async () => {
+        try {
+          const response = await fetch('https://archs4.org/api/user/i');
+          const data = await response.json();
+          if (data && data.id) {
+            setHasUserId(true);
+          }
+        } catch (error) {
+          console.log('Error fetching user data:', error);
+        }
+      };
+      
+      checkUserId();
+    }, []);
 
     const handleSearchField = () => {
       const textFromTextField = textFieldRef.current ? textFieldRef.current.value : '';
@@ -211,10 +229,20 @@ export const DataView = () => {
       </Helmet>
 
         <>
-        <AppBar position="fixed" open={open}>
-          <UserMenu sidebarOpen={open} toggleSidebar={toggle} landingPage={true} />
-        </AppBar>
+        {hasUserId ? (
+          <>
+          <AppBar position="fixed" open={open}>
+            <UserMenu sidebarOpen={open} toggleSidebar={toggle} landingPage={true} />
+          </AppBar>
+          
+          </>
+        ) : (
+          <AppBar position="fixed" open={open}>
+          <NavBar />
+          </AppBar>
+        )}
         <div style={{height: "90px"}} sx={{width: "200px", height: "360px"}}></div>
+        
         </>
 
         <Box

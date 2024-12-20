@@ -15,6 +15,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { TermsConditionsModal } from "./terms-and-conditions";
 import { styled } from "@mui/system";
 import { keyframes } from '@mui/system';
+import { GeneSearch } from "./genesearch";
+import logo from "../image/archs4vector.svg";
 
 const CustomStyles = styled('div')({ 
   '@media (max-width: 900px)': {
@@ -91,6 +93,26 @@ export const NavBar = () => {
 
   const navigate = useNavigate();
 
+  const navDataView = () => {
+    navigate('/data');
+  };
+
+  const navDownloads = () => {
+    navigate('/download');
+  };
+
+  const navHelp = () => {
+    navigate('/help');
+  };
+
+  const navGenePage = () => {
+    navigate('/gene');
+  };
+
+  const navHome = () => {
+    navigate('/');
+  };
+
   const handleLoginRedirection = (url) => {
     if (process.env.NODE_ENV === "development") {
       navigate("/search");
@@ -98,7 +120,7 @@ export const NavBar = () => {
       window.location.replace(url);
     }
   };
-
+  
   return (
     <Container maxWidth="false" disableGutters={true}>
       <AppBar
@@ -111,71 +133,45 @@ export const NavBar = () => {
         }}
       >
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1}}>
-            <Link to="/">
-              <img
-                src={data.general.project_logo}
+        <Typography component="div" sx={{ marginLeft: "30px", width: "130px", flexGrow: 1 }}>
+              <Link to="/">
+              <Box
+                component="img"
+                src={logo}
                 alt="logo"
-                className="navbarLogo"
+                sx={{
+                  width: {
+                    xs: '160px',  // width for extra-small devices
+                    sm: '180px',  // width for small devices
+                    md: '200px',  // width for medium devices
+                    lg: '220px',  // width for large devices
+                    xl: '240px',  // width for extra-large devices
+                  },
+                  transition: 'width 0.3s ease-in-out', 
+                }}
               />
-            </Link>
-          </Typography>
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="searchButton mbutton"
-          >
-            Search
+              </Link>
+            </Typography>
+          
+          <MButton variant="text" onClick={navHome} className="visualizeButton mbutton">
+            Home
           </MButton>
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="visualizeButton mbutton"
-          >
-            Visualize
+          <MButton variant="text" onClick={navDataView} className="visualizeButton mbutton">
+            Data Explorer
           </MButton>
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="downloadButton mbutton"
-          >
+          <MButton variant="text" onClick={navDownloads} className="downloadButton mbutton">
             Download
           </MButton>
-
-          
-          <CustomStyles>
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="chromeButton mbutton hide-on-small"
-          >
-            Chrome Extension
-          </MButton>
-          </CustomStyles>
-          
-
-          <MButton
-            variant="text"
-            onClick={handleOpenTerms}
-            className="helpButton mbutton"
-          >
+          <MButton variant="text" onClick={navHelp} className="helpButton mbutton">
             Help
           </MButton>
-          {data.startpage.sso.length > 1 ? (
-            <Button variant="primary" onClick={handleOpen}>
-              Log In
-            </Button>
+          <GeneSearch/>
+
           ) : (
             <Button
               variant="contained"
               onClick={() => handleLoginRedirection(data.startpage.sso[0].url)}
             >
-              {" "}
-              <img
-                src={googleIcon}
-                alt="Service"
-                style={{ width: "24px", height: "24px", marginRight: "11px" }}
-              />{" "}
               Sign in
             </Button>
           )}
@@ -227,8 +223,8 @@ export const NavBar = () => {
               </Box>
               <Typography id="modal-modal-description" variant="body4">
                 Note: ARCHS4 uses OAuth for authentication purposes only.
-            The application will not have access to your private data, and will
-            not send you any e-mails.
+                The application will not have access to your private data, and will
+                not send you any e-mails.
               </Typography>
             </Box>
           </Modal>

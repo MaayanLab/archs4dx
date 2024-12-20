@@ -99,7 +99,7 @@ export const Dashboard = () => {
         <link rel="icon" type="image/png" href={data.general.project_icon} />
         <meta
           name="description"
-          content="Beginner friendly page for learning React Helmet."
+          content="ARCHS4 gene expression repository"
         />
       </Helmet>
       <FilterContextProvider>

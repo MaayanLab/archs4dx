@@ -83,15 +83,18 @@ export const PublicPage = () => {
         />
       </Helmet>
       {hasUserId ? (
-        <>
-        <AppBar position="fixed" open={open}>
-          <UserMenu sidebarOpen={open} toggleSidebar={toggle} landingPage={true} />
-        </AppBar>
-        <div style={{height: "90px"}} sx={{width: "200px", height: "360px"}}>it is not showing any kind of usefull change</div>
-        </>
-      ) : (
-        <NavBar />
-      )}
+          <>
+          <AppBar position="fixed" open={open}>
+            <UserMenu sidebarOpen={open} toggleSidebar={toggle} landingPage={true} />
+          </AppBar>
+          
+          </>
+        ) : (
+          <AppBar position="fixed" open={open}>
+          <NavBar />
+          </AppBar>
+        )}
+        <div style={{height: "90px"}} sx={{width: "200px", height: "360px"}}></div>
       <Jumbotron sx={{boxShadow: 'none'}}/>
       {/* <AvailableData /> */}
       {/*hasUserId && <DataCollections /> */}
