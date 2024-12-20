@@ -20,7 +20,7 @@ import Divider from '@mui/material/Divider';
 
 import natcom from "../../image/naturecomm.png";
 import { GeneCountSection } from "./components/genecounts";
-
+import { NavBar } from "../../layout/navbar";
 
 const drawerWidth = 344;
 
@@ -99,6 +99,23 @@ export const Downloads = () => {
     const [open, setOpen] = useState(false); // Assuming you have a state for the sidebar
     const itemRefs = useRef([]); // Create ref array for each element
     const [email, setEmail] = useState('');
+    const [hasUserId, setHasUserId] = useState(false);
+
+    useEffect(() => {
+      const checkUserId = async () => {
+        try {
+          const response = await fetch('https://archs4.org/api/user/i');
+          const data = await response.json();
+          if (data && data.id) {
+            setHasUserId(true);
+          }
+        } catch (error) {
+          console.log('Error fetching user data:', error);
+        }
+      };
+      
+      checkUserId();
+    }, []);
 
     const scrollPage = (id) => {
         const element = document.getElementById(id);
@@ -132,9 +149,18 @@ export const Downloads = () => {
       </Helmet>
 
         <>
-        <AppBar position="fixed" open={open}>
-          <UserMenu sidebarOpen={open} toggleSidebar={toggle} landingPage={true} />
-        </AppBar>
+        {hasUserId ? (
+          <>
+          <AppBar position="fixed" open={open}>
+            <UserMenu sidebarOpen={open} toggleSidebar={toggle} landingPage={true} />
+          </AppBar>
+          
+          </>
+        ) : (
+          <AppBar position="fixed" open={open}>
+          <NavBar />
+          </AppBar>
+        )}
         <div style={{height: "90px"}} sx={{width: "200px", height: "360px"}}></div>
         </>
 
