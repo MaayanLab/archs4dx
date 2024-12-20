@@ -27,7 +27,7 @@ export const SignatureSearch = ({setNewSearchResult}) => {
 
   const submitknn = async () => {
     //const url = "https://maayanlab.cloud/sigpy/data/knn/signature";
-    const url = "http://localhost:5500/sigpy/data/knn/signature";
+    const url = "https://maayanlab.cloud/sigpy/data/knn/signature";
     const data = {
       signatures: [{
         up_genes: upregulatedGenes.split('\n'),
