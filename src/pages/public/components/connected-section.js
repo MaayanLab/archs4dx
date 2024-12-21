@@ -30,17 +30,25 @@ export const StayConnected = () => {
         }}
       >
         {data.general.socialmedia.map(({ alt_name, url, icon_url }, i) => (
-          <Grid item key={i}>
-            <Button variant="secondary" href={url} className="mediaButtons">
+        <Grid item key={i}>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mediaButtons"
+            style={{ textDecoration: 'none' }}
+          >
+            <Button variant="secondary">
               <img
                 src={icon_url}
-                alt="Github icon"
+                alt={`${alt_name} icon`} 
                 style={{ margin: "0 10px 0 0" }}
-              />{" "}
+              />
               {alt_name}
             </Button>
-          </Grid>
-        ))}
+          </a>
+        </Grid>
+      ))}
       </Grid>
     </Container>
   );

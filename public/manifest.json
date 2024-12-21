@@ -1,6 +1,6 @@
 {
-  "short_name": "IHDH",
-  "name": "Innovative Helath Data Hub",
+  "short_name": "ARCHS4",
+  "name": "Serving a Massive Collection of Uniformly Aligned RNA-seq Samples from GEO",
   "icons": [
     {
       "src": "favicon.ico",

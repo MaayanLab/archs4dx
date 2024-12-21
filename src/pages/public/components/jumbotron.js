@@ -269,19 +269,19 @@ export const Jumbotron = () => {
                 <Typography  variant="body1" component="div">
                   <h2>About</h2>
                   All RNA-seq and ChIP-seq sample and signature search (ARCHS4) <a href="https://maayanlab.cloud/archs4" target="_blank">(https://maayanlab.cloud/archs4)</a> is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from the
-                  <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank"> Gene Expression Omnibus (GEO) </a>
+                  <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank"> Gene Expression Omnibus (GEO) </a> 
                   and the
-                  <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank"> Sequence Read Archive (SRA) </a>
-                  . The ARCHS4 website provides the uniformly processed data for download and programmatic access in H5 format, and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata enhanced annotations, and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the kallisto aligner is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107).Please acknowledge ARCHS4 in your publications by citing the following reference:If you would like to receive updates on the ARCHS4 data and stay informed about new data releases consider signing up for the newsletter.
-                  <br/>
-                  The ARCHS4py now comes with an of Python package to facilitate extraction of data from the H5 files. It also supports some convenience functions such as normalization and meta data search. The software can be installed using pip. Visit the GitHub page for full documentation at the <a href="https://github.com/MaayanLab/archs4py">ARCHS4py GitHub page</a>.
-                  The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://archs4.org/zoo">ARCHS4 Zoo</a> download section.
+                  <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank"> Sequence Read Archive (SRA) </a>. 
+                  The ARCHS4 website provides uniformly processed data for download and programmatic access in H5 format and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata-enhanced annotations and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab-delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the kallisto aligner is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107). The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://archs4.org/zoo">ARCHS4 Zoo</a> download section. If you would like to receive updates on the ARCHS4 data and stay informed about new data releases, consider signing up for the newsletter.
 
+                  <br/><br/>
+                  The ARCHS4py Python package provides functions to facilitate data extraction from the H5 files. It also supports some convenience functions such as normalization and metadata search. The software can be installed using pip. Visit the GitHub page for full documentation at the <a href="https://github.com/MaayanLab/archs4py"> ARCHS4py GitHub page</a>.
+                  
                   <br /><br />
                   Please acknowledge ARCHS4 in your publications by citing the following reference:<br />
                   Lachmann A, Torre D, Keenan AB, Jagodnik KM, Lee HJ, Wang L, Silverstein MC, Ma’ayan A. Massive mining of publicly available RNA-seq data from human and mouse. Nature Communications 9. Article number: 1366 (2018), doi:10.1038/s41467-018-03751-6
 
-                  <a href="https://www.nature.com/articles/s41467-018-03751-6" target="_blank"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+                  <a href="https://www.nature.com/articles/s41467-018-03751-6" target="_blank"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true"> </span>
 
                     <img
                       src={natcom}

@@ -48,6 +48,14 @@
         {
           "text": "About",
           "url": "https://labs.icahn.mssm.edu/maayanlab/about-us/"
+        },
+        {
+          "text": "GitHub",
+          "url": "https://github.com/MaayanLab/archs4dx"
+        },
+        {
+          "text": "Submit Issues",
+          "url": "https://github.com/MaayanLab/archs4dx/issues"
         }
       ]
     }

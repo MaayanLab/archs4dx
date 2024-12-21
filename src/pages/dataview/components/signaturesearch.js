@@ -52,11 +52,25 @@ export const SignatureSearch = ({setNewSearchResult}) => {
 
   return (
     <Box sx={{ padding: '10px' }}>
+      
+      <Box sx={{ marginBottom: '5px' }}>
+      <TextField
+        label="Signature description"
+        variant="outlined"
+        fullWidth
+        value={signatureName}
+        onChange={(e) => setSignatureName(e.target.value)}
+        sx={{ marginBottom: '0px', marginTop: '10px' }}
+        InputLabelProps={{
+          shrink: true, // Forces the label to shrink
+        }}
+      />
       <a
         style={{
           color: '#007bff',
           transition: 'color 0.3s',
-          textDecoration: 'none'
+          textDecoration: 'none',
+          marginBottom: "20px"
         }}
         href="#"
         onClick={(e) => {
@@ -64,18 +78,9 @@ export const SignatureSearch = ({setNewSearchResult}) => {
           handleExampleClick("mouse");
         }}
       >
-        Example
+        Try Example
       </a>
-      <Box sx={{ marginBottom: '5px' }}>
-        <TextField
-          label="Signature Name"
-          variant="outlined"
-          fullWidth
-          value={signatureName}
-          onChange={(e) => setSignatureName(e.target.value)}
-          sx={{ marginBottom: '20px'}}
-        />
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="body1" gutterBottom sx={{marginTop: '20px' }}>
           k-NN: {knnValue}
         </Typography>
         <Slider
@@ -85,7 +90,7 @@ export const SignatureSearch = ({setNewSearchResult}) => {
           valueLabelDisplay="auto"
           min={1}
           max={5000}
-          sx={{ width: '280px', marginBottom: '20px' }}
+          sx={{ width: '280px', marginBottom: '20px', marginTop: '-10px'}}
         />
         <Typography variant="body1" gutterBottom>
           Upregulated Genes:

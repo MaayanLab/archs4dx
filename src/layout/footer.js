@@ -70,10 +70,10 @@ export const FooterSection = () => {
           </Grid>
           <Grid
             item
-            xs={1}
-            sm={1}
-            md={1}
-            lg={1}
+            xs={0}
+            sm={0}
+            md={0}
+            lg={0}
             sx={{ borderLeft: "1px solid #B0C9CB", height: "120px" }}
           ></Grid>
           <Grid
@@ -83,19 +83,22 @@ export const FooterSection = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              padding: "25px 0",
+              padding: "15px 20px",
               margin: "auto 0",
-              justifyContent: "center",
+              justifyContent: "center"
               
             }}
           >
+            <Grid container>
             {data.general.footer.links.map(({ text, url }) => (
-              <Link href={url} key={url}>
-                {text}
-              </Link>
+              <Grid item xs={6}>
+                <Link href={url} key={url} target="_blank" rel="noopener noreferrer">
+                  {text}
+                </Link>
+              </Grid>
             ))}
+            </Grid>
           </Grid>
-          
         </Grid>
       </Box>
       <Box
@@ -109,13 +112,16 @@ export const FooterSection = () => {
       >
         <Grid container>
           <Grid item xs={3} lg={3} className="rightsLogo">
+            <a href="https://labs.icahn.mssm.edu/maayanlab/">
             <img
               src={data.general.lab_logo}
               alt="logo"
               style={{ width: "140px", height: "auto"}}
             />
+            </a>
           </Grid>
-          <Grid item xs={6} lg={6} className="rightsLogo"></Grid>
+          <Grid item xs={6} lg={6} className="rightsLogo">
+          </Grid>
           <Grid item xs={3} lg={3} className="rightsLogo">
             <img
               src={data.general.mssm_logo}
