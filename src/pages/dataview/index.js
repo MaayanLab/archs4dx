@@ -424,7 +424,7 @@ export const DataView = () => {
           width: '700px',
         }}
       >
-        <h3>Data Viewer</h3>
+        
         <br />
         <ScatterPlot sampleMode={sampleMode} speciesMode={species} query={searchQuery} newSearchResult={newSearchResult} />
       </Paper>

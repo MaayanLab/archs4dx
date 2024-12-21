@@ -5,7 +5,7 @@
         {
           "title": "Heart",
           "examples": [
-            "Heart (Bulk Tissue)",
+            "Heart",
             "Atrium",
             "Cardiac Muscle Fiber",
             "Pericardium",
@@ -21,7 +21,7 @@
         {
           "title": "Adipose Tissue",
           "examples": [
-            "Adipose (Bulk Tissue)",
+            "Adipose",
             "Adipocyte"
           ]
         },
@@ -36,7 +36,7 @@
         {
           "title": "Bone Marrow",
           "examples": [
-            "Bone Marrow (Bulk Tissue)"
+            "Bone Marrow"
           ]
         },
         {
@@ -53,22 +53,22 @@
         {
           "title": "Esophagus",
           "examples": [
-            "Esophagus (Bulk Tissue)"
+            "Esophagus"
           ]
         },
         {
           "title": "Intestine",
           "examples": [
-            "Colon (Bulk Tissue)",
+            "Colon",
             "Colonic Mucosa",
             "Intestinal Epithelial Cell",
-            "Small Intestine (Bulk Tissue)"
+            "Small Intestine"
           ]
         },
         {
           "title": "Liver",
           "examples": [
-            "Liver (Bulk Tissue)",
+            "Liver",
             "Hepatic Stellate Cell",
             "Hepatocyte",
             "Primary Liver Cell"
@@ -122,13 +122,13 @@
         {
           "title": "Spleen",
           "examples": [
-            "Spleen (Bulk Tissue)"
+            "Spleen"
           ]
         },
         {
           "title": "Thymus",
           "examples": [
-            "Thymus (Bulk Tissue)",
+            "Thymus",
             "Thymocyte"
           ]
         }
@@ -140,7 +140,7 @@
         {
           "title": "Skin",
           "examples": [
-            "Skin (Bulk Tissue)",
+            "Skin",
             "Basal Cell",
             "Fibroblast",
             "Hair Follicle",
@@ -156,7 +156,7 @@
         {
           "title": "Skeletal Muscle",
           "examples": [
-            "Skeletal Muscle (Bulk Tissue)",
+            "Skeletal Muscle",
             "Myoblast"
           ]
         },
@@ -212,14 +212,14 @@
           "title": "Lung",
           "examples": [
             "Alveolar Cell Type II",
-            "Lung (Bulk Tissue)",
+            "Lung",
             "Lung Epithelial Cell"
           ]
         },
         {
           "title": "Trachea",
           "examples": [
-            "Trachea (Bulk Tissue)"
+            "Trachea"
           ]
         }
       ]
@@ -230,14 +230,14 @@
         {
           "title": "Breast",
           "examples": [
-            "Breast (Bulk Tissue)",
+            "Breast",
             "Mammary Gland"
           ]
         },
         {
           "title": "Kidney",
           "examples": [
-            "Kidney (Bulk Tissue)",
+            "Kidney",
             "Podocyte",
             "Renal Cortex"
           ]
@@ -245,7 +245,7 @@
         {
           "title": "Ovary",
           "examples": [
-            "Ovary (Bulk Tissue)",
+            "Ovary",
             "Granulosa Cell",
             "Oocyte"
           ]
@@ -253,7 +253,7 @@
         {
           "title": "Testis",
           "examples": [
-            "Testis (Bulk Tissue)"
+            "Testis"
           ]
         }
       ]

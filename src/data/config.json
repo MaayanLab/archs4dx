@@ -27,27 +27,27 @@
     },
     "footer": {
       "image_url": "/image/logo.png",
-      "description": "The development of the ARCHS4 project is made possible by NCI grant xxx. ",
+      "description": "The development of the ARCHS4 project is made possible by NCI grant U24CA264250. ",
       "links": [
         {
           "text": "Home",
-          "url": "https://maayanlab.cloud/archs4/"
+          "url": "https://archs4.org"
         },
         {
           "text": "Documentation",
-          "url": "https://maayanlab.cloud/archs4/user_guide.pdf"
+          "url": "https://archs4.org/help"
         },
         {
           "text": "Research Projects",
-          "url": "https://maayanlab.cloud/archs4/research-projects"
+          "url": "https://labs.icahn.mssm.edu/maayanlab/research/"
         },
         {
           "text": "Team",
-          "url": "https://lymemind.org/team"
+          "url": "https://labs.icahn.mssm.edu/maayanlab/team/"
         },
         {
           "text": "About",
-          "url": "https://maayanlab.cloud/archs4/about"
+          "url": "https://labs.icahn.mssm.edu/maayanlab/about-us/"
         }
       ]
     }
@@ -55,7 +55,7 @@
   "startpage": {
     "title": "ARCHS4",
     "subtitle": "Massive Mining of Publicly Available RNA-seq Data from Human and Mouse",
-    "about": "Machine learning ready RNA-seq data from publically available gene expression repositories.",
+    "about": "",
     "news": {
       "name": "ARCHS4",
       "username": "ARCHS4",
