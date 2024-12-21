@@ -226,7 +226,7 @@ export const Jumbotron = () => {
                 marginBottom: "20px",
               }}
             >
-              Machine learning ready RNA-seq data from publically available gene expression repositories.
+              
             </Typography>
 
             <Typography
