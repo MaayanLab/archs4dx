@@ -123,11 +123,13 @@ export const FooterSection = () => {
           <Grid item xs={6} lg={6} className="rightsLogo">
           </Grid>
           <Grid item xs={3} lg={3} className="rightsLogo">
+          <a href="https://icahn.mssm.edu/research/bioinformatics">
             <img
               src={data.general.mssm_logo}
               alt="logo"
               style={{ width: "140px", height: "auto" }}
             />
+            </a>
           </Grid>
 
           <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "30px" }}>
