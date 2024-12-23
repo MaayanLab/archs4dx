@@ -244,7 +244,7 @@ export const Jumbotron = () => {
               <AnimatedButton
                 type="button"
                 className="btn btn-info"
-                onClick={() => window.location.href = 'data.html'}
+                onClick={() => window.location.href = 'data'}
                 style={{
                   width: "300px", fontSize: "16px", height: "40px", backgroundColor: "#5bc0de", color: "white",
                   border: "1px solid transparent",
