@@ -217,7 +217,7 @@ pathAnim(pathElement, dir) {
         if (d.data.species !== "platform") {
           sessionStorage.setItem("sent", d.data.cat);
           sessionStorage.setItem("species", d.data.species);
-          window.open("data.html", "_self");
+          window.open("data", "_self");
         }
       }
     };
