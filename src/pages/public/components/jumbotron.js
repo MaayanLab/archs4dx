@@ -118,11 +118,11 @@ export const Jumbotron = () => {
       }
     });
   }, []);
-
+  
   useEffect(() => {
     const fetchBalanceSheet = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/pipeline/jobqueue');
+        const response = await fetch('https://dev.archs4.org/api/pipeline/jobqueue');
         if (!response.ok) {
           throw new Error('could not load jobqueue');
         }
