@@ -19,10 +19,10 @@ import LoyaltyIcon from '@mui/icons-material/Loyalty';
 
 import { BarChart } from '@mui/x-charts/BarChart';
 import GaugeChart from 'react-gauge-chart'
+import Skeleton from '@mui/material/Skeleton';
 
 import { NewsFeed } from "./news-feed";
 import { DonutCharts } from "./donut2";
-import { addLabels, balanceSheet } from './netflixBalanceSheet';
 import { keyframes } from "@mui/system";
 import {Sun} from "./RotatingSun"
 import './fade.css';
@@ -85,7 +85,19 @@ const animation = keyframes`
 }
 `;
 
+const translations = {
+  pending: 'Pending',
+  success: 'Processed',
+  failed: 'Failed',
+};
 
+function addLabels(series) {
+  return series.map((item) => ({
+    ...item,
+    label: translations[item.dataKey],
+    valueFormatter: (v) => (v ? `${v.toLocaleString()}` : '-'),
+  }));
+}
 
 
 const AnimatedButton = styled("button")`
@@ -95,7 +107,7 @@ const AnimatedButton = styled("button")`
 
 export const Jumbotron = () => {
 
-  
+  const [jobQueue, setJobQueue] = useState([]);
   const itemRefs = useRef([]); // Create ref array for each element
 
   const callbackFunction = useCallback(entries => {
@@ -106,6 +118,23 @@ export const Jumbotron = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const fetchBalanceSheet = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/pipeline/jobqueue');
+        if (!response.ok) {
+          throw new Error('could not load jobqueue');
+        }
+        const data = await response.json();
+        setJobQueue(data["jobs"]); // assuming data is in the correct format
+      } catch (error) {
+        console.error('Error fetching job queue:', error);
+      }
+    };
+
+    fetchBalanceSheet();
+  }, []); // empty dependency array means this effect only runs once when the component mounts
 
   useEffect(() => {
     const observer = new IntersectionObserver(callbackFunction, {
@@ -531,9 +560,12 @@ export const Jumbotron = () => {
           }}>
             
             <Grid item sm={12} md={8} lg={9}>
+            
               <h2>Pipeline activity</h2>
+
+              {Array.isArray(jobQueue) && jobQueue.length > 0 ? (
               <BarChart
-                dataset={balanceSheet}
+                dataset={jobQueue}
                 series={addLabels([
                   { dataKey: 'success', stack: 'processed', size: "16px" },
                   { dataKey: 'failed', stack: 'processed' },
@@ -544,9 +576,21 @@ export const Jumbotron = () => {
                 
                 height={300}
                 borderRadius={3}
-                yAxis={[{label: 'Count'}]}
-                sx={{width: "100%","& .MuiChartsAxis-tickLabel": {marginTop: "-20px !important"}, "& .MuiChartsLegend-series text": {fontSize: "1.6em !important" }, }}
+                yAxis={[{label: 'Count', labelStyle: { 
+                  transform: 'translateX(-70px) rotate(-90deg)',
+                  transformOrigin: 'left center'
+                }}]}
+                margin={{
+                  left: 100,
+                  right: 80,
+                  top: 50,
+                  bottom: 50,
+                }}
+                sx={{width: "100%","& .MuiChartsAxis-tickLabel": {marginTop: "40px !important"}, "& .MuiChartsLegend-series text": {fontSize: "1.2em !important" }, }}
               />
+            ) : (
+              <Skeleton variant="rectangular" width="100%" height={300} sx={{margin: "40px"}} />
+            )}
             </Grid>
             <Grid item sm={12} md={4} lg={3}>
             <Grid container spacing={4}>
