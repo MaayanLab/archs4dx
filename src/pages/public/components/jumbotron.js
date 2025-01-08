@@ -27,6 +27,8 @@ import { keyframes } from "@mui/system";
 import {Sun} from "./RotatingSun"
 import './fade.css';
 
+import {LetterSignup, LetterSignupChimp} from "../../../layout/newslettersignup";
+
 
 const Container = styled("div")(({ theme }) => ({
   position: "relative",
@@ -124,7 +126,7 @@ export const Jumbotron = () => {
   useEffect(() => {
     const fetchJobQueueStats = async () => {
       try {
-        const response = await fetch('https://archs4.org/api/pipeline/jobqueue');
+        const response = await fetch('https://dev.archs4.org/api/pipeline/jobqueue');
         if (!response.ok) {
           throw new Error('could not load jobqueue');
         }
@@ -137,7 +139,7 @@ export const Jumbotron = () => {
 
     const fetchPipelineStats = async () => {
       try {
-        const response = await fetch('https://archs4.org/api/pipeline/status');
+        const response = await fetch('https://dev.archs4.org/api/pipeline/status');
         if (!response.ok) {
           throw new Error('could not load pipeline status');
         }
@@ -150,7 +152,7 @@ export const Jumbotron = () => {
 
     const fetchLogStats = async () => {
       try {
-        const response = await fetch('https://archs4.org/api/log/categorycounts');
+        const response = await fetch('https://dev.archs4.org/api/log/categorycounts');
         if (!response.ok) {
           throw new Error('could not load pipeline status');
         }
@@ -330,7 +332,7 @@ export const Jumbotron = () => {
                   All RNA-seq and ChIP-seq sample and signature search (ARCHS4) is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from 
                   the <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">Gene Expression Omnibus (GEO)</a> and 
                   the <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank">Sequence Read Archive (SRA)</a>. The 
-                  ARCHS4 website provides uniformly processed data for download and programmatic access in H5 format and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata-enhanced annotations, and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab-delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the <a href="https://pachterlab.github.io/kallisto/about" target="_blank">Kallisto aligner</a> is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107). The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://archs4.org/zoo">ARCHS4 Zoo</a> download section.
+                  ARCHS4 website provides uniformly processed data for download and programmatic access in H5 format and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata-enhanced annotations, and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab-delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the <a href="https://pachterlab.github.io/kallisto/about" target="_blank">Kallisto aligner</a> is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107). The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://dev.archs4.org/zoo">ARCHS4 Zoo</a> download section.
 
                   <br/><br/>
                   The ARCHS4py Python package provides functions to facilitate data extraction from the H5 files. It also supports some convenience functions such as normalization and metadata search. The software can be installed using pip. Visit the GitHub page for full documentation at the <a href="https://github.com/MaayanLab/archs4py"> ARCHS4py GitHub page</a>.
@@ -372,70 +374,16 @@ export const Jumbotron = () => {
               key={0}
               ref={el => (itemRefs.current[0] = el)}
               className="fade-in"
-              sx={{ margin: "20px", padding: "20px",
+              sx={{margin: "20px", padding: "20px",
               transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition
               '&:hover': {
                 transform: 'translateY(-5px)', // Lift effect
                 boxShadow: '0px 4px 8px rgba(0,0,0,0.2)', // Shadow for depth
               },
             }}>
-              <Grid container>
-                <Grid item className="rightsLogo">
-                  <Typography
-                    className="headerSubtitle"
-                    sx={{
-                      fontSize: "15px",
-                      lineHeight: "18px",
-                      letterSpacing: "0px",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    If you would like to receive updates on the ARCHS4 data and stay informed
-                    about new data releases consider signing up for the newsletter.
-                  </Typography>
-                </Grid>
-                <Grid item sx={{
-                  display: 'flex',
-                  width: "100%"
-                }}>
-                  <form
-                    className="form-inline my-2 my-lg-0"
-                    style={{ paddingTop: '2px', width: '100%' }}
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      addEmail();
-                    }}
-                  >
+              
+              <LetterSignup/>
 
-                    <Paper
-                      component="form"
-                      sx={{ display: 'flex', alignItems: 'center', width: "100%"}}
-                    >
-                      <IconButton sx={{ p: '10px' }} aria-label="menu">
-                        <LoyaltyIcon />
-                      </IconButton>
-                      <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Email Address"
-                        inputProps={{ 'aria-label': 'search google maps' }}
-                      />
-
-                      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                      <IconButton color="primary" aria-label="directions" sx={{
-                          fontSize: "14px",
-                          color: "black",
-                          p: '10px' 
-                        }}
-                        className="btn btn-info my-2 my-sm-0"
-                        type="button"
-                        onClick={addEmail}
-                      >
-                        Keep Me Updated
-                      </IconButton>
-                    </Paper>
-                  </form>
-                </Grid>
-              </Grid>
             </Paper>
           </Grid>
 

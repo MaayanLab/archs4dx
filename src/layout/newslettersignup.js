@@ -12,17 +12,49 @@ import Divider from '@mui/material/Divider';
 export const LetterSignup = () => {
 
     const [email, setEmail] = useState('');
-
-    const addEmail = () => {
-      console.log(`Email submitted: ${email}`);
-      setEmail('');
+    const inputRef = useRef(null);
+    const addEmail = (event) => {
+      setEmail(event.target.value);
+      console.log(`Email: ${email}`);
+      
     };
 
-    
+    const submitEmail = async (e) => {
+        e.preventDefault();  // Prevent form submission
+
+        console.log(`Email submitted: ${email}`);
+        
+        // Replace with the Mailchimp API endpoint
+        const url = "https://cloud.us9.list-manage.com/subscribe/post?u=a47c67b0c885cd4449277dfc5&id=5e9ea951dc";
+        const payload = new URLSearchParams({
+            "EMAIL": email,
+        });
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: payload,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            });
+
+            if (response.ok) {
+                console.log("Successfully subscribed!");
+                setEmail('');  // Clear the input after success
+                inputRef.current.value = ''; // Clear the input field
+            } else {
+                console.error("Failed to subscribe:", await response.text());
+            }
+        } catch (error) {
+            console.error("Error occurred while subscribing:", error);
+        }
+    };
+
     return (
         <>
         <Box>
-        <Grid item md={6}>
+        <Grid item md={12}>
                         <Typography
                             className="headerSubtitle"
                             
@@ -37,8 +69,9 @@ export const LetterSignup = () => {
                             about new data releases consider signing up for the newsletter.
                         </Typography>
                     </Grid>
-                    <Grid item  md={6}
+                    <Grid item  md={12}
                     sx={{
+                    paddingTop: "20px",
                     display: 'flex',
                     width: "100%"
                     }}>
@@ -59,6 +92,9 @@ export const LetterSignup = () => {
                             <LoyaltyIcon />
                         </IconButton>
                         <InputBase
+                            ref={inputRef}
+                            value={email}
+                            onChange={addEmail}
                             sx={{ ml: 1, flex: 1 }}
                             placeholder="Email Address"
                             inputProps={{ 'aria-label': 'search google maps' }}
@@ -72,7 +108,7 @@ export const LetterSignup = () => {
                             }}
                             className="btn btn-info my-2 my-sm-0"
                             type="button"
-                            onClick={addEmail}
+                            onClick={submitEmail}
                         >
                             Keep Me Updated
                         </IconButton>
@@ -84,4 +120,4 @@ export const LetterSignup = () => {
            
     )
 
-}    
+}

@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { useNavigate } from 'react-router-dom';
 
-import { LetterSignup } from '../../layout/newslettersignup';
+import { MailchimpSignup } from '../../layout/mailchimpsignup';
 import "./components/styles.css"
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -53,7 +53,7 @@ export const HelpPage = () => {
   useEffect(() => {
     const checkUserId = async () => {
       try {
-        const response = await fetch('https://archs4.org/api/user/i');
+        const response = await fetch('https://dev.archs4.org/api/user/i');
         const data = await response.json();
         if (data && data.id) {
           setHasUserId(true);

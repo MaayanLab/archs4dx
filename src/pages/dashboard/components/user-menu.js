@@ -521,7 +521,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
               )}
             <a
               className="modalLinks"
-              href="https://archs4.org/api/docs/"
+              href="https://dev.archs4.org/api/docs/"
               target="_blank"
               rel="noreferrer"
             >
@@ -535,7 +535,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
             </a>
             <a
               className="modalLinks"
-              href="https://archs4.org/user_guide.pdf"
+              href="https://dev.archs4.org/user_guide.pdf"
               target="_blank"
               rel="noreferrer"
             >
