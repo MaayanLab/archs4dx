@@ -62,6 +62,30 @@ export const GeneCountSection = () => {
     };
 
 
+    const writeLog = async (event, category) => {
+      try {
+
+        const url = event.currentTarget.href;
+        const filename = url.substring(url.lastIndexOf('/') + 1);
+
+        const response = await fetch('http://127.0.0.1:5000/api/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ "category": category, "entry": filename }),
+        });
+
+        console.log(category, filename);
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+      } catch (error) {
+        console.error('Error writing log:', error);
+      }
+    };
+
     const [isHovered, setIsHovered] = useState(false);
     
     const handleMouseEnter = () => {
@@ -139,7 +163,7 @@ export const GeneCountSection = () => {
                   </Grid>
       
                   <Grid item>
-                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/human_gene_v${version}.h5`}>
+                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/human_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
                     {`human_gene_v${version}.h5`}
                     </a><br />
                     Date: 8-24-2024<br />
@@ -172,7 +196,7 @@ export const GeneCountSection = () => {
                   </Grid>
       
                   <Grid item>
-                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/mouse_gene_v${version}.h5`}>
+                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/mouse_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
                     {`mouse_gene_v${version}.h5`}
                     </a><br />
                     Date: 8-24-2024<br />
@@ -217,7 +241,7 @@ export const GeneCountSection = () => {
                   </Grid>
       
                   <Grid item>
-                    <a href="/">human_transcript_v{version}.h5</a><br />
+                    <a href="/"  onClick={(event) => writeLog(event, "download")}>human_transcript_v{version}.h5</a><br />
                     Date: 8-24-2024<br />
                     Size: 132G<br/>
                     <Tooltip title={"SHA1 hash"} arrow>
@@ -248,7 +272,7 @@ export const GeneCountSection = () => {
                   </Grid>
       
                   <Grid item>
-                    <a href="/">mouse_transcript_v{version}.h5</a><br />
+                    <a href="/"  onClick={(event) => writeLog(event, "download")}>mouse_transcript_v{version}.h5</a><br />
                     Date: 8-24-2024<br />
                     Size: 123G<br />
                     <Tooltip title={"SHA1 hash"} arrow>
@@ -287,22 +311,22 @@ export const GeneCountSection = () => {
                    <Grid container>
                    <Grid item xs={12}><h2>Human</h2></Grid>
                    <Grid item xs={12} sx={{marginBottom: "8px"}}>
-                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL570_expression.h5'>GPL570_expression.h5</a><br/>
+                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL570_expression.h5' onClick={(event) => writeLog(event, "download")}>GPL570_expression.h5</a><br/>
                         Date: 5/2021<br/>
                         Size: 14.7 GB
                     </Grid>
                     <Grid item xs={12} sx={{marginBottom: "8px"}}>
-                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL571_expression.h5'>GPL571_expression.h5</a><br/>
+                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL571_expression.h5' onClick={(event) => writeLog(event, "download")}>GPL571_expression.h5</a><br/>
                         Date: 5/2021<br/>
                         Size: 936 MB
                     </Grid>
                     <Grid item xs={12} sx={{marginBottom: "8px"}}>
-                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL6244_expression.h5'>GPL6244_expression.h5</a><br/>
+                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL6244_expression.h5' onClick={(event) => writeLog(event, "download")}>GPL6244_expression.h5</a><br/>
                         Date: 5/2021<br/>
                         Size: 2 GB
                     </Grid>
                     <Grid item xs={12} sx={{marginBottom: "8px"}}>
-                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL96_expression.h5'>GPL96_expression.h5</a><br/>
+                        <a href='https://s3.amazonaws.com/mssm-seq-matrix/GPL96_expression.h5'onClick={(event) => writeLog(event, "download")}>GPL96_expression.h5</a><br/>
                         Date: 5/2021<br/>
                         Size: 1.66 GB
                     </Grid>

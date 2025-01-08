@@ -298,7 +298,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar }) => {
               )}
             <a
               className="modalLinks"
-              href="https://dev.archs4.org/api/docs/"
+              href="https://archs4.org/api/docs/"
               target="_blank"
               rel="noreferrer"
             >
@@ -312,7 +312,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar }) => {
             </a>
             <a
               className="modalLinks"
-              href="https://dev.archs4.org/user_guide.pdf"
+              href="https://archs4.org/user_guide.pdf"
               target="_blank"
               rel="noreferrer"
             >

@@ -108,6 +108,8 @@ const AnimatedButton = styled("button")`
 export const Jumbotron = () => {
 
   const [jobQueue, setJobQueue] = useState([]);
+  const [logStats, setLogStats] = useState({"download":0,"download_custom":0,"genesearch":0});
+  const [pipelineStatus, setPipelineStatus] = useState([]);
   const itemRefs = useRef([]); // Create ref array for each element
 
   const callbackFunction = useCallback(entries => {
@@ -118,11 +120,11 @@ export const Jumbotron = () => {
       }
     });
   }, []);
-  
+
   useEffect(() => {
-    const fetchBalanceSheet = async () => {
+    const fetchJobQueueStats = async () => {
       try {
-        const response = await fetch('https://dev.archs4.org/api/pipeline/jobqueue');
+        const response = await fetch('https://archs4.org/api/pipeline/jobqueue');
         if (!response.ok) {
           throw new Error('could not load jobqueue');
         }
@@ -133,7 +135,35 @@ export const Jumbotron = () => {
       }
     };
 
-    fetchBalanceSheet();
+    const fetchPipelineStats = async () => {
+      try {
+        const response = await fetch('https://archs4.org/api/pipeline/status');
+        if (!response.ok) {
+          throw new Error('could not load pipeline status');
+        }
+        const data = await response.json();
+        setPipelineStatus(data["status"]); // assuming data is in the correct format
+      } catch (error) {
+        console.error('Error fetching pipeline status:', error);
+      }
+    };
+
+    const fetchLogStats = async () => {
+      try {
+        const response = await fetch('https://archs4.org/api/log/categorycounts');
+        if (!response.ok) {
+          throw new Error('could not load pipeline status');
+        }
+        const data = await response.json();
+        setLogStats(data["counts"]); // assuming data is in the correct format
+      } catch (error) {
+        console.error('Error fetching pipeline status:', error);
+      }
+    };
+
+    fetchJobQueueStats();
+    fetchPipelineStats();
+    fetchLogStats();
   }, []); // empty dependency array means this effect only runs once when the component mounts
 
   useEffect(() => {
@@ -300,7 +330,7 @@ export const Jumbotron = () => {
                   All RNA-seq and ChIP-seq sample and signature search (ARCHS4) is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from 
                   the <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">Gene Expression Omnibus (GEO)</a> and 
                   the <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank">Sequence Read Archive (SRA)</a>. The 
-                  ARCHS4 website provides uniformly processed data for download and programmatic access in H5 format and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata-enhanced annotations, and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab-delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the <a href="https://pachterlab.github.io/kallisto/about" target="_blank">Kallisto aligner</a> is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107). The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://dev.archs4.org/zoo">ARCHS4 Zoo</a> download section.
+                  ARCHS4 website provides uniformly processed data for download and programmatic access in H5 format and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata-enhanced annotations, and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab-delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the <a href="https://pachterlab.github.io/kallisto/about" target="_blank">Kallisto aligner</a> is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107). The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://archs4.org/zoo">ARCHS4 Zoo</a> download section.
 
                   <br/><br/>
                   The ARCHS4py Python package provides functions to facilitate data extraction from the H5 files. It also supports some convenience functions such as normalization and metadata search. The software can be installed using pip. Visit the GitHub page for full documentation at the <a href="https://github.com/MaayanLab/archs4py"> ARCHS4py GitHub page</a>.
@@ -535,7 +565,7 @@ export const Jumbotron = () => {
 
           </Grid>
               <Typography sx={{textAlign: "center", marginTop: "27px"}}>
-              Gene lookups 8,536,936 | Bulk file downloads 11,619 | Sample search downloads 8,146
+              Gene lookups {logStats["genesearch"]+9232056} | Bulk file downloads {logStats["download"]+11892} | Sample search downloads {logStats["download_custom"]+9244}
               </Typography>
 
           </Paper>
@@ -602,9 +632,9 @@ export const Jumbotron = () => {
                 <Typography sx={{marginLeft: "10px", textAlign: "left", verticalAlign: "center", marginLeft: "20px"}}>
                   <b>Pipeline active</b>
                   <br/>
-                  vCPUs: 12
+                  vCPUs: {pipelineStatus}
                   <br/>
-                  vMemory: 64
+                  vMemory: {pipelineStatus*8}
                 </Typography>
                 </Paper>
               </Grid>
