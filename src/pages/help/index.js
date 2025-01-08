@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { useNavigate } from 'react-router-dom';
 
-import { MailchimpSignup } from '../../layout/mailchimpsignup';
+
 import "./components/styles.css"
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
