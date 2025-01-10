@@ -580,9 +580,9 @@ export const Jumbotron = () => {
                 <Typography sx={{marginLeft: "10px", textAlign: "left", verticalAlign: "center", marginLeft: "20px"}}>
                   <b>Pipeline active</b>
                   <br/>
-                  vCPUs: {int(pipelineStatus/1024)}
+                  vCPUs: {Math.round(pipelineStatus/1024)}
                   <br/>
-                  vMemory: {int(pipelineStatus*8/1024)}
+                  vMemory: {Math.round(pipelineStatus*8/1024)}
                 </Typography>
                 </Paper>
               </Grid>
