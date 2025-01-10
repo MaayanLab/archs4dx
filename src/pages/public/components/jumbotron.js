@@ -27,6 +27,9 @@ import { keyframes } from "@mui/system";
 import {Sun} from "./RotatingSun"
 import './fade.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMicrochip, faMemory } from '@fortawesome/free-solid-svg-icons';
+
 import {LetterSignup, LetterSignupChimp} from "../../../layout/newslettersignup";
 
 
@@ -578,11 +581,15 @@ export const Jumbotron = () => {
                   <Sun  style={{ width: '80%', height: '80%' }} />
                 </div>     
                 <Typography sx={{marginLeft: "10px", textAlign: "left", verticalAlign: "center", marginLeft: "20px"}}>
-                  <b>Pipeline active</b>
-                  <br/>
-                  vCPUs: {Math.round(pipelineStatus/1024)}
-                  <br/>
-                  vMemory: {Math.round(pipelineStatus*8/1024)}
+                  <div style={{marginBottom: "8px"}}><b>Pipeline active</b></div>
+                  <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+                    <FontAwesomeIcon icon={faMicrochip} style={{ marginRight: "12px" }} />
+                    <span style={{marginRight: "26px"}}>vCPUs:</span> {Math.round(pipelineStatus / 1024)}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <FontAwesomeIcon icon={faMemory} style={{ marginRight: "10px" }} />
+                    <span style={{marginRight: "6px"}}>vMemory:</span> {Math.round(pipelineStatus * 8 / 1024)} GB
+                  </div>
                 </Typography>
                 </Paper>
               </Grid>
