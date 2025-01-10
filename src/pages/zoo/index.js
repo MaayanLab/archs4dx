@@ -51,7 +51,7 @@ export const ZooPage = () => {
     useEffect(() => {
       const checkUserId = async () => {
         try {
-          const response = await fetch('https://dev.archs4.org/api/user/i');
+          const response = await fetch('https://archs4.org/api/user/i');
           const data = await response.json();
           if (data && data.id) {
             setHasUserId(true);

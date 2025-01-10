@@ -48,18 +48,10 @@ export const PublicPage = () => {
     setOpen(!open);
   };
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('/logout');
-    }, 60*1000*10);
-    return () => clearTimeout(timer); // Cleanup the timer when component unmounts
-  }, [navigate]);
-
   useEffect(() => {
     const checkUserId = async () => {
       try {
-        const response = await fetch('https://dev.archs4.org/api/user/i');
+        const response = await fetch('https://archs4.org/api/user/i');
         const data = await response.json();
         if (data && data.id) {
           setHasUserId(true);

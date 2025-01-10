@@ -72,12 +72,6 @@ export const Dashboard = () => {
   const toggle = () => setOpen((state) => !state);
 
   const navigate = useNavigate();
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('/logout');
-    }, 60*1000*10);
-    return () => clearTimeout(timer); // Cleanup the timer when component unmounts
-  }, [navigate]);
 
   const {
     userdata: user,

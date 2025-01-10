@@ -91,7 +91,7 @@ export const FooterSection = () => {
           >
             <Grid container>
             {data.general.footer.links.map(({ text, url }) => (
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <Link href={url} key={url} target="_blank" rel="noopener noreferrer">
                   {text}
                 </Link>
