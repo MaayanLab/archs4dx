@@ -588,7 +588,7 @@ export const Jumbotron = () => {
                   </div>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <FontAwesomeIcon icon={faMemory} style={{ marginRight: "10px" }} />
-                    <span style={{marginRight: "6px"}}>vMemory:</span> {Math.round(pipelineStatus * 8 / 1024)} GB
+                    <span style={{marginRight: "6px"}}>vMemory:</span> {Math.round(pipelineStatus * 4 / 1024)} GB
                   </div>
                 </Typography>
                 </Paper>
