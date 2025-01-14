@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect} from "react";
+import React, { useCallback, useState} from "react";
 import { Box, Grid, Chip, Tooltip, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,7 +13,6 @@ import { RequestRole } from "../../dashboard/components/request-role";
 import gtex from '../../../image/gtex.png';
 import tcga from '../../../image/tcga.png';
 import prismexp from '../../../image/prismexp.png';
-import missingfile from '../../../image/missing_file.svg';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 
@@ -48,11 +47,11 @@ const animation = keyframes`
 `;
 
 export const GeneCountSection = () => {
-    //const [version, setVersion] = useState('2.latest');
-    const [versionList, setVersionList] = useState([]);
-    const [selectedVersion, setSelectedVersion] = useState('2.latest');
-    const [versions, setVersions] = useState([]);
-    const [files, setFiles] = useState([]);
+    const [version, setVersion] = useState('2.6');
+
+    const handleVersionChange = (event) => {
+      setVersion(event.target.value);
+    };
     
     const [openDialog, setOpenDialog] = React.useState(false);
     const handleClickOpenDialog = () => {
@@ -63,56 +62,13 @@ export const GeneCountSection = () => {
     };
 
 
-    useEffect(() => {
-      // Fetch version files from the API
-      const fetchVersionFiles = async () => {
-          try {
-              const response = await fetch('https://archs4.org/api/versionfile');
-              const data = await response.json();
-              setSelectedVersion('2.latest'); 
-              setVersions(data.versionfiles);
-              // Set initial files based on the first version
-              const initialVersion = '2.latest';
-              const uniqueVersions = [...new Set(
-                data.versionfiles.map(file => `${file.version_major}.${file.version_minor}`)
-              )];
-              setVersionList(uniqueVersions.reverse());
-              setSelectedVersion(`${initialVersion.version_major}.${initialVersion.version_minor}`);
-              updateFiles(`${initialVersion.version_major}.${initialVersion.version_minor}`, data.versionfiles);
-              setSelectedVersion('2.latest'); 
-          } catch (error) {
-              console.error('Error fetching version files:', error);
-          }
-      };
-      
-      fetchVersionFiles();
-    }, []);
-
-    const updateFiles = (version, allFiles) => {
-        const filteredFiles = allFiles.reduce((acc, file) => {
-          const fileVersion = `${file.version_major}.${file.version_minor}`;
-          if (fileVersion === version) {
-              const key = `${file.species}_${file.data_level}`; // Create a key based on species and data level
-              acc[key]= file; // Push the file into the array for that key
-          }
-          return acc;
-        }, {});
-        setFiles(filteredFiles);
-    };
-
-    const handleVersionChange = (event) => {
-        const version = event.target.value;
-        setSelectedVersion(version);
-        updateFiles(version, versions);
-    };
-
     const writeLog = async (event, category) => {
       try {
 
         const url = event.currentTarget.href;
         const filename = url.substring(url.lastIndexOf('/') + 1);
 
-        const response = await fetch('https://archs4.org/api/log', {
+        const response = await fetch('http://127.0.0.1:5000/api/log', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -139,7 +95,7 @@ export const GeneCountSection = () => {
     const handleMouseLeave = () => {
         setIsHovered(false);
     };
-    
+
     return(
     <>
         <Box sx={{
@@ -162,7 +118,7 @@ export const GeneCountSection = () => {
               </Grid>
             
               <Grid item>
-              <Chip color="secondary" icon={<SettingsBackupRestoreIcon />} label={`Version ${selectedVersion}`} />
+              <Chip color="secondary" icon={<SettingsBackupRestoreIcon />} label={`Version ${version}`} />
               </Grid>
               
               
@@ -174,16 +130,14 @@ export const GeneCountSection = () => {
                     <InputLabel id="version-select-label">Version</InputLabel>
                     <Select
                       labelId="version-select-label"
-                      value={selectedVersion}
+                      value={version}
                       onChange={handleVersionChange}
                       label="Version"
-                      sx={{width: "110px"}}
                     >
-                      {versionList.map((version) => (
-                        <MenuItem key={version} value={version}>
-                            {version}
-                        </MenuItem>
-                      ))}
+                      <MenuItem value='2.6'>2.6</MenuItem>
+                      <MenuItem value='2.5'>2.5</MenuItem>
+                      <MenuItem value='2.4'>2.4</MenuItem>
+                      <MenuItem value='2.3'>2.3</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
@@ -194,56 +148,38 @@ export const GeneCountSection = () => {
                 Expression files for mouse and human in HDF5 format. All gene counts are on gene level (Entrez Gene Symbol). For compression purposes, the Kallisto pseudocounts are rounded to integer values.
               </Grid>
       
-              
-                    <Grid item sx={{
-                        marginTop: "10px",
-                        marginLeft: "20px",
-                        width: "340px",
-                        '&:hover': {
-                            borderRadius: "18px",
-                            background: 'linear-gradient(to right, transparent, white 1%, white 0%, transparent)',
-                            transition: 'background 12.3s ease-in-out',
-                        },
-                    }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sx={{ marginBottom: "-20px", marginTop: "-10px" }}>
-                                <h3>Human</h3>
-                            </Grid>
-
-                            {files['human_gene'] ? (
-                                <Grid item key={files['human_gene'].id}>
-                                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['human_gene'].species}_${files['human_gene'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
-                                        {`${files['human_gene'].species}_${files['human_gene'].data_level}_v${selectedVersion}.h5`}
-                                    </a><br />
-                                    <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
-                                    Date: {new Date(files['human_gene'].timestamp).toLocaleDateString()}<br/>
-                                    Samples: {files['human_gene'].samples}<br />
-                                    Size: {Math.round(files['human_gene'].file_size / (1024 * 1024 * 1024))} GB<br />
-                                    </div>
-                                    <Tooltip title={"SHA1 hash"} arrow>
-                                        <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label={files['human_gene'].checksum} sx={{
-                                            marginLeft: "-15px",
-                                            fontSize: "10px",
-                                            maxWidth: 'none',
-                                            overflow: 'visible',
-                                            whiteSpace: 'nowrap'
-                                        }} />
-                                    </Tooltip>
-                                </Grid>
-                            ):(
-                              <Grid item sx={{
-                                  display: 'flex',
-                                  alignItems: 'center', // Align items vertically center
-                                  color: 'grey',
-                                  marginTop: '10px', // Optional: adds some spacing from the top, if needed
-                                  paddingBottom: "15px"
-                              }}>
-                                  <img src={missingfile} alt="Missing file" style={{ width: '50px', marginRight: '8px' }} />
-                                  <span>File not available. Please try a different version.</span>
-                              </Grid>
-                            )}
-                         </Grid>
-                    </Grid>
+              <Grid item sx={{
+                marginTop: "10px",
+                marginLeft: "20px",
+                '&:hover': {
+                    borderRadius: "18px",
+                    background: 'linear-gradient(to right, transparent, white 1%, white 0%, transparent)',  // Gradient effect
+                    transition: 'background 12.3s ease-in-out',  // Smooth transition
+                  },
+                }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sx={{marginBottom: "-20px", marginTop: "-10px"}}>
+                    <h3>Human</h3>
+                  </Grid>
+      
+                  <Grid item>
+                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/human_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
+                    {`human_gene_v${version}.h5`}
+                    </a><br />
+                    Date: 8-24-2024<br />
+                    Size: 45G<br/>
+                    <Tooltip title={"SHA1 hash"} arrow>
+                      <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label="a7b21b55515959add7b1d620371bc4b2fb610976" sx={{
+                        marginLeft: "-15px",
+                        fontSize: "10px",
+                        maxWidth: 'none',
+                        overflow: 'visible',
+                        whiteSpace: 'nowrap'
+                      }} />
+                    </Tooltip>
+                  </Grid>
+                </Grid>
+              </Grid>
       
               <Grid item  sx={{
                 marginTop: "10px",
@@ -259,40 +195,22 @@ export const GeneCountSection = () => {
                     <h3>Mouse</h3>
                   </Grid>
       
-                  {files['mouse_gene'] ? (
-                      <Grid item key={files['mouse_gene'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['mouse_gene'].species}_${files['mouse_gene'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
-                              {`${files['mouse_gene'].species}_${files['mouse_gene'].data_level}_v${selectedVersion}.h5`}
-                          </a><br />
-                          <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
-                          Date: {new Date(files['mouse_gene'].timestamp).toLocaleDateString()}<br/>
-                          Samples: {files['mouse_gene'].samples}<br />
-                          Size: {Math.round(files['mouse_gene'].file_size / (1024 * 1024 * 1024))} GB<br />
-                          </div>
-                          <Tooltip title={"SHA1 hash"} arrow>
-                              <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label={files['mouse_gene'].checksum} sx={{
-                                  marginLeft: "-15px",
-                                  fontSize: "10px",
-                                  maxWidth: 'none',
-                                  overflow: 'visible',
-                                  whiteSpace: 'nowrap'
-                              }} />
-                          </Tooltip>
-                      </Grid>
-                  ):(
-                    <Grid item sx={{
-                        display: 'flex',
-                        alignItems: 'center', // Align items vertically center
-                        color: 'grey',
-                        marginTop: '10px', // Optional: adds some spacing from the top, if needed
-                        width: "290px",
-                        paddingBottom: "15px"
-                    }}>
-                        <img src={missingfile} alt="Missing file" style={{ width: '50px', marginRight: '8px' }} />
-                        <span>File not available. Please try a different version.</span>
-                    </Grid>
-                  )}
-
+                  <Grid item>
+                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/mouse_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
+                    {`mouse_gene_v${version}.h5`}
+                    </a><br />
+                    Date: 8-24-2024<br />
+                    Size: 45G<br />
+                    <Tooltip title={"SHA1 hash"} arrow>
+                      <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label="a7b21b55515959add7b1d620371bc4b2fb610976" sx={{
+                        marginLeft: "-15px",
+                        fontSize: "10px",
+                        maxWidth: 'none',
+                        overflow: 'visible',
+                        whiteSpace: 'nowrap'
+                      }} />
+                    </Tooltip>
+                  </Grid>
                 </Grid>
               </Grid>
       
@@ -311,7 +229,6 @@ export const GeneCountSection = () => {
               <Grid item sx={{
                 marginTop: "10px",
                 marginLeft: "20px",
-                width: "340px",
                 '&:hover': {
                     borderRadius: "18px",
                     background: 'linear-gradient(to right, transparent, white 1%, white 0%, transparent)',  // Gradient effect
@@ -323,46 +240,26 @@ export const GeneCountSection = () => {
                     <h3>Human</h3>
                   </Grid>
       
-                  {files['human_transcript'] ? (
-                      <Grid item key={files['human_transcript'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['human_transcript'].species}_${files['human_transcript'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
-                              {`${files['human_transcript'].species}_${files['human_transcript'].data_level}_v${selectedVersion}.h5`}
-                          </a><br />
-                          <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
-                          Date: {new Date(files['human_transcript'].timestamp).toLocaleDateString()}<br/>
-                          Samples: {files['human_transcript'].samples}<br />
-                          Size: {Math.round(files['human_transcript'].file_size / (1024 * 1024 * 1024))} GB<br />
-                          </div>
-                          <Tooltip title={"SHA1 hash"} arrow>
-                              <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label={files['human_transcript'].checksum} sx={{
-                                  marginLeft: "-15px",
-                                  fontSize: "10px",
-                                  maxWidth: 'none',
-                                  overflow: 'visible',
-                                  whiteSpace: 'nowrap'
-                              }} />
-                          </Tooltip>
-                      </Grid>
-                  ):(
-                    <Grid item sx={{
-                        display: 'flex',
-                        alignItems: 'center', // Align items vertically center
-                        color: 'grey',
-                        marginTop: '10px', // Optional: adds some spacing from the top, if needed
-                        paddingBottom: "15px"
-                    }}>
-                        <img src={missingfile} alt="Missing file" style={{ width: '50px', marginRight: '8px' }} />
-                        <span>File not available. Please try a different version.</span>
-                    </Grid>
-                  )}
-
+                  <Grid item>
+                    <a href="/"  onClick={(event) => writeLog(event, "download")}>human_transcript_v{version}.h5</a><br />
+                    Date: 8-24-2024<br />
+                    Size: 132G<br/>
+                    <Tooltip title={"SHA1 hash"} arrow>
+                      <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label="a7b21b55515959add7b1d620371bc4b2fb610976" sx={{
+                        marginLeft: "-15px",
+                        fontSize: "10px",
+                        maxWidth: 'none',
+                        overflow: 'visible',
+                        whiteSpace: 'nowrap'
+                      }} />
+                    </Tooltip>
+                  </Grid>
                 </Grid>
               </Grid>
       
               <Grid item  sx={{
                 marginTop: "10px",
                 marginLeft: "20px",
-                width: "300px",
                 '&:hover': {
                     borderRadius: "18px",
                     background: 'linear-gradient(to right, transparent, white 1%, white 0%, transparent)',  // Gradient effect
@@ -374,40 +271,20 @@ export const GeneCountSection = () => {
                     <h3>Mouse</h3>
                   </Grid>
       
-                  {files['mouse_transcript'] ? (
-                      <Grid item key={files['mouse_transcript'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['mouse_transcript'].species}_${files['mouse_transcript'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
-                              {`${files['mouse_transcript'].species}_${files['mouse_transcript'].data_level}_v${selectedVersion}.h5`}
-                          </a><br />
-                          <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
-                          Date: {new Date(files['mouse_transcript'].timestamp).toLocaleDateString()}<br/>
-                          Samples: {files['mouse_transcript'].samples}<br />
-                          Size: {Math.round(files['mouse_transcript'].file_size / (1024 * 1024 * 1024))} GB<br />
-                          </div>
-                          <Tooltip title={"SHA1 hash"} arrow>
-                              <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label={files['mouse_transcript'].checksum} sx={{
-                                  marginLeft: "-15px",
-                                  fontSize: "10px",
-                                  maxWidth: 'none',
-                                  overflow: 'visible',
-                                  whiteSpace: 'nowrap'
-                              }} />
-                          </Tooltip>
-                      </Grid>
-                  ):(
-                    <Grid item sx={{
-                        display: 'flex',
-                        alignItems: 'center', // Align items vertically center
-                        color: 'grey',
-                        marginTop: '10px', // Optional: adds some spacing from the top, if needed
-                        paddingBottom: "15px"
-                    }}>
-                        <img src={missingfile} alt="Missing file" style={{ width: '50px', marginRight: '8px' }} />
-                        <span>File not available. Please try a different version.</span>
-                    </Grid>
-                  )}
-
-
+                  <Grid item>
+                    <a href="/"  onClick={(event) => writeLog(event, "download")}>mouse_transcript_v{version}.h5</a><br />
+                    Date: 8-24-2024<br />
+                    Size: 123G<br />
+                    <Tooltip title={"SHA1 hash"} arrow>
+                      <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label="a7b21b55515959add7b1d620371bc4b2fb610976" sx={{
+                        marginLeft: "-15px",
+                        fontSize: "10px",
+                        maxWidth: 'none',
+                        overflow: 'visible',
+                        whiteSpace: 'nowrap'
+                      }} />
+                    </Tooltip>
+                  </Grid>
                 </Grid>
               </Grid>
 
