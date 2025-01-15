@@ -64,22 +64,16 @@ export const GeneCountSection = () => {
 
 
     useEffect(() => {
-      // Fetch version files from the API
       const fetchVersionFiles = async () => {
           try {
               const response = await fetch('https://archs4.org/api/versionfile');
               const data = await response.json();
-              setSelectedVersion('2.latest'); 
               setVersions(data.versionfiles);
-              // Set initial files based on the first version
-              const initialVersion = '2.latest';
               const uniqueVersions = [...new Set(
                 data.versionfiles.map(file => `${file.version_major}.${file.version_minor}`)
               )];
               setVersionList(uniqueVersions.reverse());
-              setSelectedVersion(`${initialVersion.version_major}.${initialVersion.version_minor}`);
-              updateFiles(`${initialVersion.version_major}.${initialVersion.version_minor}`, data.versionfiles);
-              setSelectedVersion('2.latest'); 
+              updateFiles(selectedVersion, data.versionfiles);
           } catch (error) {
               console.error('Error fetching version files:', error);
           }
@@ -98,6 +92,7 @@ export const GeneCountSection = () => {
           return acc;
         }, {});
         setFiles(filteredFiles);
+        console.log("files", files);
     };
 
     const handleVersionChange = (event) => {
