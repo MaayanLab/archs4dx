@@ -7,6 +7,7 @@ import natcom from "../../../image/naturecomm.png";
 import data from "../../../data/config.json";
 import { fontSize, styled } from "@mui/system";
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import {Tooltip} from "@mui/material";
 
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
@@ -25,6 +26,7 @@ import { NewsFeed } from "./news-feed";
 import { DonutCharts } from "./donut2";
 import { keyframes } from "@mui/system";
 import {Sun} from "./RotatingSun"
+import moon from "../../../image/moonsleeping.svg"
 import './fade.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -578,10 +580,27 @@ export const Jumbotron = () => {
               <Grid item xs={6}  sm={6} md={12}  lg={12} sx={{verticalAlign: "center"}}>
                 <Paper sx={{display: "flex", padding: "10px", width: "100%"}}>
                 <div style={{ width: '100px', height: '100px', marginLeft: "10px", marginRight: "10px"}}>
-                  <Sun  style={{ width: '80%', height: '80%' }} />
+                {pipelineStatus > 0 ? (
+                  <Sun style={{ width: '80%', height: '80%' }} />
+                ) : (
+                  <Tooltip title={"While I am waiting I might just as well take a nap."} arrow>
+                  <img
+                    style={{  width: '80%', height: '80%', marginTop: "10px" }}
+                    src={moon}
+                    alt="sleeping"
+                  />
+                  </Tooltip>
+                )}
                 </div>     
                 <Typography sx={{marginLeft: "10px", textAlign: "left", verticalAlign: "center", marginLeft: "20px"}}>
-                  <div style={{marginBottom: "8px"}}><b>Pipeline active</b></div>
+                  <div style={{marginBottom: "8px"}}>
+                    
+                    {pipelineStatus > 0 ? (
+                      <b>Pipeline active</b>
+                    ) : (
+                      <b>Pipeline sleeping</b>
+                    )}
+                  </div>
                   <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
                     <FontAwesomeIcon icon={faMicrochip} style={{ marginRight: "12px" }} />
                     <span style={{marginRight: "26px"}}>vCPUs:</span> {Math.round(pipelineStatus / 1024)}
