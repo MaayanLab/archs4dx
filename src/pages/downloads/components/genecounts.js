@@ -83,17 +83,28 @@ export const GeneCountSection = () => {
     }, []);
 
     const updateFiles = (version, allFiles) => {
-        const filteredFiles = allFiles.reduce((acc, file) => {
+      const filteredFiles = allFiles.reduce((acc, file) => {
           const fileVersion = `${file.version_major}.${file.version_minor}`;
           if (fileVersion === version) {
-              const key = `${file.species}_${file.data_level}`; // Create a key based on species and data level
-              acc[key]= file; // Push the file into the array for that key
+              const key = `${file.species}_${file.data_level}`;
+              
+              if (!acc[key]) {
+                  acc[key] = file;
+              } else {
+                  const existingFileTimestamp = new Date(acc[key].timestamp);
+                  const currentFileTimestamp = new Date(file.timestamp);
+                  
+                  if (currentFileTimestamp > existingFileTimestamp) {
+                      acc[key] = file;
+                  }
+              }
           }
           return acc;
-        }, {});
-        setFiles(filteredFiles);
-        console.log("files", files);
-    };
+      }, {});
+      
+      setFiles(filteredFiles);
+      console.log("filtered files", filteredFiles); // log the filtered result
+  };
 
     const handleVersionChange = (event) => {
         const version = event.target.value;
