@@ -36,6 +36,8 @@ import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
 import {NavBar} from "../../layout/navbar";
 
+import {SigpyStatusCheck} from "../../layout/sigpystatus";
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -229,6 +231,7 @@ export const DataView = () => {
       </Helmet>
 
         <>
+        
         {hasUserId ? (
           <>
           <AppBar position="fixed" open={open}>
@@ -430,7 +433,7 @@ export const DataView = () => {
       </Paper>
     </Box>
 
-
+        <SigpyStatusCheck />
         <FooterSection />
     </>
   )

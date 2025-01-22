@@ -74,10 +74,13 @@ export const GenePage = () => {
           <Helmet>
             <title>{data.general.project_title}</title>
             <link rel="icon" type="image/png" href={data.general.project_icon} />
-            <meta
-              name="description"
-              content="ARCHS4"
-            />
+            
+            <meta name="description" content={`Gene page for ${geneName}`} />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="ARCHS4 gene page" />
+            <meta name="twitter:description" content="ARCHS4 gene pages provide gene annotations, a comprehensive tissue expression atlas, and tissue specific gene correlations." />
+            <meta name="twitter:image" content="https://yourwebsite.com/path-to-your-subpage-image.jpg" />
+
           </Helmet>
 
             <>

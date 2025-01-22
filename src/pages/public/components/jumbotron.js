@@ -1,4 +1,4 @@
-import { Grid, Box, Typography } from "@mui/material";
+import { Grid, Box, Typography, Collapse} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import pipeline from "../../../image/pipeline.png";
 import archs4py from "../../../image/archs4py.png";
@@ -27,13 +27,16 @@ import { DonutCharts } from "./donut2";
 import { keyframes } from "@mui/system";
 import {Sun} from "./RotatingSun"
 import moon from "../../../image/moonsleeping.svg"
+import tasktime from "../../../image/checklist.svg"
 import './fade.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMicrochip, faMemory } from '@fortawesome/free-solid-svg-icons';
+import { faMicrochip, faMemory, faTimeline } from '@fortawesome/free-solid-svg-icons';
 
 import {LetterSignup, LetterSignupChimp} from "../../../layout/newslettersignup";
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const Container = styled("div")(({ theme }) => ({
   position: "relative",
@@ -116,8 +119,10 @@ export const Jumbotron = () => {
 
   const [jobQueue, setJobQueue] = useState([]);
   const [logStats, setLogStats] = useState({"download":0,"download_custom":0,"genesearch":0});
+  const [logTasks, setLogTasks] = useState({"pipeline/packaging_human_gene":{"date":"2025-01-21 22:56:10.753990","entry":"complete"},"pipeline/packaging_human_transcript":{"date":"2025-01-21 22:55:46.813525","entry":"complete"},"pipeline/packaging_mouse_gene":{"date":"2025-01-21 22:56:01.305827","entry":"complete"},"pipeline/packaging_mouse_transcript":{"date":"2025-01-21 22:55:54.521404","entry":"complete"},"pipeline/samplediscovery":{"date":"2025-01-21 22:55:23.484645","entry":"234"}});
   const [pipelineStatus, setPipelineStatus] = useState([]);
   const itemRefs = useRef([]); // Create ref array for each element
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const callbackFunction = useCallback(entries => {
     entries.forEach(entry => {
@@ -128,6 +133,22 @@ export const Jumbotron = () => {
     });
   }, []);
 
+  const taskOrder = [
+    'pipeline/samplediscovery',
+    'pipeline/packaging_human_gene',
+    'pipeline/packaging_human_transcript',
+    'pipeline/packaging_mouse_gene',
+    'pipeline/packaging_mouse_transcript',
+  ];
+
+  const taskDisplayMap = {
+    'pipeline/samplediscovery': 'Sample Discovery',
+    'pipeline/packaging_human_gene': 'Human Gene',
+    'pipeline/packaging_human_transcript': 'Human Transcript',
+    'pipeline/packaging_mouse_gene': 'Mouse Gene',
+    'pipeline/packaging_mouse_transcript': 'Mouse Transcript',
+  };
+
   useEffect(() => {
     const fetchJobQueueStats = async () => {
       try {
@@ -136,9 +157,22 @@ export const Jumbotron = () => {
           throw new Error('could not load jobqueue');
         }
         const data = await response.json();
-        setJobQueue(data["jobs"]); // assuming data is in the correct format
+        setLogTasks(data["jobs"]); // assuming data is in the correct format
       } catch (error) {
         console.error('Error fetching job queue:', error);
+      }
+    };
+
+    const fetchTaskLog = async () => {
+      try {
+        const response = await fetch('https://archs4.org/api/log/pipeline/tasks');
+        if (!response.ok) {
+          throw new Error('could not load tasks');
+        }
+        const data = await response.json();
+        setLogTasks(data["log"]);
+      } catch (error) {
+        console.error('Error fetching task log:', error);
       }
     };
 
@@ -171,6 +205,7 @@ export const Jumbotron = () => {
     fetchJobQueueStats();
     fetchPipelineStats();
     fetchLogStats();
+    fetchTaskLog();
   }, []); // empty dependency array means this effect only runs once when the component mounts
 
   useEffect(() => {
@@ -576,7 +611,7 @@ export const Jumbotron = () => {
             )}
             </Grid>
             <Grid item sm={12} md={4} lg={3}>
-            <Grid container spacing={4}>
+            <Grid container spacing={3}>
               <Grid item xs={6}  sm={6} md={12}  lg={12} sx={{verticalAlign: "center"}}>
                 <Paper sx={{display: "flex", padding: "10px", width: "100%"}}>
                 <div style={{ width: '100px', height: '100px', marginLeft: "10px", marginRight: "10px"}}>
@@ -620,12 +655,74 @@ export const Jumbotron = () => {
                   textColor={"black"}
                   hideText={"true"}
                   sx={{width: "50px", marginLeft: "-20px"}}
-                  style={{width: "160px", marginLeft: "-20px", marginRight: "0px"}} 
+                  style={{width: "110px", marginLeft: "6px", marginRight: "25px"}} 
                 />
                 <Typography>
                   <b>Current Cost</b> <br/>
                   avg $/fastq: ~$0.0052 
                 </Typography>
+                </Paper>
+              </Grid>
+              <Grid item xs={6} sm={6}  md={12} lg={12} sx={{display: "flex", width: "100%", height: "100%"}}>
+                <Paper sx={{display: "flex", padding: "10px", width: "100%" , textAlign: "left", zIndex: 0}}>
+                <img
+                    style={{  width: '70px', marginTop: "10px", marginLeft: "30px", marginRight: "40px" }}
+                    src={tasktime}
+                    alt="lasttask"
+                  />
+                
+
+                <Box 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          cursor: 'pointer',
+          justifyContent: 'space-between'
+        }}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <Typography component="div">
+          <b>Task History</b>
+        </Typography>
+        <IconButton size="small">
+          {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </IconButton>
+      </Box>
+      
+      <Collapse in={isExpanded}
+        sx={{
+          position: 'absolute',
+          top: '100%',
+          zIndex: 2000
+        }}
+      >
+        <Box sx={{ mt: 2, pl: 2}}>
+          {logTasks ? (
+            <div style={{backgroundColor: "#f6f6f6", marginLeft: "-26px", padding: "20px", marginTop: "-110px", borderRadius: "4px", border: "1px solid grey"}}>
+              {taskOrder.map((taskKey) => {
+                const task = logTasks[taskKey];
+                if (!task) return null;
+                
+                return (
+                  <Box key={taskKey} sx={{ mb: 1.5 }}>
+                    <Typography>
+                      <strong>{taskDisplayMap[taskKey]}:</strong> {task.entry}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {new Date(task.date).toLocaleString()}
+                    </Typography>
+                  </Box>
+                );
+              })}
+            </div>
+          ) : (
+            <Typography color="text.secondary">
+              Loading task history...
+            </Typography>
+          )}
+        </Box>
+      </Collapse>
+
                 </Paper>
               </Grid>
             </Grid>
