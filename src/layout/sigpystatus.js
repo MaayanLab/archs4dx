@@ -24,7 +24,7 @@ export const SigpyStatusCheck = () => {
                 setStatus(response.data);
 
                 // Check if the service status is "updating"
-                if (response.data.message !== "updating") {
+                if (response.data.message !== "active") {
                     setAlertMessage('The data API is currently updating. The maintanace can take several hours during which time all data related queries are disabled. Please try again at a later timepoint.');
                     setAlertSeverity('error');
                     setOpen(true);
