@@ -157,7 +157,7 @@ export const Jumbotron = () => {
           throw new Error('could not load jobqueue');
         }
         const data = await response.json();
-        setLogTasks(data["jobs"]); // assuming data is in the correct format
+        setJobQueue(data["jobs"]); // assuming data is in the correct format
       } catch (error) {
         console.error('Error fetching job queue:', error);
       }
