@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Collapse} from "@mui/material";
+import { Grid, Box, Typography, Collapse, Button} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import pipeline from "../../../image/pipeline.png";
 import archs4py from "../../../image/archs4py.png";
@@ -37,6 +37,17 @@ import {LetterSignup, LetterSignupChimp} from "../../../layout/newslettersignup"
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+
+const MButton = styled(Button)(({ theme }) => ({
+  transition: 'color 0.3s ease, background-color 0.3s ease',
+  '&:hover': {
+    color: '#fff',
+    backgroundColor: '#0F7F90',
+  }}))
 
 const Container = styled("div")(({ theme }) => ({
   position: "relative",
@@ -120,9 +131,22 @@ export const Jumbotron = () => {
   const [jobQueue, setJobQueue] = useState([]);
   const [logStats, setLogStats] = useState({"download":0,"download_custom":0,"genesearch":0});
   const [logTasks, setLogTasks] = useState({"pipeline/packaging_human_gene":{"date":"2025-01-21 22:56:10.753990","entry":"complete"},"pipeline/packaging_human_transcript":{"date":"2025-01-21 22:55:46.813525","entry":"complete"},"pipeline/packaging_mouse_gene":{"date":"2025-01-21 22:56:01.305827","entry":"complete"},"pipeline/packaging_mouse_transcript":{"date":"2025-01-21 22:55:54.521404","entry":"complete"},"pipeline/samplediscovery":{"date":"2025-01-21 22:55:23.484645","entry":"234"}});
+  const [pipelineOverview, setPipelineOverview] = useState({});
   const [pipelineStatus, setPipelineStatus] = useState([]);
   const itemRefs = useRef([]); // Create ref array for each element
   const [isExpanded, setIsExpanded] = useState(false);
+
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isMenuOpen = Boolean(anchorEl);
+  
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const callbackFunction = useCallback(entries => {
     entries.forEach(entry => {
@@ -150,6 +174,7 @@ export const Jumbotron = () => {
   };
 
   useEffect(() => {
+
     const fetchJobQueueStats = async () => {
       try {
         const response = await fetch('https://archs4.org/api/pipeline/jobqueue');
@@ -162,6 +187,19 @@ export const Jumbotron = () => {
         console.error('Error fetching job queue:', error);
       }
     };
+
+    const fetchPipelineOverview = async () => {
+      try {
+        const response = await fetch('https://archs4.org/api/pipeline/overview');
+        if (!response.ok) {
+          throw new Error('could not load overview');
+        }
+        const data = await response.json();
+        setPipelineOverview(data["status"]);
+      } catch (error) {
+        console.error('Error fetching pipeline overview:', error);
+      }
+    }
 
     const fetchTaskLog = async () => {
       try {
@@ -206,6 +244,7 @@ export const Jumbotron = () => {
     fetchPipelineStats();
     fetchLogStats();
     fetchTaskLog();
+    fetchPipelineOverview();
   }, []); // empty dependency array means this effect only runs once when the component mounts
 
   useEffect(() => {
@@ -557,8 +596,6 @@ export const Jumbotron = () => {
               </Typography>
 
           </Paper>
-        
-        
 
           <Grid item xs={12} sx={{
             textAlign: "center",
@@ -681,47 +718,117 @@ export const Jumbotron = () => {
         }}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <Typography component="div">
-          <b>Task History</b>
-        </Typography>
-        <IconButton size="small">
-          {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </IconButton>
+
+        <MButton
+        variant="text"
+        className="intraButton mbutton"
+        id="basic-button"
+        aria-controls={isMenuOpen ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={isMenuOpen ? 'true' : undefined}
+        onClick={handleClick}
+        sx={{marginLeft: "10px"}}
+      >
+        <FontAwesomeIcon icon={isMenuOpen ? faCaretUp : faCaretDown} style={{ marginRight: '6px' }} />
+        Task History
+      </MButton>
+          
       </Box>
       
-      <Collapse in={isExpanded}
+      <Menu
+      id="basic-menu"
+      anchorEl={anchorEl}
+      open={isMenuOpen}
+      onClose={handleCloseMenu}
+      MenuListProps={{
+        'aria-labelledby': 'basic-button',
+      }}
+      PaperProps={{
+        sx: {
+          display: 'flex',
+          flexDirection: 'row', // Two-column layout
+          width: '380px', // Increased width for better layout
+          padding: 2,
+          maxHeight: '80vh', // To prevent overflow on smaller screens
+        },
+      }}
+    >
+      {/* Left Panel */}
+      <Box
         sx={{
-          position: 'absolute',
-          top: '100%',
-          zIndex: 2000
+          paddingLeft: 2,
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
         }}
       >
-        <Box sx={{ mt: 2, pl: 2}}>
+        <Typography  variant="subtitle4" sx={{fontSize: "22px"}}  gutterBottom>
+          ARCHS4 Task History
+        </Typography>
+      </Box>
+
+      {/* Right Panel */}
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          paddingLeft: 2,
+        }}
+      >
+
           {logTasks ? (
-            <div style={{backgroundColor: "#f6f6f6", marginLeft: "-26px", padding: "20px", marginTop: "-110px", borderRadius: "4px", border: "1px solid grey"}}>
-              {taskOrder.map((taskKey) => {
-                const task = logTasks[taskKey];
-                if (!task) return null;
-                
-                return (
-                  <Box key={taskKey} sx={{ mb: 1.5 }}>
-                    <Typography>
-                      <strong>{taskDisplayMap[taskKey]}:</strong> {task.entry}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {new Date(task.date).toLocaleString()}
-                    </Typography>
-                  </Box>
-                );
-              })}
-            </div>
+            <>
+              <Box>
+                {taskOrder.map((taskKey) => {
+                  const task = logTasks[taskKey];
+                  if (!task) return null;
+
+                  return (
+                    <Box key={taskKey} sx={{ mb: 1.5 }}>
+                      <div>
+                      <Typography variant="body1">
+                        <strong>{taskDisplayMap[taskKey]}:</strong> {task.entry}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        <div >
+                        {new Date(task.date).toLocaleString()}
+                        </div>
+                      </Typography>
+                      </div>
+                    </Box>
+                  );
+                })}
+              </Box>
+
+              {pipelineOverview && (
+                <Box sx={{ mb: 1.5 }}>
+                  <Typography variant="subtitle4" gutterBottom sx={{fontSize: "22px"}}>
+                    Pipeline Overview
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Waiting:</strong> {pipelineOverview.waiting}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Submitted:</strong> {pipelineOverview.submitted}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Completed:</strong> {pipelineOverview.completed}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Failed:</strong> {pipelineOverview.failed}
+                  </Typography>
+                </Box>
+              )}
+            </>
           ) : (
-            <Typography color="text.secondary">
-              Loading task history...
-            </Typography>
+            <Typography color="text.secondary">Loading task history...</Typography>
           )}
-        </Box>
-      </Collapse>
+      </Box>
+    </Menu>
+
 
                 </Paper>
               </Grid>
