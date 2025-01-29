@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
+import recent_icon from "../../../image/24hours.jpg";
 
 export const PipelineStatusChart = () => {
   const [series, setSeries] = useState([]);
@@ -53,6 +54,12 @@ export const PipelineStatusChart = () => {
   }, []);
 
   return (
+    <>
+    <img
+        src={recent_icon}
+        alt="Task outcomes in the last 24 hours"
+        style={{ width: "50px", height: "auto", position: "absoute", marginBottom: "-50px", zIndex: "4", marginLeft: "290px" }}
+    />
     <BarChart
       height={120}
       width={350}
@@ -75,5 +82,6 @@ export const PipelineStatusChart = () => {
       grid={{ vertical: false, horizontal: false }} // Remove grid lines
       margin={{ top: 0, bottom: 0, left: 10, right: 10 }}
     />
+    </>
   );
 };
