@@ -24,6 +24,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 import { NewsFeed } from "./news-feed";
 import { DonutCharts } from "./donut2";
+import {PipelineStatusChart} from "./recentbarchart.js";
 import { keyframes } from "@mui/system";
 import {Sun} from "./RotatingSun"
 import moon from "../../../image/moonsleeping.svg"
@@ -31,15 +32,11 @@ import tasktime from "../../../image/checklist.svg"
 import './fade.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMicrochip, faMemory, faTimeline } from '@fortawesome/free-solid-svg-icons';
+import { faMicrochip, faMemory } from '@fortawesome/free-solid-svg-icons';
 
-import {LetterSignup, LetterSignupChimp} from "../../../layout/newslettersignup";
-
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import {LetterSignup} from "../../../layout/newslettersignup";
 
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 const MButton = styled(Button)(({ theme }) => ({
@@ -761,6 +758,7 @@ export const Jumbotron = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-start',
+          marginLeft: "-12px"
         }}
       >
         <Typography  variant="subtitle4" sx={{fontSize: "22px"}}  gutterBottom>
@@ -827,6 +825,7 @@ export const Jumbotron = () => {
             <Typography color="text.secondary">Loading task history...</Typography>
           )}
       </Box>
+      <PipelineStatusChart/>
     </Menu>
 
 
