@@ -409,7 +409,7 @@ export const DataView = () => {
             )}
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <SignatureSearch setNewSearchResult={setNewSearchResult}/>
+            <SignatureSearch setNewSearchResult={setNewSearchResult} species={species}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
             Item Three
