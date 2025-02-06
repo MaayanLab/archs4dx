@@ -9,12 +9,13 @@ import MuiAppBar from "@mui/material/AppBar";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { useNavigate } from 'react-router-dom';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 
 import "./components/styles.css"
 
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ApiDocumentation } from './components/api';
 
 // Define drawerWidth outside the component
 const drawerWidth = 344;
@@ -44,6 +45,13 @@ export const HelpPage = () => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState(''); // State for email input
   const [hasUserId, setHasUserId] = useState(false);
+
+  // A helper for rendering code snippets using react-syntax-highlighter
+  const CodeBlock = ({ language, children }) => (
+    <SyntaxHighlighter language={language} style={okaidia}>
+      {children}
+    </SyntaxHighlighter>
+  );
 
   const toggle = () => {
     setOpen(!open);
@@ -87,54 +95,52 @@ export const HelpPage = () => {
       alert('Please enter a valid email address.');
     }
   };
+  
 
+    const codeString = `# R script to download selected samples
+# Copy code and run on a local machine to initiate download
+# Check for dependencies and install if missing
+library("rhdf5") # can be installed using Bioconductor
+destination_file = "human_matrix_v9.h5"
+extracted_expression_file = "GSM2679484_expression_matrix.tsv"
+url = "https://s3.dev.maayanlab.cloud/archs4/files/human_gene_v2.latest.h5"
 
-    const codeString = `
-    # R script to download selected samples
-    # Copy code and run on a local machine to initiate download
-    # Check for dependencies and install if missing
-    library("rhdf5") # can be installed using Bioconductor
-    destination_file = "human_matrix_v9.h5"
-    extracted_expression_file = "GSM2679484_expression_matrix.tsv"
-    url = "https://s3.amazonaws.com/mssm-seq-matrix/human_matrix_v9.h5"
+# Check if gene expression file was already downloaded, if not in current directory download file form repository
+if (!file.exists(destination_file)) {
+print("Downloading compressed gene expression matrix.")
+download.file(url, destination_file, quiet = FALSE, mode = 'wb')
+}
 
-    # Check if gene expression file was already downloaded, if not in current directory download file form repository
-    if (!file.exists(destination_file)) {
-    print("Downloading compressed gene expression matrix.")
-    download.file(url, destination_file, quiet = FALSE, mode = 'wb')
-    }
+# Selected samples to be extracted
+samp = c("GSM2679452", "GSM2679453", "GSM2679454", "GSM2679455", "GSM2679456",
+        "GSM2679457", "GSM2679458", "GSM2679459", "GSM2679460", "GSM2679461", 
+        "GSM2679462", "GSM2679463", "GSM2679464", "GSM2679465", "GSM2679466", 
+        "GSM2679467", "GSM2679468", "GSM2679469", "GSM2679470", "GSM2679471", 
+        "GSM2679472", "GSM2679473", "GSM2679474", "GSM2679475", "GSM2679476", 
+        "GSM2679477", "GSM2679478", "GSM2679479", "GSM2679480", "GSM2679481", 
+        "GSM2679482", "GSM2679483", "GSM2679484", "GSM2679485", "GSM2679486", 
+        "GSM2679487", "GSM2679488", "GSM2679489", "GSM2679490", "GSM2679491", 
+        "GSM2679492", "GSM2679493", "GSM2679494", "GSM2679495", "GSM2679496", 
+        "GSM2679497", "GSM2679498", "GSM2679499", "GSM2679500", "GSM2679501", 
+        "GSM2679502", "GSM2679503", "GSM2679504", "GSM2679505", "GSM2679506", 
+        "GSM2679507", "GSM2679508", "GSM2679509", "GSM2679510", "GSM2679511")
 
-    # Selected samples to be extracted
-    samp = c("GSM2679452", "GSM2679453", "GSM2679454", "GSM2679455", "GSM2679456",
-            "GSM2679457", "GSM2679458", "GSM2679459", "GSM2679460", "GSM2679461", 
-            "GSM2679462", "GSM2679463", "GSM2679464", "GSM2679465", "GSM2679466", 
-            "GSM2679467", "GSM2679468", "GSM2679469", "GSM2679470", "GSM2679471", 
-            "GSM2679472", "GSM2679473", "GSM2679474", "GSM2679475", "GSM2679476", 
-            "GSM2679477", "GSM2679478", "GSM2679479", "GSM2679480", "GSM2679481", 
-            "GSM2679482", "GSM2679483", "GSM2679484", "GSM2679485", "GSM2679486", 
-            "GSM2679487", "GSM2679488", "GSM2679489", "GSM2679490", "GSM2679491", 
-            "GSM2679492", "GSM2679493", "GSM2679494", "GSM2679495", "GSM2679496", 
-            "GSM2679497", "GSM2679498", "GSM2679499", "GSM2679500", "GSM2679501", 
-            "GSM2679502", "GSM2679503", "GSM2679504", "GSM2679505", "GSM2679506", 
-            "GSM2679507", "GSM2679508", "GSM2679509", "GSM2679510", "GSM2679511")
+# Retrieve information from compressed data
+samples = h5read(destination_file, "meta/samples/geo_accession")
+genes = h5read(destination_file, "meta/genes/genes")
 
-    # Retrieve information from compressed data
-    samples = h5read(destination_file, "meta/samples/geo_accession")
-    genes = h5read(destination_file, "meta/genes/genes")
+# Identify columns to be extracted
+sample_locations = which(samples %in% samp)
 
-    # Identify columns to be extracted
-    sample_locations = which(samples %in% samp)
+# Extract gene expression from compressed data
+expression = t(h5read(destination_file, "data/expression", index = list(sample_locations, 1:length(genes))))
+H5close()
+rownames(expression) = genes
+colnames(expression) = samples[sample_locations]
 
-    # Extract gene expression from compressed data
-    expression = t(h5read(destination_file, "data/expression", index = list(sample_locations, 1:length(genes))))
-    H5close()
-    rownames(expression) = genes
-    colnames(expression) = samples[sample_locations]
-
-    # Print file
-    write.table(expression, file = extracted_expression_file, sep = "\\t", quote = FALSE, col.names = NA)
-    print(paste0("Expression file was created at ", getwd(), "/", extracted_expression_file))
-        `;
+# Print file
+write.table(expression, file = extracted_expression_file, sep = "\\t", quote = FALSE, col.names = NA)
+print(paste0("Expression file was created at ", getwd(), "/", extracted_expression_file))`;
 
   return (
     <>
@@ -292,6 +298,11 @@ export const HelpPage = () => {
               </div>
 
               <div style={{ flex: '1 1 300px', marginBottom: '20px' }}>
+              <h3 style={{ marginBottom: '10px' }}>
+                  <span style={{ cursor: 'pointer', color: 'black' }} onClick={() => scrollPage('apidoc')}>
+                    API documentation
+                  </span>
+                </h3>
                 <h3 style={{ marginBottom: '10px' }}>
                   <span style={{ cursor: 'pointer', color: 'black' }} onClick={() => scrollPage('termsofuse')}>
                     Terms of use
@@ -399,6 +410,7 @@ The colors of sample and gene sets can be modified in the result section.
             <p style={{ fontSize: '14px' }}>
             Hierarchical Data Format (HDF) is an open source file format for large data storage. It allows programmatic accessibility of matrix entries based on column and row indices while allowing for efficient data compression. The H5 files provided by ARCHS4 contain raw read counts as well as detailed meta data information extracted from GEO.
             </p>
+            <br/>
             <div style={{ textAlign: 'center' }}>
             <iframe
                 width="560"
@@ -410,67 +422,62 @@ The colors of sample and gene sets can be modified in the result section.
             ></iframe>
             </div>
             <p>
+            <br/>
+            <strong>H5 metadata/data fields</strong>
+            <br/>
+            <p>H5 file structure with hierachical data fields. data/expression contains the expression matrix. In this example there are 53511 genes and 1041306 samples. The meta field contains meta information for genes and samples, as well as general information. </p>
+            <br/>
+            
 
-            <table>
-        <thead>
-            <tr>
-                <th>Path</th>
-                <th>Object Type</th>
-                <th>Data Type</th>
-                <th>Dimensions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>/data</td><td>H5I_GROUP</td><td></td><td></td></tr>
-            <tr><td>/data/expression</td><td>H5I_DATASET</td><td>INTEGER</td><td>307268 x 35238</td></tr>
-            <tr><td>/meta</td><td>H5I_GROUP</td><td></td><td></td></tr>
-            <tr><td>/meta/genes/chromosome</td><td>H5I_DATASET</td><td>STRING</td><td>35238</td></tr>
-            <tr><td>/meta/genes/ensembl_gene_id</td><td>H5I_DATASET</td><td>STRING</td><td>35238</td></tr>
-            <tr><td>/meta/genes/gene_biotype</td><td>H5I_DATASET</td><td>STRING</td><td>35238</td></tr>
-            <tr><td>/meta/genes/gene_symbol</td><td>H5I_DATASET</td><td>STRING</td><td>35238</td></tr>
-            <tr><td>/meta/genes/gene</td><td>H5I_DATASET</td><td>STRING</td><td>35238</td></tr>
-            <tr><td>/meta/genes/start_position</td><td>H5I_DATASET</td><td>STRING</td><td>35238</td></tr>
-            <tr><td>/meta/info</td><td>H5I_GROUP</td><td></td><td></td></tr>
-            <tr><td>/meta/info/author</td><td>H5I_DATASET</td><td>STRING</td><td>(0)</td></tr>
-            <tr><td>/meta/info/contact</td><td>H5I_DATASET</td><td>STRING</td><td>(0)</td></tr>
-            <tr><td>/meta/info/creation-date</td><td>H5I_DATASET</td><td>STRING</td><td>(0)</td></tr>
-            <tr><td>/meta/info/laboratory</td><td>H5I_DATASET</td><td>STRING</td><td>(0)</td></tr>
-            <tr><td>/meta/info/version</td><td>H5I_DATASET</td><td>INTEGER</td><td>(0)</td></tr>
-            <tr><td>/meta/samples</td><td>H5I_GROUP</td><td></td><td></td></tr>
-            <tr><td>/meta/samples/channel_count</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/characteristics_ch1</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/contact_address</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/contact_city</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/contact_country</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/contact_institute</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/contact_name</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/contact_zip</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/data_processing</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/data_row_count</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/extract_protocol_ch1</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/geo_accession</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/instrument_model</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/last_update_date</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/library_selection</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/library_source</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/library_strategy</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/molecule_ch1</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/organism_ch1</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/platform_id</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/readsaligned</td><td>H5I_DATASET</td><td>FLOAT</td><td>307268</td></tr>
-            <tr><td>/meta/samples/readstotal</td><td>H5I_DATASET</td><td>FLOAT</td><td>307268</td></tr>
-            <tr><td>/meta/samples/relation</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/series_id</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/singlecellprobability</td><td>H5I_DATASET</td><td>FLOAT</td><td>307268</td></tr>
-            <tr><td>/meta/samples/source_name_ch1</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/status</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/submission_date</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/taxid_ch1</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/title</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/samples/type</td><td>H5I_DATASET</td><td>STRING</td><td>307268</td></tr>
-            <tr><td>/meta/genes</td><td>H5I_DATASET</td><td>STRING</td><td>35238</td></tr>
-        </tbody>
-    </table>
+            <pre style={{backgroundColor: "#fcf8ed", fontFamily: "monospace", whiteSpace: "pre", borderRadius: "6px", border: "1px solid black", padding: "50px" }}>
+
+<strong>Fields</strong>                    <strong>Type</strong>     <strong>Dimensions</strong>
+<br/><br/>
+<strong>data</strong><br/>                      
+│ expression                uint32 | (53511, 1041306)<br/>
+<strong>meta</strong><br/>                      
+│ <strong>genes</strong><br/>                     
+│   biotype                 str    | (53511,)<br/>
+│   ensembl_gene            str    | (53511,)<br/>
+│   symbol                  str    | (53511,)<br/>
+│ <strong>info</strong><br/>                      
+│   author                  str    | ()<br/>
+│   contact                 str    | ()<br/>
+│   creation-date           str    | ()<br/>
+│   laboratory              str    | ()<br/>
+│   version                 str    | ()<br/>
+│ <strong>samples</strong><br/>                 
+│   alignedreads           float64 | (1041306,)<br/>
+│   channel_count           str    | (1041306,)<br/>
+│   characteristics_ch1     str    | (1041306,)<br/>
+│   contact_address         str    | (1041306,)<br/>
+│   contact_city            str    | (1041306,)<br/>
+│   contact_country         str    | (1041306,)<br/>
+│   contact_institute       str    | (1041306,)<br/>
+│   contact_name            str    | (1041306,)<br/>
+│   contact_zip             str    | (1041306,)<br/>
+│   data_processing         str    | (1041306,)<br/>
+│   extract_protocol_ch1    str    | (1041306,)<br/>
+│   geo_accession           str    | (1041306,)<br/>
+│   instrument_model        str    | (1041306,)<br/>
+│   last_update_date        str    | (1041306,)<br/>
+│   library_selection       str    | (1041306,)<br/>
+│   library_source          str    | (1041306,)<br/>
+│   library_strategy        str    | (1041306,)<br/>
+│   molecule_ch1            str    | (1041306,)<br/>
+│   organism_ch1            str    | (1041306,)<br/>
+│   platform_id             str    | (1041306,)<br/>
+│   relation                str    | (1041306,)<br/>
+│   sample                  str    | (1041306,)<br/>
+│   series_id               str    | (1041306,)<br/>
+│   singlecellprobability  float64 | (1041306,)<br/>
+│   source_name_ch1         str    | (1041306,)<br/>
+│   status                  str    | (1041306,)<br/>
+│   submission_date         str    | (1041306,)<br/>
+│   taxid_ch1               str    | (1041306,)<br/>
+│   title                   str    | (1041306,)<br/>
+│   type                    str    | (1041306,)<br/>
+    </pre>
 
             </p>
             </div>
@@ -478,14 +485,82 @@ The colors of sample and gene sets can be modified in the result section.
             <div class="subpoint">
             <h4 id="parsing">Parsing the H5 file</h4>
             <p style={{ fontSize: '14px' }}>
-            Scripts to extract tab separated gene expression files can be created through the graphical user interface of ARCHS4. The script has to be executed as an R-script. A free version of R can be downloaded from: www.rstudio.com. Upon execution the script should install all required dependencies, and then download the full gene expression file before extracting the selected samples.
+              The recommended way to interact with the ARCHS4 H5 files is the official <strong>archs4py</strong> Python package. Full documentation can be found on the GitHub page: <a href="https://github.com/MaayanLab/archs4py">https://github.com/MaayanLab/archs4py</a>. The package supports a wide variety of functions, such as data download, data extraction, meta data search, and local execution of the ARCHS4 sequence alignment.
+              We are also providing an R package with similar functionality (<strong>archs4r</strong>). The Documentation can be found here: <a href="https://github.com/MaayanLab/archs4r">https://github.com/MaayanLab/archs4r</a>
+            </p>
+            <br/>
+            <br/>
+            <p>
+            <strong>Install archs4py</strong>
+            <CodeBlock  language="bash">
+                {`pip3 install archs4py`}
+            </CodeBlock>
             </p>
 
             <p>
+            <strong>Example use (Python):</strong><br/>
+            For full documentation of parameters and options refer to the GitHub documentation. <a href="https://github.com/MaayanLab/archs4py">https://github.com/MaayanLab/archs4py</a>
+            <CodeBlock  language="python">
+                {`import archs4py as a4
 
-            <SyntaxHighlighter language="r" style={solarizedlight}>
-                {codeString}
-            </SyntaxHighlighter>
+
+file = "human_gene_v2.6.h5"
+
+# list file structure
+a4.ls(file)
+
+
+# Data extraction module
+# ----------------------
+
+# extract 100 random samples and remove sinle cell data
+rand_counts = a4.data.rand(file, 100, remove_sc=True)
+
+# get counts for samples at position [0,1,2,3,4]
+pos_counts = a4.data.index(file, [0,1,2,3,4])
+
+# search and extract samples matching regex (ignores whitespaces)
+meta_counts = a4.data.meta(file, "myoblast", remove_sc=True)
+
+#get sample counts
+sample_counts = a4.data.samples(file, ["GSM1158284","GSM1482938","GSM1562817"])
+
+#get sample counts for samples belonging to GSE64016
+series_counts = a4.data.series(file, "GSE64016")
+
+
+# Metadata module
+# ---------------
+
+# get sample meta data based on search term
+meta_meta = a4.meta.meta(file, "myoblast", meta_fields=["characteristics_ch1", "source_name_ch1"])
+
+# get sample meta data
+sample_meta = a4.meta.samples(file, ["GSM1158284","GSM1482938","GSM1562817"])
+
+# get series meta data
+series_meta = a4.meta.series(file, "GSE64016")
+
+# get all entries of a meta data field for all samples. In this example get all sample ids and gene symbols in H5 file
+all_samples = a4.meta.field(file, "geo_accession")
+all_symbols = a4.meta.field(file, "symbol")
+
+
+# Utility functions
+# -----------------
+
+exp = a4.data.rand(file, 100, remove_sc=True)
+
+# aggregate duplicate genes
+exp_deduplicated = a4.utils.aggregate_duplicate_genes(exp)
+
+# filter genes with low expression
+exp_filtered = a4.utils.filter_genes(exp, readThreshold=50, sampleThreshold=0.02, deterministic=True, aggregate=True)
+
+# normalize gene expression to correct for library size
+exp_normalized = a4.normalize(exp, method="log_quantile")
+`}
+            </CodeBlock>
             </p>
 
             </div>
@@ -494,7 +569,7 @@ The colors of sample and gene sets can be modified in the result section.
             <h4 id="batcheffect">Batch effect correction</h4>
             <p style={{ fontSize: '14px' }}>
             Extracted samples from a specified tissue can originate from multiple series with slightly different experimental conditions. If desired batch effects from gene expression can be removed with the Combat library.
-            </p>
+            </p><br/><br/>
             <div style={{ textAlign: 'center' }}>
             <iframe
                 width="560"
@@ -535,11 +610,7 @@ Open gene landing page when searching by gene symbol. A set of genes can be high
             </div>
 
             <div class="subpoint">
-            <h4 id="api">API</h4>
-            <p style={{ fontSize: '14px' }}>
-            
-Open gene landing page when searching by gene symbol. A set of genes can be highlighted by selecting a gene set library and a corresponding gene set.
-            </p>
+            <ApiDocumentation/>
             </div>
 
         </div>
@@ -606,9 +677,10 @@ Open gene landing page when searching by gene symbol. A set of genes can be high
       </p>
     </div>
 
-
-
         </Paper>
+
+          
+
       </Box>
 
       {/* Footer Section */}
