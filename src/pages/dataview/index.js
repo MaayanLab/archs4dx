@@ -31,6 +31,7 @@ import mouse_foot from "./../../image/mouse_foot.svg";
 import dnaicon from "./../../image/dna-black-icon2.svg";
 import sampleicon from "./../../image/lab-icon.svg";
 import { SignatureSearch } from "./components/signaturesearch";
+import { DiffExpQuery } from "./components/diffgenesearch";
 
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
@@ -154,6 +155,7 @@ export const DataView = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [newSearchResult, setNewSearchResult] = useState();
+    const [newGeneSearchResult, setNewGeneSearchResult] = useState();
 
     useEffect(() => {
       const checkUserId = async () => {
@@ -408,13 +410,16 @@ export const DataView = () => {
               <CellLineList menuId="sidemenu2" setSearchQuery={updateSearchQueryFromCellList} />
             )}
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <SignatureSearch setNewSearchResult={setNewSearchResult} species={species}/>
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            Item Three
-          </CustomTabPanel>
-          </div>  
+          {sampleMode === "sample" ? (
+              <CustomTabPanel value={value} index={1}>
+                  <SignatureSearch setNewSearchResult={setNewSearchResult} species={species} />
+              </CustomTabPanel>
+          ) : (
+              <CustomTabPanel value={value} index={1}>
+                <DiffExpQuery setNewGeneSearchResult={setNewGeneSearchResult} species={species} />
+              </CustomTabPanel>  
+          )}
+          </div>
         </div>
       </Paper>
       </div>
@@ -429,7 +434,7 @@ export const DataView = () => {
       >
         
         <br />
-        <ScatterPlot sampleMode={sampleMode} speciesMode={species} query={searchQuery} newSearchResult={newSearchResult} />
+        <ScatterPlot sampleMode={sampleMode} speciesMode={species} query={searchQuery} newSearchResult={newSearchResult} newGeneSearchResult={newGeneSearchResult} />
       </Paper>
     </Box>
 
