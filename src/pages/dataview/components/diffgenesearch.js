@@ -62,7 +62,7 @@ export const DiffExpQuery = ({setNewGeneSearchResult, species}) => {
     setLoading(true);
     setResult(null); // clear previous results if any
     
-    const url = "http://127.0.0.1:5500/sigpy/data/diffexp";
+    const url = "https://maayanlab.cloud/sigpy/data/diffexp";
     const payload = {
       meta: meta,
       fdr_cutoff: 0.01,
