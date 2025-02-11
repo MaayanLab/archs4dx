@@ -589,7 +589,7 @@ export const Jumbotron = () => {
 
           </Grid>
               <Typography sx={{textAlign: "center", marginTop: "27px"}}>
-              Gene lookups {logStats["genesearch"]+9232056} | Bulk file downloads {logStats["download"]+11892} | Sample search downloads {9344}
+              Gene lookups {logStats["genesearch"]+9232056} | Bulk file downloads {logStats["download"]+11892} | Sample search downloads {logStats["metadownload"]+9344}
               </Typography>
 
           </Paper>

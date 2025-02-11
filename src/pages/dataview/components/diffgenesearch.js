@@ -57,10 +57,30 @@ export const DiffExpQuery = ({setNewGeneSearchResult, species}) => {
     setKnnValue(newValue);
   };
 
+
+  const writeLog = async () => {
+    try {
+      const response = await fetch('https://archs4.org/api/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "category": "markergenes", "entry": meta }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error writing log:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setResult(null); // clear previous results if any
+    writeLog();
     
     const url = "https://maayanlab.cloud/sigpy/data/diffexp";
     const payload = {
@@ -100,6 +120,8 @@ export const DiffExpQuery = ({setNewGeneSearchResult, species}) => {
       setLoading(false);
     }
   };
+
+  
 
   return (
     <div style={{ fontFamily: "sans-serif", margin: "20px" }}>

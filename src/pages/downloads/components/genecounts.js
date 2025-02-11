@@ -114,7 +114,6 @@ export const GeneCountSection = () => {
 
     const writeLog = async (event, category) => {
       try {
-
         const url = event.currentTarget.href;
         const filename = url.substring(url.lastIndexOf('/') + 1);
 
@@ -125,8 +124,6 @@ export const GeneCountSection = () => {
           },
           body: JSON.stringify({ "category": category, "entry": filename }),
         });
-
-        console.log(category, filename);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');

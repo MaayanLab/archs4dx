@@ -107,7 +107,7 @@ export const GeneSearch = () => {
 
     const writeLog = async (gene) => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/log', {
+        const response = await fetch('https://archs4.org/api/log', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

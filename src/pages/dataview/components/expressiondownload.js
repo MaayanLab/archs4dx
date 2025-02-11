@@ -4,7 +4,7 @@ import { faFileExport, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-export const ExpressionDownload = ({ species, samples }) => {
+export const ExpressionDownload = ({queryKey, species, samples }) => {
   const [progress, setProgress] = useState(null);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [isBuilding, setIsBuilding] = useState(false); // New state to track building status
@@ -35,8 +35,27 @@ export const ExpressionDownload = ({ species, samples }) => {
       setHasFailed(true);
     }
   };
+  
+  const writeLog = async () => {
+    try {
+      const response = await fetch('https://archs4.org/api/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "category": "metadownload", "entry": queryKey }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error writing log:', error);
+    }
+  };
 
   const startDownload = () => {
+    writeLog();
     setDownloadUrl(null);
     setIsBuilding(false);
     setProgress(null)

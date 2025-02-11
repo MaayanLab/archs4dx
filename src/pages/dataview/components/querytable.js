@@ -84,7 +84,7 @@ const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromH
       </td>
       <td style={{ padding: "5px" }}>{queryValue.series_count}</td>
       <td style={{ padding: "5px" }}>
-        <ExpressionDownload species={queryValue.species} samples={queryValue.samples} />
+        <ExpressionDownload queryKey={queryKey} species={queryValue.species} samples={queryValue.samples} />
       </td>
       <td style={{ padding: "5px" }}>
         <a href="#" onClick={(e) => { e.preventDefault(); removeQueryFromHistory(queryValue.species, queryKey); }}>

@@ -32,6 +32,24 @@ export const GeneCorrelation = ({ geneName }) => {
     setMetaData(event.target.value);
   };
 
+  const writeLog = async () => {
+    try {
+      const response = await fetch('https://archs4.org/api/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "category": "correlation", "entry": geneName+","+metaData}),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error writing log:', error);
+    }
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     
