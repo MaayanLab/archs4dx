@@ -176,6 +176,27 @@ export const EditUserForm = ({
           {user.uuid ? user.uuid : ""}
         </Typography>
       </Grid>
+
+      <Grid container justifyContent="space-between" margin="24px 0">
+        <Typography variant="modalTitle" sx={{ color: "#0F7F90" }}>
+          Storage Quota:{" "}
+        </Typography>
+        {isEdit ? (
+          <OutlinedInput
+            name="storage_quota"
+            defaultValue={user.storage_quota ? user.storage_quota : "0"}
+            sx={{ width: "204px", height: "40px", maxWidth: "60%" }}
+          />
+        ) : (
+          <Typography sx={{ overflowWrap: "break-word" }}>
+            {" "}
+            {user.storage_quota ? user.storage_quota : "0"}
+          </Typography>
+        )}
+      </Grid>
+
+
+
       <Grid
         container
         sx={{
