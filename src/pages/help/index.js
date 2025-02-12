@@ -627,7 +627,7 @@ Open gene landing page when searching by gene symbol. A set of genes can be high
         ></i>
       </h2>
       <br/>
-      <h4>Use</h4>
+      <h4>Licences</h4>
 
       <div style={{display: "flex"}}>
       <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
