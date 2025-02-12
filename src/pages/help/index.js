@@ -11,7 +11,8 @@ import Paper from '@mui/material/Paper';
 import { useNavigate } from 'react-router-dom';
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
-
+import creativecommons from "../../image/commons.svg";
+import citation from "../../image/citation.svg";
 
 import "./components/styles.css"
 
@@ -625,30 +626,40 @@ Open gene landing page when searching by gene symbol. A set of genes can be high
           onClick={() => scrollPage('nav')}
         ></i>
       </h2>
-
+      <br/>
       <h4>Use</h4>
+
+      <div style={{display: "flex"}}>
+      <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+          <img
+            alt="Creative Commons License"
+            style={{ borderWidth: 0, width: "200px", marginRight: "20px" }}
+            src={creativecommons}
+          />
+        </a>
+
       <p>
         Source code is available under the{' '}
         <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache Licence 2.0</a>. Provided gene expression files
         available under the{' '}
         <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
           Creative Commons Attribution 4.0 International License
-        </a>
-        <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-          <img
-            alt="Creative Commons License"
-            style={{ borderWidth: 0 }}
-            src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
-          />
-        </a>
-        .<br />
+        </a>. 
         All data is free to use for non-commercial purposes. For commercial use please contact{' '}
         <a href="https://www.ip.mountsinai.org/">MSIP</a>.
       </p>
-
+      </div>
+      <br/>
       <h4>Citation</h4>
       <p>
-        Please acknowledge ARCHS<sup>4</sup> in your publications by citing the following reference:
+      <div style={{display: "flex"}}>
+      <img
+            alt="Citation"
+            style={{ borderWidth: 0, width: "70px", marginRight: "20px" }}
+            src={citation}
+          />
+        <div>
+        <b>Please acknowledge ARCHS<sup>4</sup> in your publications by citing the following reference:</b>
         <br />
         <div class="citation">
         Lachmann A, Torre D, Keenan AB, Jagodnik KM, Lee HJ, Wang L, Silverstein MC, Ma’ayan A. Massive mining of
@@ -659,8 +670,10 @@ Open gene landing page when searching by gene symbol. A set of genes can be high
           {' '}
           <span className="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
         </a>
+        </div>
+        </div>
       </p>
-
+      <br/>
       <h4>Disclaimer</h4>
       <p>
         ARCHS<sup>4</sup> is not to be used for treating or diagnosing human subjects. ARCHS<sup>4</sup> or any
