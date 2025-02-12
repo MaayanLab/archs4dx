@@ -48,6 +48,26 @@ export const GenePage = () => {
     const { geneName } = useParams();
     const [hasUserId, setHasUserId] = useState(false);
     
+
+    const writeLog = async () => {
+      try {
+        const response = await fetch('https://archs4.org/api/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ "category": "genesearch", "entry": geneName }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+      } catch (error) {
+        console.error('Error writing log:', error);
+      }
+    };
+
+
     const toggle = () => {
         setOpen(!open);
     };
@@ -65,7 +85,7 @@ export const GenePage = () => {
           console.log('Error fetching user data:', error);
         }
       };
-      
+      writeLog();
       checkUserId();
     }, []);
 

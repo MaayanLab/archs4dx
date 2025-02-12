@@ -105,28 +105,8 @@ export const GeneSearch = () => {
 
   const handleSubmit = (event) => {
 
-    const writeLog = async (gene) => {
-      try {
-        const response = await fetch('https://archs4.org/api/log', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ "category": "genesearch", "entry": gene }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-      } catch (error) {
-        console.error('Error writing log:', error);
-      }
-    };
-
     event.preventDefault();
     if (searchText.trim() && validateSearchText(searchText.trim())) {
-      console.log("submit");
-      writeLog(searchText.trim());
       //navigate(`/gene/${searchText.trim()}`);
       window.location.replace(`/gene/${searchText.trim()}`, '_blank');
     }
