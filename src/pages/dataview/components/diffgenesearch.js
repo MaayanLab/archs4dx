@@ -81,7 +81,7 @@ export const DiffExpQuery = ({setNewGeneSearchResult, species}) => {
     setLoading(true);
     setResult(null); // clear previous results if any
     writeLog();
-    
+
     const url = "https://maayanlab.cloud/sigpy/data/diffexp";
     const payload = {
       meta: meta,
@@ -126,6 +126,8 @@ export const DiffExpQuery = ({setNewGeneSearchResult, species}) => {
   return (
     <div style={{ fontFamily: "sans-serif", margin: "20px" }}>
       <h2>Search Genes</h2>
+
+      Find genes that are upregulated in selected cellular context compared to a randomized background. 100 samples matching the search term and 100 random samples are extracted from ARCHS4. Differential gene expression is computed and the {knnValue} genes that are upregulated are returned.
       <form onSubmit={handleSubmit}>
       <div style={{ marginBottom: "12px" }}>
           <Typography variant="body1" gutterBottom sx={{ marginTop: '20px' }}>

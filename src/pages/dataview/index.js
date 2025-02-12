@@ -156,6 +156,11 @@ export const DataView = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [newSearchResult, setNewSearchResult] = useState();
     const [newGeneSearchResult, setNewGeneSearchResult] = useState();
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
 
     useEffect(() => {
       const checkUserId = async () => {
@@ -172,6 +177,10 @@ export const DataView = () => {
       
       checkUserId();
     }, []);
+
+    useEffect(() => {
+      setValue(sampleMode === "sample" ? 0 : 1)
+    }, [sampleMode]);
 
     const handleSearchField = () => {
       const textFromTextField = textFieldRef.current ? textFieldRef.current.value : '';
@@ -211,11 +220,7 @@ export const DataView = () => {
         }
       };
 
-    const [value, setValue] = React.useState(0);
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
     
     const toggle = () => {
       setOpen(!open);
@@ -303,11 +308,15 @@ export const DataView = () => {
       >
         {/* Content of the left paper */}
         <div>
-          <h3>Search</h3>
+          {/*<h3>Search</h3>*/}
 
           <div style={{}}>
+
+          
           <Box sx={{ borderBottom: 1, borderColor: 'divider', fontSize: "10px" }}>
             <Tabs value={value} onChange={handleChange} aria-label="">
+
+            {sampleMode === "sample" ? (
             <Tab
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -317,18 +326,18 @@ export const DataView = () => {
               }
               {...a11yProps(0)}
             />
+            ) : (<></>) }
 
             <Tab
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <SignalCellularAltIcon style={{ marginRight: 8 }} /> {/* Add spacing between icon and text */}
-                  Signature
+                  {sampleMode === "sample" ? "Signature" : "Marker Genes"}
                 </div>
               }
               {...a11yProps(1)}
             />
 
-              {/*<Tab label="Enrichment" {...a11yProps(2)} /> */}
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0} style={{padding: "5px"}}>
