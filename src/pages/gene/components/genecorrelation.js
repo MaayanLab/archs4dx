@@ -52,7 +52,7 @@ export const GeneCorrelation = ({ geneName }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    
+    writeLog();
     try {
       const response = await fetch('https://maayanlab.cloud/sigpy/data/correlation', {
         method: 'POST',
