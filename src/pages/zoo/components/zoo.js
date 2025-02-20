@@ -1,5 +1,6 @@
 import {speciesData} from "./data.js"
 import { Grid, Box, Typography } from "@mui/material";
+import archs4zoo from "../../../image/archs4zoo.png";
 
 export const Zoo = () => {
   // Function to handle API requests for downloads
@@ -13,7 +14,7 @@ export const Zoo = () => {
   return (
     <div style={{ backgroundColor: 'white', margin: '0px', }}>
       <div style={{ paddingTop: '0px', textAlign: 'center' }}>
-        <img id="animation-target" src="../images/archs4zoo.png" alt="ARCHS4 ZOO" />
+        <img id="animation-target" src={archs4zoo} alt="ARCHS4 ZOO" />
       </div>
       
       <div style={{margin: "20px"}}>
