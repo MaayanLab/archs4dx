@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './celllinelist.css';
 import menuData from './celllines.json';
+import menuDataMouse from './celllinesmouse.json';
 
-export const CellLineList = ({ setSearchQuery, menuId = "menu-v2" }) => {
+export const CellLineList = ({species, setSearchQuery, menuId = "menu-v2" }) => {
   const [hoveredIndices, setHoveredIndices] = useState({});
 
   const handleMouseEnter = (index) => {
@@ -19,45 +20,41 @@ const fillExample = (term) => {
   console.log(`Example term: ${term}`);
 };
 
+const renderMenuItems = (data, parentIndex = '0') => {
+  const filteredData = data.filter(item => item.examples && item.examples.length > 0);
 
-  const renderMenuItems = (data, parentIndex = '0') =>
-    data.map((item, index) => {
-      const currentIndex = `${parentIndex}-${index}`;
-
-      return (
-        <li
-          key={currentIndex}
-          onMouseEnter={() => handleMouseEnter(currentIndex)}
-          onMouseLeave={() => handleMouseLeave(currentIndex)}
+  return filteredData.map((item, index) => {
+    const currentIndex = `${parentIndex}-${index}`;
+    return (
+      <li
+        key={currentIndex}
+        onMouseEnter={() => handleMouseEnter(currentIndex)}
+        onMouseLeave={() => handleMouseLeave(currentIndex)}
+      >
+        <a>{item.title}</a>
+        <ul
+          className="sub"
+          style={{ display: hoveredIndices[currentIndex] ? 'block' : 'none' }}
         >
-          <a>{item.title}</a>
-          {item.examples && (
-            <ul
-              className="sub"
-              style={{ display: hoveredIndices[currentIndex] ? 'block' : 'none' }}
-            >
-              {item.examples.map((example, i) => (
-                <li key={`${currentIndex}-${i}`}>
-                  <a
-                    className="exampleTerm"
-                    onClick={() => fillExample(example)}
-                  >
-                    {example}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      );
-    });
+          {item.examples.map((example, i) => (
+            <li key={`${currentIndex}-${i}`}>
+              <a className="exampleTerm" onClick={() => fillExample(example)}>
+                {example}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+    );
+  });
+};
 
   return (
     <>
       <br />
       <h2>Cell Lines</h2>
       <ul id={menuId} className="menu-v2">
-        {renderMenuItems(menuData, "0")}
+        {species === "human" ? renderMenuItems(menuData, "0") : renderMenuItems(menuDataMouse, "0")}
       </ul>
     </>
   );

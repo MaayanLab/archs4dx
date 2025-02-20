@@ -415,9 +415,9 @@ export const DataView = () => {
           
             <CellList menuId="sidemenu" setSearchQuery={updateSearchQueryFromCellList} />
 
-            {species === "human" && (
-              <CellLineList menuId="sidemenu2" setSearchQuery={updateSearchQueryFromCellList} />
-            )}
+            
+            <CellLineList species={species} menuId="sidemenu2" setSearchQuery={updateSearchQueryFromCellList} />
+            
           </CustomTabPanel>
           {sampleMode === "sample" ? (
               <CustomTabPanel value={value} index={1}>

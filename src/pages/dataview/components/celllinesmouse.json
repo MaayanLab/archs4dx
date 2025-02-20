@@ -1,0 +1,136 @@
+[
+    {
+      "title": "Bone",
+      "examples": [
+        "MLO-Y4"
+      ]
+    },
+    {
+      "title": "Brain",
+      "examples": [
+        "LbetaT2",
+        "MN9D",
+        "SN56.B5.G4"
+      ]
+    },
+    {
+      "title": "Breast / Mammary",
+      "examples": [
+        "66cl4",
+        "67NR",
+        "B117H",
+        "B140H",
+        "B117P",
+        "B140P",
+        "BC-5",
+        "HC11",
+        "UBOC1"
+      ]
+    },
+    {
+      "title": "Cervix",
+      "examples": []
+    },
+    {
+      "title": "Colon",
+      "examples": []
+    },
+    {
+      "title": "Connective",
+      "examples": [
+        "3T3-F442A",
+        "3T3-L1",
+        "AB2.2",
+        "ES-Bruce4",
+        "ES-CJ7",
+        "ES-D3",
+        "ZHBTc4",
+        "F121-9",
+        "F123",
+        "C3H10T1",
+        "CM7-1",
+        "NIH3T3",
+        "NIH3T3-L1",
+        "MN1",
+        "INC-2",
+        "WW6"
+      ]
+    },
+    {
+      "title": "Endothelial",
+      "examples": []
+    },
+    {
+      "title": "Kidney",
+      "examples": [
+        "Patski",
+        "nIMCD-3"
+      ]
+    },
+    {
+      "title": "Liver",
+      "examples": []
+    },
+    {
+      "title": "Lung",
+      "examples": []
+    },
+    {
+      "title": "Lymphoid",
+      "examples": [
+        "5T33MM",
+        "CH12.LX",
+        "CH12F3",
+        "CTLL-2",
+        "D10.G4.1",
+        "L-1210",
+        "TT2",
+        "TT3E",
+        "WEHI-231"
+      ]
+    },
+    {
+      "title": "Muscle",
+      "examples": [
+        "C2C12",
+        "HL-1"
+      ]
+    },
+    {
+      "title": "Myeloid",
+      "examples": [
+        "J-774",
+        "J774.2",
+        "J185a",
+        "MEL-GATA-1-ER",
+        "RAW264.7",
+        "G1E",
+        "G1E-ER4"
+      ]
+    },
+    {
+      "title": "Ovary",
+      "examples": []
+    },
+    {
+      "title": "Pancreas",
+      "examples": [
+        "MIN6",
+        "mPAC L20"
+      ]
+    },
+    {
+      "title": "Placenta",
+      "examples": [
+        "2TS22C"
+      ]
+    },
+    {
+      "title": "Prostate",
+      "examples": []
+    },
+    {
+      "title": "Skin",
+      "examples": []
+    }
+  ]

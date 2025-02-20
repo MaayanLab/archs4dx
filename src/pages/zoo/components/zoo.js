@@ -13,7 +13,7 @@ export const Zoo = () => {
   return (
     <div style={{ backgroundColor: 'white', margin: '0px', }}>
       <div style={{ paddingTop: '0px', textAlign: 'center' }}>
-        <img id="animation-target" src="images/archs4zoo.png" alt="ARCHS4 ZOO" />
+        <img id="animation-target" src="../images/archs4zoo.png" alt="ARCHS4 ZOO" />
       </div>
       
       <div style={{margin: "20px"}}>
