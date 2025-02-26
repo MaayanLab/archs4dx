@@ -45,7 +45,7 @@ export const ScatterPlot = ({
   //   gene: { human: {}, mouse: {} }
   // }
 
-  //localStorage.setItem("searchHistory", JSON.stringify({"gene": {"mouse": {}, "human": {}}, "sample": {"mouse": {}, "human": {}}}));
+  localStorage.setItem("searchHistory", JSON.stringify({"gene": {"mouse": {}, "human": {}}, "sample": {"mouse": {}, "human": {}}}));
 
 
   const loadFromStorage = () => {
@@ -113,7 +113,8 @@ export const ScatterPlot = ({
       const numberOfQueries = Object.keys(
         searchHistory.sample[speciesSelection]
       ).length;
-      if (!searchHistory.sample[speciesSelection].hasOwnProperty(newSearchResult.signame)) {
+      if (true){
+      //if (!searchHistory.sample[speciesSelection].hasOwnProperty(newSearchResult.signame)) {
         setSearchHistory((prevHistory) => ({
           ...prevHistory,
           sample: {

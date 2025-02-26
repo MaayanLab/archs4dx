@@ -1,17 +1,62 @@
 import React, { useState } from 'react';
-import { Box, TextField, Slider, Typography, TextareaAutosize,ToggleButtonGroup, ToggleButton, Button } from '@mui/material';
+import { Box, TextField, Slider, Typography, TextareaAutosize, ToggleButtonGroup, ToggleButton, Button, Tooltip } from '@mui/material';
 import axios from 'axios';
-import exampleData from './example_data.json'; // Use relative path to your JSON file
-import exampleDataWeights from './example_signature.json'; // Use relative path to your JSON file
+import exampleData from './example_data.json';
+import exampleDataWeights from './example_signature.json';
 
+// A simple spinner component
+const Spinner = () => (
+  <div style={spinnerStyle} aria-label="Loading" />
+);
 
-export const SignatureSearch = ({setNewSearchResult, species}) => {
+// Inline spinner styles
+const spinnerStyle = {
+  border: "4px solid rgba(0, 0, 0, 0.1)",
+  width: "24px",
+  height: "24px",
+  borderRadius: "50%",
+  borderLeftColor: "#09f",
+  animation: "spin 1s linear infinite",
+};
+
+// Keyframe for spinner animation
+const insertSpinnerKeyframes = () => {
+  if (!document.getElementById("spinner-keyframes")) {
+    const style = document.createElement("style");
+    style.id = "spinner-keyframes";
+    style.innerHTML = `
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+};
+insertSpinnerKeyframes();
+
+export const SignatureSearch = ({ setNewSearchResult, species }) => {
   const [signatureName, setSignatureName] = useState('');
   const [knnValue, setKnnValue] = useState(500);
   const [upregulatedGenes, setUpregulatedGenes] = useState('');
   const [downregulatedGenes, setDownregulatedGenes] = useState('');
   const [fullSignature, setFullSignature] = useState('');
   const [isWeightedSignature, setIsWeightedSignature] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState(''); // State for warning message
+
+  // Helper function to get unique genes from text
+  const getUniqueGenes = (text) => {
+    const lines = text.split('\n').filter(line => line.trim() !== '');
+    return [...new Set(lines)];
+  };
+
+  // Helper function to deduplicate genes and update state
+  const deduplicateGenes = (setGenes) => {
+    setGenes((prev) => {
+      const unique = getUniqueGenes(prev);
+      return unique.join('\n');
+    });
+  };
 
   const handleSliderChange = (event, newValue) => {
     setKnnValue(newValue);
@@ -21,68 +66,115 @@ export const SignatureSearch = ({setNewSearchResult, species}) => {
     setIsWeightedSignature(newAlignment === 'weighted');
   };
 
-  const handleExampleClick = () => {
+  const handleExampleClick = (e) => {
+    e.preventDefault();
+    console.log('Populating example for species:', species, 'isWeightedSignature:', isWeightedSignature);
 
-    if(isWeightedSignature){
-      const example = exampleDataWeights[species]
-      setSignatureName("example profile");
-      setFullSignature(example);
-    }
-    else{
-      const example = exampleData[species];
-      if (example) {
-        setSignatureName(example.signaturename);
-        setUpregulatedGenes(example.up_genes.join('\n'));
-        setDownregulatedGenes(example.down_genes.join('\n'));
-      } else {
-        console.error("Example not found");
+    setWarning(''); // Clear any existing warnings
+
+    if (isWeightedSignature) {
+      const example = exampleDataWeights[species];
+      if (!example) {
+        console.error(`No weighted example data found for species: ${species}`);
+        setNewSearchResult({ error: `No weighted example data for species: ${species}`, samples: [] });
+        return;
       }
+      const exampleName = "weighted search";
+      setSignatureName(exampleName);
+      setFullSignature(example);
+    } else {
+      const example = exampleData[species];
+      if (!example || !example.signaturename || !Array.isArray(example.up_genes) || !Array.isArray(example.down_genes)) {
+        console.error(`Invalid or missing example data for species: ${species}`, example);
+        setNewSearchResult({ error: `Invalid example data for species: ${species}`, samples: [] });
+        return;
+      }
+      setSignatureName(example.signaturename);
+      setUpregulatedGenes(example.up_genes.join('\n'));
+      setDownregulatedGenes(example.down_genes.join('\n'));
     }
   };
 
-  const submitknn = async () => {
-    if(isWeightedSignature){
-      submitfullknn();
+  const tempSetNewSearchResult = (result) => {
+    setNewSearchResult({
+      ...result,
+      samples: result.samples || [] // Ensure samples is always an array
+    });
+  };
+
+  const submitknn = async (overrideSignatureName) => {
+    const effectiveSignatureName = overrideSignatureName || signatureName;
+    if (!effectiveSignatureName.trim()) {
+      setWarning("Please provide a signature description.");
+      return;
     }
-    else{
-      //const url = "https://maayanlab.cloud/sigpy/data/knn/signature";
+    setWarning('');
+
+    if (isWeightedSignature) {
+      await submitfullknn(effectiveSignatureName);
+    } else {
       const url = "https://maayanlab.cloud/sigpy/data/knn/signature";
       const data = {
         signatures: [{
-          up_genes: upregulatedGenes.split('\n'),
-          down_genes: downregulatedGenes.split('\n')
+          up_genes: upregulatedGenes.split('\n').filter(gene => gene.trim() !== ''),
+          down_genes: downregulatedGenes.split('\n').filter(gene => gene.trim() !== '')
         }],
         species: species,
         k: knnValue,
-        signame: signatureName
+        signame: effectiveSignatureName
       };
+
+      setLoading(true);
+      tempSetNewSearchResult({
+        signame: effectiveSignatureName,
+        species: species,
+        samples: [],
+        series_count: "Loading...",
+        indexes: [],
+        distances: [],
+        status: 'loading'
+      });
 
       try {
         const response = await axios.post(url, data);
-        const result = response.data;
-        
-        setNewSearchResult(result);
-        //const sample = result.samples[0];
-        //console.log("Sample:", sample);
+        const result = response.data || { samples: [] };
+        tempSetNewSearchResult(result);
       } catch (error) {
         console.error("Error occurred while fetching data:", error);
+        tempSetNewSearchResult({ error: error.message, samples: [] });
+      } finally {
+        setLoading(false);
       }
     }
   };
 
-  const submitfullknn = async () => {
-    //const url = "https://maayanlab.cloud/sigpy/data/knn/signature";
+  const submitfullknn = async (overrideSignatureName) => {
+    const effectiveSignatureName = overrideSignatureName || signatureName;
+    if (!effectiveSignatureName.trim()) {
+      setWarning("Please provide a signature description.");
+      return;
+    }
+    setWarning('');
+
     const url = "https://maayanlab.cloud/sigpy/data/knn/signature";
-    const lines = fullSignature.split("\n");
+    const lines = fullSignature.split("\n").filter(line => line.trim() !== '');
 
     const genes = [];
     const values = [];
 
-    lines.forEach(line => {
+    try {
+      lines.forEach(line => {
         const [gene, value] = line.split(",");
-        genes.push(gene);
+        if (!gene || !value) throw new Error(`Invalid format in line: ${line}`);
+        genes.push(gene.trim());
         values.push(parseInt(value, 10));
-    });
+      });
+    } catch (error) {
+      console.error("Error parsing weighted signature:", error);
+      tempSetNewSearchResult({ error: error.message, samples: [] });
+      setLoading(false);
+      return;
+    }
 
     const data = {
       signatures: [{
@@ -91,18 +183,29 @@ export const SignatureSearch = ({setNewSearchResult, species}) => {
       }],
       species: species,
       k: knnValue,
-      signame: signatureName
+      signame: effectiveSignatureName
     };
+
+    setLoading(true);
+    tempSetNewSearchResult({
+      signame: effectiveSignatureName,
+      species: species,
+      samples: [],
+      series_count: "Loading...",
+      indexes: [],
+      distances: [],
+      status: 'loading'
+    });
 
     try {
       const response = await axios.post(url, data);
-      const result = response.data;
-      
-      setNewSearchResult(result);
-      //const sample = result.samples[0];
-      //console.log("Sample:", sample);
+      const result = response.data || { samples: [] };
+      tempSetNewSearchResult(result);
     } catch (error) {
       console.error("Error occurred while fetching data:", error);
+      tempSetNewSearchResult({ error: error.message, samples: [] });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,26 +218,63 @@ export const SignatureSearch = ({setNewSearchResult, species}) => {
           fullWidth
           value={signatureName}
           onChange={(e) => setSignatureName(e.target.value)}
-          sx={{ marginBottom: '0px', marginTop: '10px' }}
+          sx={{
+            marginBottom: '0px',
+            marginTop: '10px',
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: warning ? 'red' : 'inherit', // Red border when warning exists
+              },
+              '&:hover fieldset': {
+                borderColor: warning ? 'red' : 'inherit',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: warning ? 'red' : 'primary.main',
+              },
+            },
+          }}
           InputLabelProps={{
-            shrink: true, // Forces the label to shrink
+            shrink: true,
           }}
         />
-        <a
-          style={{
-            color: '#007bff',
-            transition: 'color 0.3s',
-            textDecoration: 'none',
-            marginBottom: "20px"
-          }}
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            handleExampleClick();
-          }}
-        >
-          Try Example
-        </a>
+        {warning && (
+            <Box sx={{ width: '100%' }}>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'red',
+                  fontWeight: 'bold',
+                  backgroundColor: '#ffe6e6', // Light red background
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
+              >
+                {warning}
+              </Typography>
+            </Box>
+          )}
+        <Box sx={{ marginBottom: '20px' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+            <a
+              style={{
+                color: '#007bff',
+                transition: 'color 0.3s',
+                textDecoration: 'none',
+                marginRight: '10px',
+              }}
+              href="#"
+              onClick={handleExampleClick}
+            >
+              Load Example
+            </a>
+          </Box>
+          
+        </Box>
         <Typography variant="body1" gutterBottom sx={{ marginTop: '20px' }}>
           k-NN: {knnValue}
         </Typography>
@@ -148,7 +288,6 @@ export const SignatureSearch = ({setNewSearchResult, species}) => {
           sx={{ width: '280px', marginBottom: '20px', marginTop: '-10px' }}
         />
         
-        {/* Toggle between Up/Downregulated Genes and Weighted Signature */}
         <ToggleButtonGroup
           value={isWeightedSignature ? 'weighted' : 'genes'}
           exclusive
@@ -164,7 +303,6 @@ export const SignatureSearch = ({setNewSearchResult, species}) => {
           </ToggleButton>
         </ToggleButtonGroup>
 
-        {/* Conditional Rendering based on the toggle selection */}
         {isWeightedSignature ? (
           <>
             <Typography variant="body1" gutterBottom>
@@ -180,31 +318,106 @@ export const SignatureSearch = ({setNewSearchResult, species}) => {
           </>
         ) : (
           <>
+            {/* Upregulated Genes Section */}
             <Typography variant="body1" gutterBottom>
-              Upregulated Genes:
+              Upregulated Genes ({getUniqueGenes(upregulatedGenes).length}):
             </Typography>
             <TextareaAutosize
               minRows={4}
               maxRows={4}
               value={upregulatedGenes}
               onChange={(e) => setUpregulatedGenes(e.target.value)}
-              style={{ width: '100%', height: '50px', marginBottom: '20px' }}
+              onPaste={(e) => {
+                setTimeout(() => deduplicateGenes(setUpregulatedGenes), 100);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (e.dataTransfer.files.length > 0) {
+                  const file = e.dataTransfer.files[0];
+                  if (file.type === 'text/plain') {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      const text = event.target.result;
+                      const uniqueGenes = getUniqueGenes(text);
+                      setUpregulatedGenes(uniqueGenes.join('\n'));
+                    };
+                    reader.readAsText(file);
+                  }
+                } else {
+                  const text = e.dataTransfer.getData('text');
+                  if (text) {
+                    const uniqueGenes = getUniqueGenes(text);
+                    setUpregulatedGenes(uniqueGenes.join('\n'));
+                  }
+                }
+              }}
+              onDragOver={(e) => e.preventDefault()}
+              style={{ width: '100%', height: '50px', marginBottom: '20px', paddingLeft: "5px" }}
             />
+
+            {/* Downregulated Genes Section */}
             <Typography variant="body1" gutterBottom>
-              Downregulated Genes:
+              Downregulated Genes ({getUniqueGenes(downregulatedGenes).length}):
             </Typography>
             <TextareaAutosize
               minRows={4}
               maxRows={4}
               value={downregulatedGenes}
               onChange={(e) => setDownregulatedGenes(e.target.value)}
-              style={{ width: '100%', height: '50px', marginBottom: '20px' }}
+              onPaste={(e) => {
+                setTimeout(() => deduplicateGenes(setDownregulatedGenes), 100);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (e.dataTransfer.files.length > 0) {
+                  const file = e.dataTransfer.files[0];
+                  if (file.type === 'text/plain') {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      const text = event.target.result;
+                      const uniqueGenes = getUniqueGenes(text);
+                      setDownregulatedGenes(uniqueGenes.join('\n'));
+                    };
+                    reader.readAsText(file);
+                  }
+                } else {
+                  const text = e.dataTransfer.getData('text');
+                  if (text) {
+                    const uniqueGenes = getUniqueGenes(text);
+                    setDownregulatedGenes(uniqueGenes.join('\n'));
+                  }
+                }
+              }}
+              onDragOver={(e) => e.preventDefault()}
+              style={{ width: '100%', height: '50px', marginBottom: '20px', paddingLeft: "5px" }}
             />
           </>
         )}
 
-        <button className="colorpicker" onClick={submitknn} style={{ marginTop: '0px', width: "100%" }}>
-          Search
+        <button
+          className="colorpicker"
+          onClick={() => submitknn()} // Pass undefined to use state value
+          disabled={loading}
+          style={{
+            marginTop: '0px',
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "8px 16px",
+            fontSize: "16px",
+            cursor: loading ? "not-allowed" : "pointer",
+            backgroundColor: loading ? "#eeeeee" : "",
+            color: loading ? "#888888" : "#ffffff",
+          }}
+        >
+          {loading ? (
+            <>
+              <Spinner /> <span style={{ marginLeft: "8px" }}>Loading...</span>
+            </>
+          ) : (
+            "Search"
+          )}
         </button>
       </Box>
     </Box>
