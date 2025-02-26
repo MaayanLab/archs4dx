@@ -108,7 +108,7 @@ export const GeneCorrelation = ({ geneName }) => {
             <Box>
               <Typography variant="h6">Gene Correlation</Typography>
               <Typography>
-                Find top correlated genes for gene {geneName}. The correlation calculation can be constrained with meta data information. The service will extract up to 2000 samples matching the meta data search term and retrieve the top k genes and their Pearson correlation score.
+                Find top correlated genes for gene {geneName}. The correlation calculation can be constrained with metadata information. The service will extract up to 2000 samples matching the metadata search term and retrieve the top k genes and their Pearson correlation score.
               </Typography>
             </Box>
           </Box>
@@ -131,13 +131,22 @@ export const GeneCorrelation = ({ geneName }) => {
               sx={{ width: "300px" }}
             />
             <TextField
-              label="Meta Data"
+              label="Metadata"
               value={metaData}
               onChange={handleMetaChange}
               variant="outlined"
               margin="normal"
               fullWidth
-              sx={{ backgroundColor: "white", width: "300px"  }}
+              sx={{
+                backgroundColor: "white",
+                width: "300px",
+                "& .MuiInputLabel-outlined": {
+                  transform: "translate(14px, 4px) scale(1)", // Adjust initial position (lower number moves it up)
+                },
+                "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
+                  transform: "translate(14px, -6px) scale(0.75)", // Position when shrunk (focused or with value)
+                },
+              }}
             />
             <button
               type="button"

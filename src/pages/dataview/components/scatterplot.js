@@ -45,7 +45,7 @@ export const ScatterPlot = ({
   //   gene: { human: {}, mouse: {} }
   // }
 
-  localStorage.setItem("searchHistory", JSON.stringify({"gene": {"mouse": {}, "human": {}}, "sample": {"mouse": {}, "human": {}}}));
+  //localStorage.setItem("searchHistory", JSON.stringify({"gene": {"mouse": {}, "human": {}}, "sample": {"mouse": {}, "human": {}}}));
 
 
   const loadFromStorage = () => {
@@ -139,8 +139,6 @@ export const ScatterPlot = ({
 
   // When new gene search result is received, add it if not already in history.
   useEffect(() => {
-    console.log("new gene info!", newGeneSearchResult);
-    
     if (newGeneSearchResult) {
       const numberOfQueries = Object.keys(
         searchHistory.gene[speciesSelection]
@@ -290,20 +288,39 @@ export const ScatterPlot = ({
     }
   }, [searchHistory, sampleMode]);
 
-  // Call API to search for samples if not already in history.
   const searchSamples = async (query) => {
     try {
+      // Set placeholder/loading state immediately
+      const numberOfQueries = Object.keys(searchHistory.sample[speciesSelection]).length;
+      setSearchHistory((prevHistory) => ({
+        ...prevHistory,
+        sample: {
+          ...prevHistory.sample,
+          [speciesSelection]: {
+            ...prevHistory.sample[speciesSelection],
+            [query]: {
+              samples: new Set(), // Empty set as placeholder
+              series_count: "Loading...", // Placeholder text
+              species: speciesSelection, // Can use current species as placeholder
+              color: colorOptions[numberOfQueries % colorOptions.length],
+              isLoading: true, // Optional: flag to indicate loading state
+            },
+          },
+        },
+      }));
+  
+      // Fetch the actual data
       const response = await fetch(
         `https://maayanlab.cloud/sigpy/meta/quicksearch?query=${query}&species=${speciesSelection}`
       );
+      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const numberOfQueries = Object.keys(
-        searchHistory.sample[speciesSelection]
-      ).length;
+      
       const responseData = await response.json();
-
+  
+      // Overwrite placeholder with real data
       setSearchHistory((prevHistory) => ({
         ...prevHistory,
         sample: {
@@ -319,13 +336,29 @@ export const ScatterPlot = ({
               series_count: responseData.series_count,
               species: responseData.species,
               color: colorOptions[numberOfQueries % colorOptions.length],
+              isLoading: false, // Optional: clear loading flag
             },
           },
         },
       }));
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching data:", error);
+      // Optional: Update state to show error
+      setSearchHistory((prevHistory) => ({
+        ...prevHistory,
+        sample: {
+          ...prevHistory.sample,
+          [speciesSelection]: {
+            ...prevHistory.sample[speciesSelection],
+            [query]: {
+              ...prevHistory.sample[speciesSelection][query],
+              samples: new Set(),
+              series_count: "Error loading data",
+              isLoading: false,
+            },
+          },
+        },
+      }));
     }
   };
 

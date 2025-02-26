@@ -2,21 +2,24 @@ import React, { useState } from 'react';
 import './celllists.css';
 import menuData from './celltypes.json';
 
-
-
 export const CellList = ({ setSearchQuery, menuId = "menu-v1" }) => {
   const [hoveredIndices, setHoveredIndices] = useState({});
+  const [isOpen, setIsOpen] = useState({});
 
   const handleMouseEnter = (index) => {
     setHoveredIndices((prev) => ({ ...prev, [index]: true }));
+    setIsOpen((prev) => ({ ...prev, [index]: true }));
   };
 
   const handleMouseLeave = (index) => {
     setHoveredIndices((prev) => ({ ...prev, [index]: false }));
+    setIsOpen((prev) => ({ ...prev, [index]: false })); // Close the specific submenu
   };
 
   const fillExample = (term) => {
     setSearchQuery(term);
+    setIsOpen({}); // Close all submenus
+    setHoveredIndices({}); // Reset hover states
     console.log(`Example term: ${term}`);
   };
 
@@ -32,11 +35,11 @@ export const CellList = ({ setSearchQuery, menuId = "menu-v1" }) => {
         >
           <a>{item.title}</a>
           {item.subcategories ? (
-            <ul className="sub" style={{ display: hoveredIndices[currentIndex] ? 'block' : 'none' }}>
+            <ul className="sub" style={{ display: isOpen[currentIndex] ? 'block' : 'none' }}>
               {renderMenuItems(item.subcategories, currentIndex)}
             </ul>
           ) : (
-            <ul className="sub" style={{ display: hoveredIndices[currentIndex] ? 'block' : 'none' }}>
+            <ul className="sub" style={{ display: isOpen[currentIndex] ? 'block' : 'none' }}>
               {item.examples.map((example, i) => (
                 <li key={`${currentIndex}-${i}`}>
                   <a

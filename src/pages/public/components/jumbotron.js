@@ -503,7 +503,7 @@ export const Jumbotron = () => {
                 }}
               >
                 The ARCHS4 now comes with an official Python package to facilitate extraction of data from
-                the H5 files. It also supports some convenience functions such as normalization and meta data
+                the H5 files. It also supports some convenience functions such as normalization and metadata
                 search. The software can be installed using pip.
                 Visit the GitHub page for full documentation at the <a href="https://github.com/MaayanLab/archs4py">ARCHS4py GitHub page</a>.
               </Typography>

@@ -405,7 +405,8 @@ export const DataView = () => {
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#48a9c7"} // Hover color
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#5bc0de"}
                 sx={{
-                  backgroundColor: "#5bc0de"
+                  backgroundColor: "#5bc0de",
+                  cursor: "pointer"
                 }}
               >
               Search
@@ -414,8 +415,6 @@ export const DataView = () => {
           </Box>
           
             <CellList menuId="sidemenu" setSearchQuery={updateSearchQueryFromCellList} />
-
-            
             <CellLineList species={species} menuId="sidemenu2" setSearchQuery={updateSearchQueryFromCellList} />
             
           </CustomTabPanel>

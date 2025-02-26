@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { HexColorPicker } from 'react-colorful';
 import { ExpressionDownload } from './expressiondownload';
 import enrichricon from '../../../image/dna_red.png';
-
 
 // Utility function to lighten a hex color
 const lightenColor = (color, percent) => {
@@ -22,21 +21,36 @@ const lightenColor = (color, percent) => {
 };
 
 const QueryRow = ({ queryKey, queryValue, downloadQueryGenes, removeQueryFromHistory, changeColor }) => {
-  //console.log(queryKey, queryValue);
   const [isHovered, setIsHovered] = useState(false);
   const [isPickerOpen, setPickerOpen] = useState(false);
   const [currentColor, setCurrentColor] = useState(queryValue.color);
+  const [isFading, setIsFading] = useState(false); // New state for fading
   const lighterColor = lightenColor(currentColor, 60);
 
   const setPickerOpenWrapper = (species, searchterm, opened) => {
     setPickerOpen(opened);
     changeColor(species, searchterm, currentColor);
-  }
+  };
 
   const handleSendToEnrichr = () => {
     const genes = Array.from(queryValue.genes).join('\n');
     send_to_Enrichr(genes, "ARCHS4 "+queryKey, true);
   };
+
+  const handleRemove = (e) => {
+    e.preventDefault();
+    setIsFading(true); // Trigger fade-out
+  };
+
+  useEffect(() => {
+    if (isFading) {
+      // After fade-out animation (e.g., 300ms), call the actual removal
+      const timer = setTimeout(() => {
+        removeQueryFromHistory(queryValue.species, queryKey);
+      }, 300); // Match this with CSS transition duration
+      return () => clearTimeout(timer); // Cleanup timer on unmount
+    }
+  }, [isFading, queryValue.species, queryKey, removeQueryFromHistory]);
 
   function send_to_Enrichr(genes, description = "Gene list from ARCHS4", popup = true) {
     if (!genes) {
@@ -56,7 +70,6 @@ const QueryRow = ({ queryKey, queryValue, downloadQueryGenes, removeQueryFromHis
     listField.setAttribute("type", "hidden");
     listField.setAttribute("name", "list");
     listField.setAttribute("value", genes);
-    console.log(genes);
     form.appendChild(listField);
   
     const descField = document.createElement("input");
@@ -71,7 +84,15 @@ const QueryRow = ({ queryKey, queryValue, downloadQueryGenes, removeQueryFromHis
   }
   
   return (
-    <tr class="queryrow" key={queryKey} style={{ borderBottom: "1px solid #ddd" }}>
+    <tr
+      className="queryrow"
+      key={queryKey}
+      style={{
+        borderBottom: "1px solid #ddd",
+        opacity: isFading ? 0 : 1, // Fade out when isFading is true
+        transition: "opacity 0.3s ease-in-out", // Smooth fade effect
+      }}
+    >
       <td style={{ padding: "5px" }}>
         <div
           onClick={() => setPickerOpen(true)}
@@ -111,7 +132,13 @@ const QueryRow = ({ queryKey, queryValue, downloadQueryGenes, removeQueryFromHis
             boxShadow: '0 0 10px rgba(0,0,0,0.2)'
           }}>
             <HexColorPicker color={currentColor} onChange={setCurrentColor} />
-            <button class="colorpicker" onClick={() => setPickerOpenWrapper(queryValue.species, queryKey, false, currentColor)} style={{ marginTop: '10px' }}>Select</button>
+            <button
+              className="colorpicker"
+              onClick={() => setPickerOpenWrapper(queryValue.species, queryKey, false)}
+              style={{ marginTop: '10px' }}
+            >
+              Select
+            </button>
           </div>
         )}
       </td>
@@ -123,10 +150,15 @@ const QueryRow = ({ queryKey, queryValue, downloadQueryGenes, removeQueryFromHis
         </a>
       </td>
       <td style={{ padding: "5px" }}>
-        <img src={enrichricon} alt="Enrichr icon" style={{ width: "22px", cursor: "pointer", marginBottom: "-6px" }} onClick={handleSendToEnrichr} />
+        <img
+          src={enrichricon}
+          alt="Enrichr icon"
+          style={{ width: "22px", cursor: "pointer", marginBottom: "-6px" }}
+          onClick={handleSendToEnrichr}
+        />
       </td>
       <td style={{ padding: "5px" }}>
-        <a href="#" onClick={(e) => { e.preventDefault(); removeQueryFromHistory(queryValue.species, queryKey); }}>
+        <a href="#" onClick={handleRemove}>
           <FontAwesomeIcon style={{ color: 'black' }} icon={faXmark} />
         </a>
       </td>
@@ -138,9 +170,9 @@ export const QueryTableGene = ({ searchHistory, speciesSelection, downloadQueryG
   console.log(searchHistory[speciesSelection]);
   return (
     <div style={{ width: "100%", backgroundColor: "white", padding: "6px" }}>
-      <table style={{ width: "100%",  borderCollapse: 'separate', borderSpacing: 0 }}>
+      <table style={{ width: "100%", borderCollapse: 'separate', borderSpacing: 0 }}>
         <thead>
-          <tr class="querytableheader" style={{textAlign: 'left' }}>
+          <tr className="querytableheader" style={{ textAlign: 'left' }}>
             <th style={{ padding: "5px" }}></th>
             <th style={{ padding: "5px" }}>Description</th>
             <th style={{ padding: "5px" }}>Organism</th>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { HexColorPicker } from 'react-colorful';
@@ -23,15 +23,39 @@ const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromH
   const [isHovered, setIsHovered] = useState(false);
   const [isPickerOpen, setPickerOpen] = useState(false);
   const [currentColor, setCurrentColor] = useState(queryValue.color);
+  const [isFading, setIsFading] = useState(false); // New state for fading
   const lighterColor = lightenColor(currentColor, 60);
 
   const setPickerOpenWrapper = (species, searchterm, opened) => {
     setPickerOpen(opened);
     changeColor(species, searchterm, currentColor);
-  }
+  };
+
+  const handleRemove = (e) => {
+    e.preventDefault();
+    setIsFading(true); // Trigger fade-out
+  };
+
+  useEffect(() => {
+    if (isFading) {
+      // After fade-out animation (e.g., 300ms), call the actual removal
+      const timer = setTimeout(() => {
+        removeQueryFromHistory(queryValue.species, queryKey);
+      }, 300); // Match this with CSS transition duration
+      return () => clearTimeout(timer); // Cleanup timer on unmount
+    }
+  }, [isFading, queryValue.species, queryKey, removeQueryFromHistory]);
 
   return (
-    <tr class="queryrow" key={queryKey} style={{ borderBottom: "1px solid #ddd" }}>
+    <tr
+      className="queryrow"
+      key={queryKey}
+      style={{
+        borderBottom: "1px solid #ddd",
+        opacity: isFading ? 0 : 1, // Fade out when isFading is true
+        transition: "opacity 0.3s ease-in-out", // Smooth fade effect
+      }}
+    >
       <td style={{ padding: "5px" }}>
         <div
           onClick={() => setPickerOpen(true)}
@@ -71,7 +95,13 @@ const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromH
             boxShadow: '0 0 10px rgba(0,0,0,0.2)'
           }}>
             <HexColorPicker color={currentColor} onChange={setCurrentColor} />
-            <button class="colorpicker" onClick={() => setPickerOpenWrapper(queryValue.species, queryKey, false, currentColor)} style={{ marginTop: '10px' }}>Select</button>
+            <button
+              className="colorpicker"
+              onClick={() => setPickerOpenWrapper(queryValue.species, queryKey, false)}
+              style={{ marginTop: '10px' }}
+            >
+              Select
+            </button>
           </div>
         )}
       </td>
@@ -87,7 +117,7 @@ const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromH
         <ExpressionDownload queryKey={queryKey} species={queryValue.species} samples={queryValue.samples} />
       </td>
       <td style={{ padding: "5px" }}>
-        <a href="#" onClick={(e) => { e.preventDefault(); removeQueryFromHistory(queryValue.species, queryKey); }}>
+        <a href="#" onClick={handleRemove}>
           <FontAwesomeIcon style={{ color: 'black' }} icon={faXmark} />
         </a>
       </td>
@@ -98,9 +128,9 @@ const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromH
 export const QueryTable = ({ searchHistory, speciesSelection, downloadQuerySamples, removeQueryFromHistory, changeColor }) => {
   return (
     <div style={{ width: "100%", backgroundColor: "white", padding: "6px" }}>
-      <table style={{ width: "100%",  borderCollapse: 'separate', borderSpacing: 0 }}>
+      <table style={{ width: "100%", borderCollapse: 'separate', borderSpacing: 0 }}>
         <thead>
-          <tr class="querytableheader" style={{textAlign: 'left' }}>
+          <tr className="querytableheader" style={{ textAlign: 'left' }}>
             <th style={{ padding: "5px" }}></th>
             <th style={{ padding: "5px" }}>Description</th>    
             <th style={{ padding: "5px" }}>Organism</th>

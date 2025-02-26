@@ -31,7 +31,7 @@ export const SigpyStatusCheck = () => {
                 }
             } catch (error) {
                 console.error('Error fetching the status:', error);
-                setAlertMessage('Data API currently unavailable. This can be due to maintanace. Please try again at a later timepoint.');
+                setAlertMessage('Data API currently unavailable. This can be due to maintanace or high load. Please try again at a later timepoint.');
                 setAlertSeverity('error');
                 setOpen(true);
             }

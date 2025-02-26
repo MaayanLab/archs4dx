@@ -284,7 +284,7 @@ print(paste0("Expression file was created at ", getwd(), "/", extracted_expressi
                 </h3>
                 <ul style={{ paddingLeft: "20px", listStyle: 'none' }}>
                   <li>
-                    <span style={{ cursor: 'pointer', color: 'black' }} onClick={() => scrollPage('metasearch')}>Meta data search</span>
+                    <span style={{ cursor: 'pointer', color: 'black' }} onClick={() => scrollPage('metasearch')}>Metadata search</span>
                   </li>
                   <li>
                     <span style={{ cursor: 'pointer', color: 'black' }} onClick={() => scrollPage('sigsearch')}>Signature search</span>
@@ -326,7 +326,7 @@ print(paste0("Expression file was created at ", getwd(), "/", extracted_expressi
             <div class="subpoint">
             <h4 id="about">About ARCHS<sup>4</sup></h4>
             <p style={{ fontSize: '14px' }}>
-            ARCHS4 provides access to gene counts from all major sequencing platforms for human and mouse experiments. The website allows download of the data in H5 format for programmatic access as well as a 3-dimensional view of the sample space. Search features allow browsing of the data by meta data annotation, signature similarity and functional enrichment. Selected sample sets can be downloaded into a tab separated through auto-generated R scripts for further analysis. Reads are aligned with Kallisto using a custom cloud computing platform. Human samples are aligned against GRCh38 cdna reference and mouse samples against GRCm38 cdna. All processable files from the GEO/SRA database since June 2024 are processed and available for download.
+            ARCHS4 provides access to gene counts from all major sequencing platforms for human and mouse experiments. The website allows download of the data in H5 format for programmatic access as well as a 3-dimensional view of the sample space. Search features allow browsing of the data by metadata annotation, signature similarity and functional enrichment. Selected sample sets can be downloaded into a tab separated through auto-generated R scripts for further analysis. Reads are aligned with Kallisto using a custom cloud computing platform. Human samples are aligned against GRCh38 cdna reference and mouse samples against GRCm38 cdna. All processable files from the GEO/SRA database since June 2024 are processed and available for download.
             </p>
             </div>
 
@@ -409,7 +409,7 @@ The colors of sample and gene sets can be modified in the result section.
             <div class="subpoint">
             <h4 id="functionalprediction">About the H5 file format</h4>
             <p style={{ fontSize: '14px' }}>
-            Hierarchical Data Format (HDF) is an open source file format for large data storage. It allows programmatic accessibility of matrix entries based on column and row indices while allowing for efficient data compression. The H5 files provided by ARCHS4 contain raw read counts as well as detailed meta data information extracted from GEO.
+            Hierarchical Data Format (HDF) is an open source file format for large data storage. It allows programmatic accessibility of matrix entries based on column and row indices while allowing for efficient data compression. The H5 files provided by ARCHS4 contain raw read counts as well as detailed metadata information extracted from GEO.
             </p>
             <br/>
             <div style={{ textAlign: 'center' }}>
@@ -486,7 +486,7 @@ The colors of sample and gene sets can be modified in the result section.
             <div class="subpoint">
             <h4 id="parsing">Parsing the H5 file</h4>
             <p style={{ fontSize: '14px' }}>
-              The recommended way to interact with the ARCHS4 H5 files is the official <strong>archs4py</strong> Python package. Full documentation can be found on the GitHub page: <a href="https://github.com/MaayanLab/archs4py">https://github.com/MaayanLab/archs4py</a>. The package supports a wide variety of functions, such as data download, data extraction, meta data search, and local execution of the ARCHS4 sequence alignment.
+              The recommended way to interact with the ARCHS4 H5 files is the official <strong>archs4py</strong> Python package. Full documentation can be found on the GitHub page: <a href="https://github.com/MaayanLab/archs4py">https://github.com/MaayanLab/archs4py</a>. The package supports a wide variety of functions, such as data download, data extraction, metadata search, and local execution of the ARCHS4 sequence alignment.
               We are also providing an R package with similar functionality (<strong>archs4r</strong>). The Documentation can be found here: <a href="https://github.com/MaayanLab/archs4r">https://github.com/MaayanLab/archs4r</a>
             </p>
             <br/>
@@ -588,7 +588,7 @@ exp_normalized = a4.normalize(exp, method="log_quantile")
             <h2>Search tools <span style={{ cursor: 'pointer' }} onClick={() => scrollPage('nav')}>↑</span></h2>
 
             <div class="subpoint">
-            <h4 id="metasearch">Meta data search</h4>
+            <h4 id="metasearch">Metadata search</h4>
             <p style={{ fontSize: '14px' }}>
             Metadata search parses the tissue description field from GEO to find matches with the entered search term. The search ignores spaces and is case insensitive. Results are highliged in the data viewer and a result is added to the result list.
 We preselected a series of cellular tissues based by cellular system. This allows simple browsing of the data for tissues of interest. Some tissue selections can return empty for either mouse or human samples.
