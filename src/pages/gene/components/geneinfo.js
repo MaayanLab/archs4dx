@@ -97,7 +97,7 @@ export const GeneInfo = ({ geneName }) => {
               <b>Description: </b>
               {data?.summary ? (
                 <>
-                  <div dangerouslySetInnerHTML={{ __html: data.summary }} />
+                  <div style={{textAlign: "justify"}} dangerouslySetInnerHTML={{ __html: data.summary }} />
                   {isSigPyAbstract && (
                     <div style={{width: "100%", color: "grey", textAlign: "right"}}>
                        AI generated gene description 
