@@ -8,11 +8,13 @@ import { useParams } from "react-router-dom";
 import { faDna } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GeneSearch } from "../../../layout/genesearch";
+import aiicon from "../../../image/airead.png";
 
 export const GeneInfo = ({ geneName }) => {
   const [data, setData] = useState(null);
   const [gene, setGene] = useState(geneName);
   const [loading, setLoading] = useState(true);
+  const [isSigPyAbstract, setIsSigPyAbstract] = useState(false); // New state to track SigPy abstract
 
   const scrollPage = (id) => {
     const element = document.getElementById(id);
@@ -33,15 +35,32 @@ export const GeneInfo = ({ geneName }) => {
         throw new Error("Network response was not ok");
       }
 
-      const jsonData = await response.json();
+      let jsonData = await response.json();
       console.log(jsonData);
 
-      // Set data only if it exists, otherwise set to null
+      // Step 1: Check Maayan Lab API for abstract
+      const sigpyResponse = await fetch(
+        `https://maayanlab.cloud/sigpy/abstract/${encodeURIComponent(geneName)}`
+      );
+      
+      if (!sigpyResponse.ok) {
+        throw new Error("SigPy API response was not ok");
+      }
+      let jsonSigpy = await sigpyResponse.json();
+      const hasAbstract = jsonSigpy.abstract && Object.keys(jsonSigpy.abstract).length > 0;
+      if (hasAbstract) {
+        jsonData.data.geneBySymbol.summary = jsonSigpy.abstract; // HTML content goes here
+        setIsSigPyAbstract(true); // Set flag for SigPy abstract
+      } else {
+        setIsSigPyAbstract(false); // No SigPy abstract
+      }
+
       setData(jsonData?.data?.geneBySymbol || null);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching gene data:", err);
-      setData(null); // Set data to null on error
+      setData(null);
+      setIsSigPyAbstract(false);
       setLoading(false);
     }
   };
@@ -50,14 +69,14 @@ export const GeneInfo = ({ geneName }) => {
     if (geneName) {
       fetchGeneData(geneName);
     } else {
-      setLoading(false); // If no geneName is provided, stop loading
+      setLoading(false);
     }
   }, [geneName]);
 
   if (loading) {
     return <Typography>Waiting...</Typography>;
   }
-  
+
   return (
     <>
       <Box>
@@ -67,24 +86,36 @@ export const GeneInfo = ({ geneName }) => {
               <FontAwesomeIcon icon={faDna} /> {geneName}
             </h2>
             <Typography>
-              {data?.description || "No description available."}
+              {data?.description || "Coming soon!"}
             </Typography>
           </Grid>
           <Grid item md={5}>
             <GeneSearch />
           </Grid>
           <Grid item md={7}>
-            <Typography>
+            <Typography component="div">
               <b>Description: </b>
-              {data?.summary || "No summary available."}
+              {data?.summary ? (
+                <>
+                  <div dangerouslySetInnerHTML={{ __html: data.summary }} />
+                  {isSigPyAbstract && (
+                    <div style={{width: "100%", color: "grey", textAlign: "right"}}>
+                       AI generated gene description 
+                    <img
+                      src={aiicon}
+                      alt="AI Generated Abstract"
+                      style={{ width: "80px", height: "80px", marginLeft: "8px", verticalAlign: "middle" }}
+                    />
+                    </div>
+                  )}
+                </>
+              ) : (
+                "Coming soon!"
+              )}
             </Typography>
           </Grid>
 
-          <Grid
-            item
-            style={{ textAlign: "top", fontSize: "14px" }}
-            md={5}
-          >
+          <Grid item style={{ textAlign: "top", fontSize: "14px" }} md={5}>
             <div
               style={{
                 float: "right",

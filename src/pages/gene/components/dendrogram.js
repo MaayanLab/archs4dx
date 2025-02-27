@@ -77,7 +77,7 @@ export const Dendrogram = ({ species, gene, type }) => {
               .attr("y", compactHeight / 2)
               .attr("text-anchor", "middle")
               .attr("fill", "black")
-              .text("Data is missing");
+              .text("Coming soon!");
             setLoading(false);
             return; // Exit early
           }
