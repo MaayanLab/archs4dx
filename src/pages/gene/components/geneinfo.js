@@ -110,6 +110,14 @@ export const GeneInfo = ({ geneName }) => {
     }
   };
 
+  // Function to abbreviate authors
+  const formatAuthors = (authors) => {
+    if (!authors) return "Unknown Authors";
+    const authorList = authors.split(", ");
+    if (authorList.length <= 3) return authors;
+    return `${authorList.slice(0, 3).join(", ")}, et al.`;
+  };
+
   useEffect(() => {
     if (geneName) {
       fetchGeneData(geneName);
@@ -145,7 +153,6 @@ export const GeneInfo = ({ geneName }) => {
                   <div style={{ textAlign: "justify" }} dangerouslySetInnerHTML={{ __html: data.summary }} />
                   {isSigPyAbstract && (
                     <>
-                      
                       {/* Expandable list of citations with no grey line when collapsed */}
                       {citations.length > 0 && (
                         <Accordion
@@ -168,10 +175,9 @@ export const GeneInfo = ({ geneName }) => {
                               {citations.map((citation) => (
                                 <li key={citation.pmid} style={{ marginBottom: "10px" }}>
                                   <Typography>
-                                    <strong>[{citation.number}] {citation.title}</strong>
-                                    <br />
-                                    {citation.authors} ({citation.year})<br />
-                                    <em>{citation.journal}</em>
+                                   <strong>[{citation.number}]</strong> {formatAuthors(citation.authors)} <strong>{citation.title}</strong>
+                                    
+                                    <em>{citation.journal} ({citation.year})</em>
                                     {citation.doi && (
                                       <>
                                         {" "}—{" "}
@@ -280,41 +286,39 @@ export const GeneInfo = ({ geneName }) => {
               <br /><br />
               <b>External links</b>
               <Grid container spacing={0.6}>
-          <Grid item>
-            <a
-              href={`https://www.ncbi.nlm.nih.gov/gene/?term=${geneName}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              NCBI Entrez Gene
-            </a>
-          </Grid>
-          <Grid item>|</Grid>
-          <Grid item>
-            <a
-              href={`http://www.genecards.org/cgi-bin/carddisp.pl?gene=${geneName}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GeneCards
-            </a>
-          </Grid>
-          <Grid item>|</Grid>
-          <Grid item>
-            <a
-              href={`https://amp.pharm.mssm.edu/Harmonizome/gene/${geneName}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Harmonizome
-            </a>
-          </Grid>
-        </Grid>
-
+                <Grid item>
+                  <a
+                    href={`https://www.ncbi.nlm.nih.gov/gene/?term=${geneName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    NCBI Entrez Gene
+                  </a>
+                </Grid>
+                <Grid item>|</Grid>
+                <Grid item>
+                  <a
+                    href={`http://www.genecards.org/cgi-bin/carddisp.pl?gene=${geneName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GeneCards
+                  </a>
+                </Grid>
+                <Grid item>|</Grid>
+                <Grid item>
+                  <a
+                    href={`https://amp.pharm.mssm.edu/Harmonizome/gene/${geneName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Harmonizome
+                  </a>
+                </Grid>
+              </Grid>
             </div>
           </Grid>
         </Grid>
-        
       </Box>
     </>
   );
