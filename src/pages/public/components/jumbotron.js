@@ -38,6 +38,7 @@ import {LetterSignup} from "../../../layout/newslettersignup";
 
 import Menu from '@mui/material/Menu';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { useMediaQuery } from '@mui/material';
 
 const MButton = styled(Button)(({ theme }) => ({
   transition: 'color 0.3s ease, background-color 0.3s ease',
@@ -133,7 +134,7 @@ export const Jumbotron = () => {
   const itemRefs = useRef([]); // Create ref array for each element
   const [isExpanded, setIsExpanded] = useState(false);
 
-
+  const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('md'));
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   
@@ -401,39 +402,46 @@ export const Jumbotron = () => {
 
             </Typography>
 
-              <Grid Container xs={12} sx={{ display: "flex", marginY: "40px", alignItems: 'stretch'}}>
-                <Grid item xs={12} sm={12} lg={7} sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                <Typography  variant="body1" component="div">
-                  <h2>About</h2>
-                  All RNA-seq and ChIP-seq sample and signature search (ARCHS4) is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from 
-                  the <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">Gene Expression Omnibus (GEO)</a> and 
-                  the <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank">Sequence Read Archive (SRA)</a>. The 
-                  ARCHS4 website provides uniformly processed data for download and programmatic access in H5 format and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata-enhanced annotations, and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab-delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the <a href="https://pachterlab.github.io/kallisto/about" target="_blank">Kallisto aligner</a> is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107). The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://archs4.org/zoo">ARCHS4 Zoo</a> download section.
+  
+            <Grid container spacing={2} sx={{ marginY: '40px' }}>
+      {/* About Section */}
+      <Grid item xs={12} md={7}>
+        <Typography variant="body1" component="div" sx={{margin: { xs: "6px", sm: "10px" },}}>
+          <h2>About</h2>
+          All RNA-seq and ChIP-seq sample and signature search (ARCHS4) is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from 
+          the <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">Gene Expression Omnibus (GEO)</a> and 
+          the <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank">Sequence Read Archive (SRA)</a>. The 
+          ARCHS4 website provides uniformly processed data for download and programmatic access in H5 format and as a 3-dimensional interactive viewer and search engine. Users can search and browse the data by metadata-enhanced annotations, and can submit their own gene sets for search. Subsets of selected samples can be downloaded as a tab-delimited text file that is ready for loading into the R programming environment. To generate the ARCHS4 resource, the <a href="https://pachterlab.github.io/kallisto/about" target="_blank">Kallisto aligner</a> is applied in an efficient parallelized cloud infrastructure. Human and mouse samples are aligned against GRCh38 and GRCm39 with Ensembl annotation (Ensembl 107). The ARCHS4 database now includes 35000 samples from additional species, such as C. elegans and Drosophila melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the <a href="https://archs4.org/zoo">ARCHS4 Zoo</a> download section.
 
-                  <br/><br/>
-                  The ARCHS4py Python package provides functions to facilitate data extraction from the H5 files. It also supports some convenience functions such as normalization and metadata search. The software can be installed using pip. Visit the GitHub page for full documentation at the <a href="https://github.com/MaayanLab/archs4py"> ARCHS4py GitHub page</a>.
-                  
-                  <br /><br />
-                  Please acknowledge ARCHS4 in your publications by citing the following reference:<br />
-                  Lachmann A, Torre D, Keenan AB, Jagodnik KM, Lee HJ, Wang L, Silverstein MC, Ma’ayan A. Massive mining of publicly available RNA-seq data from human and mouse. Nature Communications 9. Article number: 1366 (2018), doi:10.1038/s41467-018-03751-6
+          <br/><br/>
+          The ARCHS4py Python package provides functions to facilitate data extraction from the H5 files. It also supports some convenience functions such as normalization and metadata search. The software can be installed using pip. Visit the GitHub page for full documentation at the <a href="https://github.com/MaayanLab/archs4py"> ARCHS4py GitHub page</a>.
+          
+          <br /><br />
+          Please acknowledge ARCHS4 in your publications by citing the following reference:<br />
+          Lachmann A, Torre D, Keenan AB, et al. Massive mining of publicly available RNA-seq data from human and mouse. Nature Communications 9. Article number: 1366 (2018), doi:10.1038/s41467-018-03751-6
 
-                  <a href="https://www.nature.com/articles/s41467-018-03751-6" target="_blank"> <span class="glyphicon glyphicon-share-alt" aria-hidden="true"> </span>
+          <a href="https://www.nature.com/articles/s41467-018-03751-6" target="_blank" style={{marginLeft: "5px"}}> 
+            <span className="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+            <img
+              src={natcom} // Replace with the actual image path
+              alt="natcom"
+              style={{ width: '100px', height: 'auto' }}
+            />
+          </a>
+        </Typography>
+      </Grid>
 
-                    <img
-                      src={natcom}
-                      alt="natcom"
-                      style={{ width: "100px", height: "auto" }}
-                    />
+      {/* News Section */}
+      <Grid item xs={12} md={5} >
+        <h2 sx={{margin: { xs: "8px !important", sm: "10px" },}}>News</h2>
+        <Paper elevation={3} sx={{ padding: '10px' }}>
+          <NewsFeed />
+        </Paper>
+      </Grid>
+    </Grid>
 
-                  </a>
-                  </Typography>
-                </Grid>
-                <Grid  item xs={12} sm={12} md={5} sx={{ marginLeft: "14px",  flex: 1, display: 'flex', flexDirection: 'column' }}><h2>News</h2>
-                  <Grid component={Paper} elevation={3} sx={{ marginTop: "0px", flexDirection: 'column' }}>
-                    <NewsFeed />
-                  </Grid>
-                </Grid>
-              </Grid>
+
+
 
           </Box>
         </Grid>
@@ -442,7 +450,7 @@ export const Jumbotron = () => {
         <Grid containter sx={{ backgroundImage: 'url(congruent_pentagon2.png)', display: 'flex',
                                 flexWrap: 'wrap', // Allow wrapping on smaller screens
                                 justifyContent: 'space-between',
-                                padding: "20px"
+                                padding: "20px",
                                 }}>
 
           <Grid item lg={4} md={6} sm={12}>
@@ -450,7 +458,9 @@ export const Jumbotron = () => {
               key={0}
               ref={el => (itemRefs.current[0] = el)}
               className="fade-in"
-              sx={{margin: "20px", padding: "20px",
+              sx={{
+                margin: { sm: "5px", md: "20px" },
+                padding: "20px",
               transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition
               '&:hover': {
                 transform: 'translateY(-5px)', // Lift effect
@@ -470,7 +480,7 @@ export const Jumbotron = () => {
             key={1}
             ref={el => (itemRefs.current[1] = el)}
             className="fade-in"
-            sx={{ margin: "20px", padding: "20px",
+            sx={{ margin: { sm: "5px", md: "20px" }, marginTop: "20px !important", padding: "20px",
             transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition
             '&:hover': {
               transform: 'translateY(-5px)', // Lift effect
@@ -520,7 +530,7 @@ export const Jumbotron = () => {
            key={2}
            ref={el => (itemRefs.current[2] = el)}
            className="fade-in"
-            sx={{ margin: "20px", padding: "20px",
+            sx={{ margin: { sm: "5px", md: "20px" }, marginTop: "20px !important", marginBottom: "20px !important", padding: "20px",
             transition: 'transform 0.3s, box-shadow 0.3s', // Smooth transition
             '&:hover': {
               transform: 'translateY(-5px)', // Lift effect
@@ -563,277 +573,329 @@ export const Jumbotron = () => {
 
           </Grid>
 
-        <Paper 
-            key={3}
-            ref={el => (itemRefs.current[3] = el)}
-            className="fade-in"
-            sx={{
-            height: "460px",
-            width: "100%",
-            margin: "20px"}}>
-          <Grid item xs={12} sx={{
-            height: "400px",
-            padding: "20px"
-          }}>
-            <Grid container>
-              <Grid item xs={12} sx={{
-                height: "400px",
-              }}>
-                <iframe src="/heatmap.html" style={{
-                  width: "100%",
-                  height: "100%",
-                  border: "none"
-                }}></iframe>
-              </Grid>
-            </Grid>
-
-          </Grid>
-              <Typography sx={{textAlign: "center", marginTop: "27px"}}>
-              Gene lookups {logStats["genesearch"]+9232056} | Bulk file downloads {logStats["download"]+11892} | Sample search downloads {logStats["metadownload"]+9344}
-              </Typography>
-
-          </Paper>
-
-          <Grid item xs={12} sx={{
-            textAlign: "center",
-            marginBottom: "50px",
-            marginTop: "50px"
-          }}>
-            <DonutCharts xs={12}></DonutCharts>
-          </Grid>
-
-          <Grid container xs={12} sx={{
-            display: 'flex', // Use flexbox layout
-            justifyContent: 'center', // Center horizontally
-            alignItems: 'center', // Center vertically
-            textAlign: 'center',
-            marginBottom: "40px"
-             // Ensure the container has enough height to center vertically, adjust as needed
-          }}>
-            
-            <Grid item sm={12} md={8} lg={9}>
-            
-              <h2>Pipeline activity</h2>
-
-              {Array.isArray(jobQueue) && jobQueue.length > 0 ? (
-              <BarChart
-                dataset={jobQueue}
-                series={addLabels([
-                  { dataKey: 'success', stack: 'processed', size: "16px" },
-                  { dataKey: 'failed', stack: 'processed' },
-                  { dataKey: 'pending', stack: 'pending' },
-                ])}
-                xAxis={[{ scaleType: 'band', dataKey: 'year', label: ""}]}
-                slotProps={{ fontSize: 24, legend: { hidden: false, style: { fontSize: '14px' }  } }}
-                
-                height={300}
-                borderRadius={3}
-                yAxis={[{label: 'Count', labelStyle: { 
-                  transform: 'translateX(-70px) rotate(-90deg)',
-                  transformOrigin: 'left center'
-                }}]}
-                margin={{
-                  left: 100,
-                  right: 80,
-                  top: 50,
-                  bottom: 50,
-                }}
-                sx={{width: "100%","& .MuiChartsAxis-tickLabel": {marginTop: "40px !important"}, "& .MuiChartsLegend-series text": {fontSize: "1.2em !important" }, }}
-              />
-            ) : (
-              <Skeleton variant="rectangular" width="100%" height={300} sx={{margin: "40px"}} />
-            )}
-            </Grid>
-            <Grid item sm={12} md={4} lg={3}>
-            <Grid container spacing={3}>
-              <Grid item xs={6}  sm={6} md={12}  lg={12} sx={{verticalAlign: "center"}}>
-                <Paper sx={{display: "flex", padding: "10px", width: "100%"}}>
-                <div style={{ width: '100px', height: '100px', marginLeft: "10px", marginRight: "10px"}}>
-                {pipelineStatus > 0 ? (
-                  <Sun style={{ width: '80%', height: '80%' }} />
-                ) : (
-                  <Tooltip title={"While I am waiting I might just as well take a nap."} arrow>
-                  <img
-                    style={{  width: '80%', height: '80%', marginTop: "10px" }}
-                    src={moon}
-                    alt="sleeping"
-                  />
-                  </Tooltip>
-                )}
-                </div>     
-                <Typography sx={{marginLeft: "10px", textAlign: "left", verticalAlign: "center", marginLeft: "20px"}}>
-                  <div style={{marginBottom: "8px"}}>
-                    
-                    {pipelineStatus > 0 ? (
-                      <b>Pipeline active</b>
-                    ) : (
-                      <b>Pipeline sleeping</b>
-                    )}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
-                    <FontAwesomeIcon icon={faMicrochip} style={{ marginRight: "12px" }} />
-                    <span style={{marginRight: "26px"}}>vCPUs:</span> {Math.round(pipelineStatus / 1024)}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <FontAwesomeIcon icon={faMemory} style={{ marginRight: "10px" }} />
-                    <span style={{marginRight: "6px"}}>vMemory:</span> {Math.round(pipelineStatus * 4 / 1024)} GB
-                  </div>
-                </Typography>
-                </Paper>
-              </Grid>
-              <Grid item xs={6} sm={6}  md={12} lg={12} sx={{display: "flex", width: "100%", height: "100%"}}>
-                <Paper sx={{display: "flex", padding: "10px", width: "100%" , textAlign: "left"}}>
-                <GaugeChart id="gauge-chart2" 
-                  nrOfLevels={20} 
-                  percent={0.2}
-                  textColor={"black"}
-                  hideText={"true"}
-                  sx={{width: "50px", marginLeft: "-20px"}}
-                  style={{width: "110px", marginLeft: "6px", marginRight: "25px"}} 
-                />
-                <Typography>
-                  <b>Current Cost</b> <br/>
-                  avg $/fastq: ~$0.0052 
-                </Typography>
-                </Paper>
-              </Grid>
-              <Grid item xs={6} sm={6}  md={12} lg={12} sx={{display: "flex", width: "100%", height: "100%"}}>
-                <Paper sx={{display: "flex", padding: "10px", width: "100%" , textAlign: "left", zIndex: 0}}>
-                <img
-                    style={{  width: '70px', marginTop: "10px", marginLeft: "30px", marginRight: "40px" }}
-                    src={tasktime}
-                    alt="lasttask"
-                  />
-                
-
-                <Box 
-        sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          cursor: 'pointer',
-          justifyContent: 'space-between'
+<Paper 
+  key={3}
+  ref={el => (itemRefs.current[3] = el)}
+  className="fade-in"
+  sx={{
+    width: "100%",
+    margin: { sm: "5px", md: "20px" },
+    minHeight: "460px", // Use minHeight instead of fixed height
+    display: "flex",
+    flexDirection: "column" // Ensure Paper stacks its children vertically
+  }}
+>
+  <Grid 
+    item 
+    xs={12} 
+    sx={{
+      flex: "1 0 auto", // Allow Grid to grow with iframe content
+      padding: "0px"
+    }}
+  >
+    <Grid container>
+      <Grid 
+        item 
+        xs={12} 
+        sx={{
+          height: "400px" // Keep iframe height fixed
         }}
-        onClick={() => setIsExpanded(!isExpanded)}
       >
+        <iframe 
+          src="/heatmap.html" 
+          style={{
+            width: "100%",
+            height: "100%",
+            border: "none"
+          }}
+        ></iframe>
+      </Grid>
+    </Grid>
 
-        <MButton
-        variant="text"
-        className="intraButton mbutton"
-        id="basic-button"
-        aria-controls={isMenuOpen ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={isMenuOpen ? 'true' : undefined}
-        onClick={handleClick}
-        sx={{marginLeft: "10px"}}
-      >
-        <FontAwesomeIcon icon={isMenuOpen ? faCaretUp : faCaretDown} style={{ marginRight: '6px' }} />
-        Task History
-      </MButton>
-          
-      </Box>
-      
-      <Menu
-      id="basic-menu"
-      anchorEl={anchorEl}
-      open={isMenuOpen}
-      onClose={handleCloseMenu}
-      MenuListProps={{
-        'aria-labelledby': 'basic-button',
-      }}
-      PaperProps={{
-        sx: {
-          display: 'flex',
-          flexDirection: 'row', // Two-column layout
-          width: '380px', // Increased width for better layout
-          padding: 2,
-          maxHeight: '80vh', // To prevent overflow on smaller screens
-        },
+    <Typography 
+      component="div"
+      sx={{
+        textAlign: "center",
+        marginTop: "27px",
+        marginBottom: "20px", // Add bottom margin for padding
+        display: "flex",
+        flexDirection: { xs: "column", sm: "row" },
+        gap: { xs: "4px", sm: "8px" },
+        justifyContent: "center",
+        alignItems: "center"
       }}
     >
-      {/* Left Panel */}
-      <Box
-        sx={{
-          paddingLeft: 2,
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          marginLeft: "-12px"
-        }}
-      >
-        <Typography  variant="subtitle4" sx={{fontSize: "22px"}}  gutterBottom>
-          ARCHS4 Task History
-        </Typography>
-      </Box>
+      <span><b>Gene lookups</b> {logStats["genesearch"]+9232056}</span>
+      <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>|</Box>
+      <span><b>Bulk file downloads</b> {logStats["download"]+11892}</span>
+      <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>|</Box>
+      <span><b>Sample search downloads</b> {logStats["metadownload"]+9344}</span>
+    </Typography>
+  </Grid>
+</Paper>
 
-      {/* Right Panel */}
-      <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          paddingLeft: 2,
-        }}
-      >
 
-          {logTasks ? (
-            <>
-              <Box>
-                {taskOrder.map((taskKey) => {
-                  const task = logTasks[taskKey];
-                  if (!task) return null;
 
-                  return (
-                    <Box key={taskKey} sx={{ mb: 1.5 }}>
-                      <div>
-                      <Typography variant="body1">
-                        <strong>{taskDisplayMap[taskKey]}:</strong> {task.entry}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        <div >
-                        {new Date(task.date).toLocaleString()}
-                        </div>
-                      </Typography>
-                      </div>
-                    </Box>
-                  );
-                })}
-              </Box>
-
-              {pipelineOverview && (
-                <Box sx={{ mb: 1.5 }}>
-                  <Typography variant="subtitle4" gutterBottom sx={{fontSize: "22px"}}>
-                    Pipeline Overview
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Waiting:</strong> {pipelineOverview.waiting}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Submitted:</strong> {pipelineOverview.submitted}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Completed:</strong> {pipelineOverview.completed}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Failed:</strong> {pipelineOverview.failed}
-                  </Typography>
-                </Box>
-              )}
-            </>
+          <Grid 
+  container 
+  xs={12} 
+  sx={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    textAlign: 'center',
+    marginBottom: "40px",
+    margin: { sm: "5px", md: "20px" },
+  }}
+>
+  {/* Pipeline Activity BarChart */}
+  <Grid 
+          item 
+          xs={12} // Full width on small screens
+          md={8}  // 8/12 width on medium and larger screens
+          lg={9}  // 9/12 width on large screens
+        >
+          <h2>Pipeline Activity</h2>
+          {Array.isArray(jobQueue) && jobQueue.length > 0 ? (
+            <BarChart
+              dataset={jobQueue}
+              series={addLabels([
+                { dataKey: 'success', stack: 'processed', size: "16px" },
+                { dataKey: 'failed', stack: 'processed' },
+                { dataKey: 'pending', stack: 'pending' },
+              ])}
+              xAxis={[{ scaleType: 'band', dataKey: 'year', label: "" }]}
+              slotProps={{
+                fontSize: 10, // Likely applies to axis labels or other chart text, not legend
+                legend: {
+                  hidden: false,
+                  direction: 'column',
+                  position: isSmallScreen ? { vertical: 'middle', horizontal: 'right' } : { vertical: 'top', horizontal: 'right' },
+                  padding: 0,
+                }
+              }}
+              height={300}
+              borderRadius={3}
+              yAxis={[{ 
+                label: 'Count', 
+                labelStyle: { 
+                  transform: 'translateX(-70px) rotate(-90deg)', 
+                  transformOrigin: 'left center' 
+                }
+              }]}
+              margin={isSmallScreen 
+                ? { left: 50, right: 20, top: 30, bottom: 30 } // Smaller margins for full-width (xs)
+                : { left: 100, right: 80, top: 50, bottom: 50 }} // Larger margins for md/lg
+                sx={{ 
+                  width: "60%", 
+                  "& .MuiChartsAxis-tickLabel": { marginTop: "60px !important" }, 
+                  "& .MuiChartsLegend-series text": {
+                    fontSize: "1.0em !important",
+                    marginBottom: "20px !important", // Adjust this value to decrease vertical spacing
+                  }
+                }}
+            />
           ) : (
-            <Typography color="text.secondary">Loading task history...</Typography>
+            <Skeleton variant="rectangular" width="100%" height={300} sx={{ margin: "40px" }} />
           )}
-      </Box>
-      <PipelineStatusChart/>
-    </Menu>
+        </Grid>
+
+  {/* Right Column (Pipeline Status, Cost, Task History) */}
+  <Grid 
+    item 
+    xs={12} // Full width on small screens
+    md={4}  // 4/12 width on medium screens
+    lg={3}  // 3/12 width on large screens
+  >
+    <Grid 
+      container 
+      spacing={2} 
+      sx={{ 
+        alignItems: { sm: 'stretch' } // Stretch items to equal height on sm screens
+      }}
+    >
+      {/* Pipeline Status (Sun/Moon) */}
+      <Grid 
+        item 
+        xs={12} // Full width on small screens
+        sm={6}  // Half width on small-medium screens
+        md={12} // Full width within this column on medium+
+      >
+        <Paper 
+          sx={{ 
+            display: "flex", 
+            padding: "10px", 
+            width: "100%", 
+            height: { sm: '100%' } // Ensure full height on sm screens
+          }}
+        >
+          <div style={{ width: '100px', height: '100px', marginLeft: "10px", marginRight: "10px" }}>
+            {pipelineStatus > 0 ? (
+              <Sun style={{ width: '80%', height: '80%' }} />
+            ) : (
+              <Tooltip title={"While I am waiting I might just as well take a nap."} arrow>
+                <img
+                  style={{ width: '80%', height: '80%', marginTop: "10px" }}
+                  src={moon}
+                  alt="sleeping"
+                />
+              </Tooltip>
+            )}
+          </div>
+          <Typography sx={{ marginLeft: "10px", textAlign: "left", verticalAlign: "center", marginLeft: "20px" }}>
+            <div style={{ marginBottom: "8px" }}>
+              {pipelineStatus > 0 ? <b>Pipeline active</b> : <b>Pipeline sleeping</b>}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+              <FontAwesomeIcon icon={faMicrochip} style={{ marginRight: "12px" }} />
+              <span style={{ marginRight: "26px" }}>vCPUs:</span> {Math.round(pipelineStatus / 1024)}
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <FontAwesomeIcon icon={faMemory} style={{ marginRight: "10px" }} />
+              <span style={{ marginRight: "6px" }}>vMemory:</span> {Math.round(pipelineStatus * 4 / 1024)} GB
+            </div>
+          </Typography>
+        </Paper>
+      </Grid>
+
+      {/* Current Cost (GaugeChart) */}
+      <Grid 
+        item 
+        xs={12} // Full width on small screens
+        sm={6}  // Half width on small-medium screens
+        md={12} // Full width within this column on medium+
+      >
+        <Paper 
+          sx={{ 
+            display: "flex", 
+            padding: "10px", 
+            width: "100%", 
+            textAlign: "left",
+            height: { sm: '100%' } // Ensure full height on sm screens
+          }}
+        >
+          <GaugeChart 
+            id="gauge-chart2" 
+            nrOfLevels={20} 
+            percent={0.2}
+            textColor={"black"}
+            hideText={"true"}
+            style={{ width: "110px", marginLeft: "6px", marginRight: "25px" }} 
+          />
+          <Typography>
+            <b>Current Cost</b> <br />
+            avg $/fastq: ~$0.0052 
+          </Typography>
+        </Paper>
+      </Grid>
+
+      {/* Task History */}
+      <Grid 
+        item 
+        xs={12} // Full width on small screens
+        md={12} // Full width within this column on medium+
+      >
+        <Paper sx={{ display: "flex", padding: "10px", width: "100%", textAlign: "left", zIndex: 0 }}>
+          <img
+            style={{ width: '70px', marginTop: "10px", marginLeft: "30px", marginRight: "40px" }}
+            src={tasktime}
+            alt="lasttask"
+          />
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              cursor: 'pointer',
+              justifyContent: 'space-between'
+            }}
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            <MButton
+              variant="text"
+              className="intraButton mbutton"
+              id="basic-button"
+              aria-controls={isMenuOpen ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={isMenuOpen ? 'true' : undefined}
+              onClick={handleClick}
+              sx={{ marginLeft: "10px" }}
+            >
+              <FontAwesomeIcon icon={isMenuOpen ? faCaretUp : faCaretDown} style={{ marginRight: '6px' }} />
+              Task History
+            </MButton>
+          </Box>
+          
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={isMenuOpen}
+            onClose={handleCloseMenu}
+            MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            PaperProps={{
+              sx: {
+                display: 'flex',
+                flexDirection: 'row', // Two-column layout
+                width: '380px', // Increased width for better layout
+                padding: 2,
+                maxHeight: '80vh', // To prevent overflow
+              },
+            }}
+          >
+            {/* Left Panel */}
+            <Box sx={{ paddingLeft: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginLeft: "-12px" }}>
+              <Typography variant="subtitle4" sx={{ fontSize: "22px" }} gutterBottom>
+                ARCHS4 Task History
+              </Typography>
+            </Box>
+            {/* Right Panel */}
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', paddingLeft: 2 }}>
+              {logTasks ? (
+                <>
+                  <Box>
+                    {taskOrder.map((taskKey) => {
+                      const task = logTasks[taskKey];
+                      if (!task) return null;
+                      return (
+                        <Box key={taskKey} sx={{ mb: 1.5 }}>
+                          <Typography variant="body1">
+                            <strong>{taskDisplayMap[taskKey]}:</strong> {task.entry}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {new Date(task.date).toLocaleString()}
+                          </Typography>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                  {pipelineOverview && (
+                    <Box sx={{ mb: 1.5 }}>
+                      <Typography variant="subtitle4" gutterBottom sx={{ fontSize: "22px" }}>
+                        Pipeline Overview
+                      </Typography>
+                      <Typography variant="body1"><strong>Waiting:</strong> {pipelineOverview.waiting}</Typography>
+                      <Typography variant="body1"><strong>Submitted:</strong> {pipelineOverview.submitted}</Typography>
+                      <Typography variant="body1"><strong>Completed:</strong> {pipelineOverview.completed}</Typography>
+                      <Typography variant="body1"><strong>Failed:</strong> {pipelineOverview.failed}</Typography>
+                    </Box>
+                  )}
+                </>
+              ) : (
+                <Typography color="text.secondary">Loading task history...</Typography>
+              )}
+            </Box>
+            <PipelineStatusChart />
+          </Menu>
+        </Paper>
+      </Grid>
+    </Grid>
+  </Grid>
+</Grid>
 
 
-                </Paper>
-              </Grid>
-            </Grid>
-            </Grid>
-          </Grid>
+
+
+
+
         </Grid>
         </Grid>
     </Container>

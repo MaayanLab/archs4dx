@@ -68,8 +68,7 @@ export const SignatureSearch = ({ setNewSearchResult, species }) => {
 
   const handleExampleClick = (e) => {
     e.preventDefault();
-    console.log('Populating example for species:', species, 'isWeightedSignature:', isWeightedSignature);
-
+    
     setWarning(''); // Clear any existing warnings
 
     if (isWeightedSignature) {

@@ -16,3 +16,20 @@
     background-color: rgb(191, 226, 255);
     padding: 12px;
 }
+
+/* For WebKit browsers (Chrome, Safari) */
+.syntax-highlighter-pre::-webkit-scrollbar {
+    width: 8px; /* Sets the scrollbar width to 8px, making it thinner */
+  }
+  
+  /* Styles the scrollbar thumb (the draggable part) */
+  .syntax-highlighter-pre::-webkit-scrollbar-thumb {
+    background-color: #888; /* Gray color for the thumb */
+    border-radius: 4px; /* Rounded edges for a polished look */
+  }
+  
+  /* For Firefox */
+  .syntax-highlighter-pre {
+    scrollbar-width: thin; /* Makes the scrollbar thinner */
+    scrollbar-color: #68bba4 #2d2d2d; /* Thumb color: gray, Track color: dark background */
+  }

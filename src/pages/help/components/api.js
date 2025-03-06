@@ -2,6 +2,7 @@
 import React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { styled } from "@mui/material/styles";
 
 export const ApiDocumentation = () => {
   // Change this if your BASE_NAME is different than the default "sigpy"
@@ -18,11 +19,40 @@ export const ApiDocumentation = () => {
     }
   };
 
-  // A helper for rendering code snippets using react-syntax-highlighter
+  const StyledCodeBlock = styled('div')({
+    '& pre::-webkit-scrollbar': {
+      width: '8px', // Thin scrollbar for WebKit browsers (Chrome, Safari)
+    },
+    '& pre::-webkit-scrollbar-thumb': {
+      backgroundColor: '#888', // Gray thumb
+      borderRadius: '4px', // Rounded edges
+    },
+    '& pre': {
+      scrollbarWidth: 'thin', // Thin scrollbar for Firefox
+      scrollbarColor: '#888 #2d2d2d', // Thumb and track colors
+      margin: 0,
+      padding: '20px',
+      maxWidth: "100%",
+      boxSizing: "border-box",
+      overflowX: "auto", // Enable horizontal scrolling
+    },
+  });
+  
+  // CodeBlock component
   const CodeBlock = ({ language, children }) => (
-    <SyntaxHighlighter language={language} style={okaidia}>
-      {children}
-    </SyntaxHighlighter>
+    <StyledCodeBlock>
+      <SyntaxHighlighter
+        language={language}
+        style={okaidia}
+        customStyle={{
+          background: "#2d2d2d", // Dark background
+          fontSize: { xs: "12px", sm: "14px" }, // Responsive font size
+          lineHeight: "1.5",
+        }}
+      >
+        {children}
+      </SyntaxHighlighter>
+    </StyledCodeBlock>
   );
 
   return (
@@ -228,7 +258,7 @@ print("File downloaded as matrix.zip")`}
             <br />• signame – a name identifier for the signature.
             <br />• k – (optional) number of nearest neighbors to return (default is 10).
           </p>
-          <div style={{borderRadius: "5px", border: "1px solid black", padding: "12px", marginLeft: "-10px", backgroundColor: "#2dde88"}}>
+          <div style={{borderRadius: "5px", border: "1px solid black", padding: "12px", marginLeft: "-10px", backgroundColor: '#34ebc9'}}>
             k-NN search can be performed either using a gene expression profile (gene counts) or marker genes (up genes for genes that are characteristically upregulated, and down genes that are characteristically down regulated. Down genes can be left blank).
           </div>
           <p>
