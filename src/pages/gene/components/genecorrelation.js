@@ -17,7 +17,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px'
+    gap: '8px', // Ensures spacing between elements
+    minHeight: '36px',
   },
   loadingButton: {
     padding: '6px 15px',
@@ -31,7 +32,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px'
+    gap: '8px', // Ensures spacing between spinner and text
+    minHeight: '36px',
   },
   disabledButton: {
     padding: '6px 15px',
@@ -42,6 +44,7 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'not-allowed',
+    minHeight: '36px',
   },
   recalculateButton: {
     padding: '6px 15px',
@@ -55,7 +58,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px'
+    gap: '8px',
+    minHeight: '36px',
   },
   exampleContainer: {
     display: 'flex',
@@ -396,8 +400,13 @@ export const GeneCorrelation = ({ geneName }) => {
                       onMouseOut={(e) => !(loading || recalculateLoading) && (e.currentTarget.style.backgroundColor = '#5bc0de')}
                       disabled={loading || recalculateLoading}
                     >
-                      {loading && !proposedRegex && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
-                      {loading && !proposedRegex ? 'Generating...' : 'Generate Regex'}
+                      {loading && !proposedRegex && (
+                        <>
+                          <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
+                          Generating...
+                        </>
+                      )}
+                      {!(loading && !proposedRegex) && 'Generate Regex'}
                     </button>
                   )}
                   {!useRegexWizard && (
@@ -409,8 +418,13 @@ export const GeneCorrelation = ({ geneName }) => {
                       onMouseOut={(e) => !(loading || recalculateLoading) && (e.currentTarget.style.backgroundColor = '#5bc0de')}
                       disabled={loading || recalculateLoading}
                     >
-                      {loading && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
-                      {loading ? 'Loading...' : 'Submit'}
+                      {loading && (
+                        <>
+                          <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
+                          Loading...
+                        </>
+                      )}
+                      {!loading && 'Submit'}
                     </button>
                   )}
                 </Box>
@@ -435,7 +449,7 @@ export const GeneCorrelation = ({ geneName }) => {
                     />
                     {sampleMatchSize !== null && !isRegexEdited && (
                       <Typography variant="caption" sx={{ display: 'block', color: '#666', mt: 1 }}>
-                        Matching samples: {sampleMatchSize}
+                        <b>Matching samples: {sampleMatchSize}</b>
                       </Typography>
                     )}
                     {isRegexEdited && (
@@ -447,12 +461,17 @@ export const GeneCorrelation = ({ geneName }) => {
                         onMouseOut={(e) => !recalculateLoading && (e.currentTarget.style.backgroundColor = '#5bc0de')}
                         disabled={recalculateLoading}
                       >
-                        {recalculateLoading && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
-                        {recalculateLoading ? 'Recalculating...' : 'Recalculate Sample Match'}
+                        {recalculateLoading && (
+                          <>
+                            <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
+                            Recalculating...
+                          </>
+                        )}
+                        {!recalculateLoading && 'Recalculate Sample Match'}
                       </button>
                     )}
                     {regexExplanation && (
-                      <Typography variant="caption" sx={{ display: 'block', color: '#666', mt: 1 }}>
+                      <Typography variant="caption" sx={{ display: 'block', color: '#666', mt: 1, marginBottom: "10px" }}>
                         {regexExplanation}
                       </Typography>
                     )}
@@ -468,8 +487,13 @@ export const GeneCorrelation = ({ geneName }) => {
                       }}
                       disabled={sampleMatchSize === null || sampleMatchSize === 0 || loading || recalculateLoading}
                     >
-                      {loading && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
-                      {loading ? 'Loading...' : 'Submit'}
+                      {loading && (
+                        <>
+                          <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
+                          Loading...
+                        </>
+                      )}
+                      {!loading && 'Submit'}
                     </button>
                     {sampleMatchSize === 0 && (
                       <Typography variant="caption" sx={{ display: 'block', color: '#666', mt: 1 }}>

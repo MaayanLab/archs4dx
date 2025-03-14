@@ -37,37 +37,65 @@ export const ScatterPlot = ({
   const [is3D, setIs3D] = useState(true);
   const [isSampleView, setIsSampleView] = useState(true);
 
-  // Load search history from localStorage, expecting integers for samples
+  // Validate and load search history from localStorage
   const loadFromStorage = () => {
     const storedData = localStorage.getItem("searchHistory");
-    const initialData = storedData
-      ? JSON.parse(storedData)
-      : { sample: { human: {}, mouse: {} }, gene: { human: {}, mouse: {} } };
+    let initialData;
 
-    // Convert sample arrays to Sets of integers
-    if (initialData.sample) {
+    try {
+      if (!storedData) {
+        throw new Error("No stored data");
+      }
+      
+      initialData = JSON.parse(storedData);
+      
+      // Basic structure validation
+      if (!initialData?.sample || !initialData?.gene) {
+        throw new Error("Invalid structure");
+      }
+      
+      // Validate species structure
+      if (!initialData.sample.human || !initialData.sample.mouse ||
+          !initialData.gene.human || !initialData.gene.mouse) {
+        throw new Error("Missing species data");
+      }
+
+      // Convert sample arrays to Sets of integers
       for (const sp in initialData.sample) {
         for (const key in initialData.sample[sp]) {
           if (initialData.sample[sp].hasOwnProperty(key)) {
+            // Validate samples is an array
+            if (!Array.isArray(initialData.sample[sp][key].samples)) {
+              throw new Error("Invalid samples format");
+            }
             initialData.sample[sp][key].samples = new Set(
-              initialData.sample[sp][key].samples // Already integers
+              initialData.sample[sp][key].samples
             );
           }
         }
       }
-    }
-    // Convert gene arrays to Sets (no change needed here)
-    if (initialData.gene) {
+
+      // Convert gene arrays to Sets
       for (const sp in initialData.gene) {
         for (const key in initialData.gene[sp]) {
           if (initialData.gene[sp].hasOwnProperty(key)) {
+            // Validate genes is an array
+            if (!Array.isArray(initialData.gene[sp][key].genes)) {
+              throw new Error("Invalid genes format");
+            }
             initialData.gene[sp][key].genes = new Set(
               initialData.gene[sp][key].genes
             );
           }
         }
       }
+    } catch (error) {
+      console.error("Corrupted search history detected, resetting localStorage:", error);
+      // Reset to default structure
+      initialData = { sample: { human: {}, mouse: {} }, gene: { human: {}, mouse: {} } };
+      localStorage.removeItem("searchHistory");
     }
+
     return initialData;
   };
 
@@ -90,7 +118,7 @@ export const ScatterPlot = ({
     }
   }, [query]);
 
-  // Handle new sample search result, storing integers
+  // Handle new sample search result
   useEffect(() => {
     if (newSearchResult) {
       const numberOfQueries = Object.keys(
@@ -118,7 +146,7 @@ export const ScatterPlot = ({
     }
   }, [newSearchResult]);
 
-  // Handle new gene search result (no change needed)
+  // Handle new gene search result
   useEffect(() => {
     if (newGeneSearchResult) {
       const numberOfQueries = Object.keys(
@@ -191,8 +219,8 @@ export const ScatterPlot = ({
         const chunk = rows.slice(start, start + chunkSize).map((row) => {
           const columns = row.split(",");
           const firstColumn = isSampleView
-            ? parseInt(columns[0], 10) // Integer for samples
-            : columns[0]; // String for genes
+            ? parseInt(columns[0], 10)
+            : columns[0];
           return [firstColumn, ...columns.slice(1).map(Number)];
         });
         dataChunk = [...dataChunk, ...chunk];
@@ -225,7 +253,7 @@ export const ScatterPlot = ({
     return clonedObj;
   };
 
-  // Prepare searchHistory for storage (convert Sets to arrays, keep integers)
+  // Prepare searchHistory for storage
   const prepareForStorage = () => {
     const historyToSave = deepCloneWithSetHandling(searchHistory);
     if (historyToSave.sample) {
@@ -233,7 +261,7 @@ export const ScatterPlot = ({
         for (const key in historyToSave.sample[sp]) {
           historyToSave.sample[sp][key].samples = Array.from(
             historyToSave.sample[sp][key].samples
-          ); // Integers as-is
+          );
         }
       }
     }
@@ -263,7 +291,7 @@ export const ScatterPlot = ({
     }
   }, [searchHistory, sampleMode]);
 
-  // Fetch samples for a query, storing integers
+  // Fetch samples for a query
   const searchSamples = async (query) => {
     try {
       const numberOfQueries = Object.keys(
@@ -390,7 +418,7 @@ export const ScatterPlot = ({
     updateScatterPlotGeneColors();
   };
 
-  // Download sample IDs with "GSM" prefix
+  // Download sample IDs
   const downloadQuerySamples = (species, query) => {
     if (
       !searchHistory?.sample[species] ||
@@ -406,7 +434,7 @@ export const ScatterPlot = ({
     }
     try {
       const dataStr = Array.from(samples)
-        .map((sample) => `GSM${sample}`) // Add "GSM" prefix here
+        .map((sample) => `GSM${sample}`)
         .join("\n");
       const blob = new Blob([dataStr], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
@@ -422,7 +450,7 @@ export const ScatterPlot = ({
     }
   };
 
-  // Download gene IDs (no change needed)
+  // Download gene IDs
   const downloadQueryGenes = (species, query) => {
     if (
       !searchHistory?.gene[species] ||
@@ -452,13 +480,13 @@ export const ScatterPlot = ({
     }
   };
 
-  // Update scatter plot colors for sample mode (compare integers)
+  // Update scatter plot colors for sample mode
   const updateScatterPlotColors = () => {
     if (!normalPointsRef.current) return;
     const colors = [];
     const sizes = [];
     data.forEach((d) => {
-      const gsm = d[0]; // Integer from CSV
+      const gsm = d[0];
       let color = new THREE.Color("#000000");
       let size = 0.1;
       for (const key in searchHistory.sample[speciesSelection]) {
@@ -482,7 +510,7 @@ export const ScatterPlot = ({
     );
   };
 
-  // Update scatter plot colors for gene mode (no change needed)
+  // Update scatter plot colors for gene mode
   const updateScatterPlotGeneColors = () => {
     if (!normalPointsRef.current) return;
     const colors = [];

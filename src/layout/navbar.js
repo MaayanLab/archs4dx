@@ -265,7 +265,7 @@ export const NavBar = () => {
               <Button
                 variant="contained"
                 onClick={() => handleLoginRedirection(data.startpage.sso[0].url)}
-                sx={{ ml: 2, whiteSpace: "nowrap" }}
+                sx={{ ml: 1,mr: 0, whiteSpace: "nowrap" }} // Changed ml from 2 to 1
               >
                 Sign in
               </Button>
