@@ -87,7 +87,7 @@ const sendToEnrichr = (genes, description = "Correlation Table from ARCHS4") => 
   document.body.removeChild(form);
 };
 
-export const CorrelationTable = ({ tableData }) => {
+export const CorrelationTable = ({ tableData, searchTerm, gene, direction }) => {
   if (!tableData || tableData.length === 0) {
     return null;
   }
@@ -129,7 +129,7 @@ export const CorrelationTable = ({ tableData }) => {
           Download Table
         </button>
         <button
-          onClick={() => sendToEnrichr(geneList)}
+          onClick={() => sendToEnrichr(geneList, searchTerm+" - ARCHS4 "+direction+" correlation "+gene)}
           style={{
             padding: '8px 16px',
             backgroundColor: '#ff6f61',

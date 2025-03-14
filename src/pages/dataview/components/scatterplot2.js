@@ -35,28 +35,38 @@ export const ScatterPlot = ({
   const [speciesSelection, setSpeciesSelection] = useState("human");
   const [progress, setProgress] = useState(0);
   const [is3D, setIs3D] = useState(true);
+  // isSampleView will determine which CSV file to load
   const [isSampleView, setIsSampleView] = useState(true);
 
-  // Load search history from localStorage, expecting integers for samples
+  // Load the search history from localStorage.
+  // The expected structure is:
+  // {
+  //   sample: { human: {}, mouse: {} },
+  //   gene: { human: {}, mouse: {} }
+  // }
+
+  //localStorage.setItem("searchHistory", JSON.stringify({"gene": {"mouse": {}, "human": {}}, "sample": {"mouse": {}, "human": {}}}));
+
+
   const loadFromStorage = () => {
     const storedData = localStorage.getItem("searchHistory");
     const initialData = storedData
       ? JSON.parse(storedData)
       : { sample: { human: {}, mouse: {} }, gene: { human: {}, mouse: {} } };
 
-    // Convert sample arrays to Sets of integers
+    // Convert arrays stored into sets for sample queries.
     if (initialData.sample) {
       for (const sp in initialData.sample) {
         for (const key in initialData.sample[sp]) {
           if (initialData.sample[sp].hasOwnProperty(key)) {
             initialData.sample[sp][key].samples = new Set(
-              initialData.sample[sp][key].samples // Already integers
+              initialData.sample[sp][key].samples
             );
           }
         }
       }
     }
-    // Convert gene arrays to Sets (no change needed here)
+    // Convert arrays stored into sets for gene queries.
     if (initialData.gene) {
       for (const sp in initialData.gene) {
         for (const key in initialData.gene[sp]) {
@@ -73,62 +83,68 @@ export const ScatterPlot = ({
 
   const [searchHistory, setSearchHistory] = useState(loadFromStorage());
 
-  // Update isSampleView based on sampleMode prop
+  // Update the isSampleView based on sampleMode prop.
   useEffect(() => {
-    setIsSampleView(sampleMode === "sample");
+    if (sampleMode === "sample") {
+      setIsSampleView(true);
+    } else {
+      setIsSampleView(false);
+    }
   }, [sampleMode]);
 
-  // Update species selection when speciesMode changes
+  // Update species selection when speciesMode changes.
   useEffect(() => {
     setSpeciesSelection(speciesMode);
   }, [speciesMode]);
 
-  // Fetch samples for a new query if not in history
+  // When a new query is received and not already in the history for current species,
+  // Fetch samples.
   useEffect(() => {
-    if (query && !searchHistory.sample[speciesSelection].hasOwnProperty(query)) {
-      searchSamples(query);
+    if (query) {
+      if (!searchHistory.sample[speciesSelection].hasOwnProperty(query)) {
+        searchSamples(query);
+      }
     }
   }, [query]);
 
-  // Handle new sample search result, storing integers
+  // When new sample search result is received, add it if not already in history.
   useEffect(() => {
     if (newSearchResult) {
       const numberOfQueries = Object.keys(
         searchHistory.sample[speciesSelection]
       ).length;
-      setSearchHistory((prevHistory) => ({
-        ...prevHistory,
-        sample: {
-          ...prevHistory.sample,
-          [speciesSelection]: {
-            ...prevHistory.sample[speciesSelection],
-            [newSearchResult.signame]: {
-              samples: new Set(
-                newSearchResult.samples.map((sample) =>
-                  parseInt(sample.replace("GSM", ""), 10)
-                )
-              ),
-              series_count: newSearchResult.series_count,
-              species: newSearchResult.species,
-              color: colorOptions[numberOfQueries % colorOptions.length],
+      if (true){
+      //if (!searchHistory.sample[speciesSelection].hasOwnProperty(newSearchResult.signame)) {
+        setSearchHistory((prevHistory) => ({
+          ...prevHistory,
+          sample: {
+            ...prevHistory.sample,
+            [speciesSelection]: {
+              ...prevHistory.sample[speciesSelection],
+              [newSearchResult.signame]: {
+                samples: new Set(
+                  newSearchResult.samples.map((sample) =>
+                    parseInt(sample.replace("GSM", ""), 10)
+                  )
+                ),
+                series_count: newSearchResult.series_count,
+                species: newSearchResult.species,
+                color: colorOptions[numberOfQueries % colorOptions.length],
+              },
             },
           },
-        },
-      }));
+        }));
+      }
     }
   }, [newSearchResult]);
 
-  // Handle new gene search result (no change needed)
+  // When new gene search result is received, add it if not already in history.
   useEffect(() => {
     if (newGeneSearchResult) {
       const numberOfQueries = Object.keys(
         searchHistory.gene[speciesSelection]
       ).length;
-      if (
-        !searchHistory.gene[speciesSelection].hasOwnProperty(
-          newGeneSearchResult.query
-        )
-      ) {
+      if (!searchHistory.gene[speciesSelection].hasOwnProperty(newGeneSearchResult.query)) {
         setSearchHistory((prevHistory) => ({
           ...prevHistory,
           gene: {
@@ -138,7 +154,7 @@ export const ScatterPlot = ({
               [newGeneSearchResult.query]: {
                 genes: new Set(newGeneSearchResult.genes),
                 color: colorOptions[numberOfQueries % colorOptions.length],
-                species: newGeneSearchResult.species,
+                species: newGeneSearchResult.species
               },
             },
           },
@@ -147,16 +163,18 @@ export const ScatterPlot = ({
     }
   }, [newGeneSearchResult]);
 
-  // Toggle between 2D and 3D
+  // Function to toggle between 2D and 3D.
   const toggleScatterDimensionality = () => {
     setIs3D((prev) => !prev);
   };
 
-  // Fetch embedding CSV data
+  // Fetch embedding CSV data.
   const fetchData = async () => {
     try {
       const url = `https://s3.dev.maayanlab.cloud/archs4/files/${speciesSelection}_embedding_${isSampleView ? "samples" : "genes"}_${is3D ? "3d" : "2d"}.csv.gz`;
       const response = await fetch(url);
+
+      // Get content length for progress estimation.
       const contentLength = response.headers.get("Content-Length");
       const reader = response.body.getReader();
       const totalBytes = parseInt(contentLength, 10);
@@ -174,6 +192,7 @@ export const ScatterPlot = ({
         }
       }
 
+      // Concatenate chunks.
       const arrayBuffer = new Uint8Array(receivedBytes);
       let position = 0;
       for (let chunk of chunks) {
@@ -181,38 +200,47 @@ export const ScatterPlot = ({
         position += chunk.length;
       }
 
+      // Decompress CSV.
       const decompressed = pako.inflate(arrayBuffer, { to: "string" });
       const rows = decompressed.trim().split("\n");
       const totalRows = rows.length;
       const chunkSize = 100000;
 
       let dataChunk = [];
+
+      // Process CSV in chunks.
       for (let start = 0; start < totalRows; start += chunkSize) {
         const chunk = rows.slice(start, start + chunkSize).map((row) => {
           const columns = row.split(",");
+          // For samples: first column is number, for genes: it could be a string.
           const firstColumn = isSampleView
-            ? parseInt(columns[0], 10) // Integer for samples
-            : columns[0]; // String for genes
+            ? parseInt(columns[0], 10)
+            : columns[0];
           return [firstColumn, ...columns.slice(1).map(Number)];
         });
         dataChunk = [...dataChunk, ...chunk];
         setData(dataChunk);
+        // Let UI breathe.
         await new Promise((resolve) => setTimeout(resolve, 0));
       }
       setLoading(false);
-    } catch (error) {
+    }
+    catch (error) {
       console.error("Error fetching data", error);
       setLoading(false);
     }
   };
 
+  // Trigger data fetch when dependencies change.
   useEffect(() => {
     fetchData();
   }, [speciesSelection, is3D, isSampleView]);
 
-  // Deep clone utility with Set handling
+  // Utility function to deep-clone an object and properly handle Sets.
   const deepCloneWithSetHandling = (obj) => {
-    if (obj === null || typeof obj !== "object") return obj;
+    if (obj === null || typeof obj !== "object") {
+      return obj;
+    }
     if (obj instanceof Set) return new Set(obj);
     if (Array.isArray(obj))
       return obj.map((item) => deepCloneWithSetHandling(item));
@@ -225,7 +253,8 @@ export const ScatterPlot = ({
     return clonedObj;
   };
 
-  // Prepare searchHistory for storage (convert Sets to arrays, keep integers)
+  // Save searchHistory to localStorage.
+  // We need to convert Sets into arrays.
   const prepareForStorage = () => {
     const historyToSave = deepCloneWithSetHandling(searchHistory);
     if (historyToSave.sample) {
@@ -233,7 +262,7 @@ export const ScatterPlot = ({
         for (const key in historyToSave.sample[sp]) {
           historyToSave.sample[sp][key].samples = Array.from(
             historyToSave.sample[sp][key].samples
-          ); // Integers as-is
+          );
         }
       }
     }
@@ -249,26 +278,21 @@ export const ScatterPlot = ({
     return historyToSave;
   };
 
-  // Save to localStorage and update scatter plot colors
+  // Save to localStorage and update scatter plot colors when searchHistory changes.
   useEffect(() => {
-    try {
-      localStorage.setItem("searchHistory", JSON.stringify(prepareForStorage()));
-    } catch (e) {
-      console.error("Failed to save to localStorage:", e);
-    }
+    localStorage.setItem("searchHistory", JSON.stringify(prepareForStorage()));
     if (sampleMode === "sample") {
       updateScatterPlotColors();
-    } else {
+    }
+    else {
       updateScatterPlotGeneColors();
     }
   }, [searchHistory, sampleMode]);
 
-  // Fetch samples for a query, storing integers
   const searchSamples = async (query) => {
     try {
-      const numberOfQueries = Object.keys(
-        searchHistory.sample[speciesSelection]
-      ).length;
+      // Set placeholder/loading state immediately
+      const numberOfQueries = Object.keys(searchHistory.sample[speciesSelection]).length;
       setSearchHistory((prevHistory) => ({
         ...prevHistory,
         sample: {
@@ -276,24 +300,28 @@ export const ScatterPlot = ({
           [speciesSelection]: {
             ...prevHistory.sample[speciesSelection],
             [query]: {
-              samples: new Set(),
-              series_count: "Loading...",
-              species: speciesSelection,
+              samples: new Set(), // Empty set as placeholder
+              series_count: "Loading...", // Placeholder text
+              species: speciesSelection, // Can use current species as placeholder
               color: colorOptions[numberOfQueries % colorOptions.length],
-              isLoading: true,
+              isLoading: true, // Optional: flag to indicate loading state
             },
           },
         },
       }));
-
+  
+      // Fetch the actual data
       const response = await fetch(
         `https://maayanlab.cloud/sigpy/meta/quicksearch?query=${query}&species=${speciesSelection}`
       );
+      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      
       const responseData = await response.json();
-
+  
+      // Overwrite placeholder with real data
       setSearchHistory((prevHistory) => ({
         ...prevHistory,
         sample: {
@@ -309,13 +337,14 @@ export const ScatterPlot = ({
               series_count: responseData.series_count,
               species: responseData.species,
               color: colorOptions[numberOfQueries % colorOptions.length],
-              isLoading: false,
+              isLoading: false, // Optional: clear loading flag
             },
           },
         },
       }));
     } catch (error) {
       console.error("Error fetching data:", error);
+      // Optional: Update state to show error
       setSearchHistory((prevHistory) => ({
         ...prevHistory,
         sample: {
@@ -334,66 +363,79 @@ export const ScatterPlot = ({
     }
   };
 
-  // Update sample query color
+  // Update a sample query's color.
   const changeColor = (species, query, color) => {
     setSearchHistory((prevHistory) => {
       const speciesHistory = { ...prevHistory.sample[species] };
       if (speciesHistory[query]) {
-        speciesHistory[query] = { ...speciesHistory[query], color };
+        speciesHistory[query] = { ...speciesHistory[query], color: color };
       }
       return {
         ...prevHistory,
-        sample: { ...prevHistory.sample, [species]: speciesHistory },
+        sample: {
+          ...prevHistory.sample,
+          [species]: speciesHistory,
+        },
       };
     });
     updateScatterPlotColors();
   };
 
-  // Update gene query color
+  // Update a gene query's color.
   const changeGeneColor = (species, query, color) => {
     setSearchHistory((prevHistory) => {
       const speciesHistory = { ...prevHistory.gene[species] };
       if (speciesHistory[query]) {
-        speciesHistory[query] = { ...speciesHistory[query], color };
+        speciesHistory[query] = { ...speciesHistory[query], color: color };
       }
       return {
         ...prevHistory,
-        gene: { ...prevHistory.gene, [species]: speciesHistory },
+        gene: {
+          ...prevHistory.gene,
+          [species]: speciesHistory,
+        },
       };
     });
     updateScatterPlotGeneColors();
   };
 
-  // Remove sample query from history
+  // Remove a sample query from the history.
   const removeQueryFromHistory = (species, query) => {
     setSearchHistory((prevHistory) => {
       const speciesHistory = { ...prevHistory.sample[species] };
       delete speciesHistory[query];
       return {
         ...prevHistory,
-        sample: { ...prevHistory.sample, [species]: speciesHistory },
+        sample: {
+          ...prevHistory.sample,
+          [species]: speciesHistory,
+        },
       };
     });
     updateScatterPlotColors();
   };
 
-  // Remove gene query from history
+  // Remove a gene query from the history.
   const removeGeneQueryFromHistory = (species, query) => {
     setSearchHistory((prevHistory) => {
       const speciesHistory = { ...prevHistory.gene[species] };
       delete speciesHistory[query];
       return {
         ...prevHistory,
-        gene: { ...prevHistory.gene, [species]: speciesHistory },
+        gene: {
+          ...prevHistory.gene,
+          [species]: speciesHistory,
+        },
       };
     });
     updateScatterPlotGeneColors();
   };
 
-  // Download sample IDs with "GSM" prefix
+  // Download sample IDs for a given sample query.
   const downloadQuerySamples = (species, query) => {
     if (
-      !searchHistory?.sample[species] ||
+      !searchHistory ||
+      !searchHistory.sample[species] ||
       !(query in searchHistory.sample[species])
     ) {
       console.error(`No data available for query: ${query}`);
@@ -406,7 +448,7 @@ export const ScatterPlot = ({
     }
     try {
       const dataStr = Array.from(samples)
-        .map((sample) => `GSM${sample}`) // Add "GSM" prefix here
+        .map((sample) => `GSM${sample}`)
         .join("\n");
       const blob = new Blob([dataStr], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
@@ -417,15 +459,17 @@ export const ScatterPlot = ({
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error creating download:", error);
+    }
+    catch (error) {
+      console.error("An error occurred while creating the download:", error);
     }
   };
 
-  // Download gene IDs (no change needed)
+  // Download gene IDs for a given gene query.
   const downloadQueryGenes = (species, query) => {
     if (
-      !searchHistory?.gene[species] ||
+      !searchHistory ||
+      !searchHistory.gene[species] ||
       !(query in searchHistory.gene[species])
     ) {
       console.error(`No data available for query: ${query}`);
@@ -447,18 +491,19 @@ export const ScatterPlot = ({
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error creating download:", error);
+    }
+    catch (error) {
+      console.error("An error occurred while creating the download:", error);
     }
   };
 
-  // Update scatter plot colors for sample mode (compare integers)
+  // Update scatter plot colors for sample mode.
   const updateScatterPlotColors = () => {
     if (!normalPointsRef.current) return;
     const colors = [];
     const sizes = [];
     data.forEach((d) => {
-      const gsm = d[0]; // Integer from CSV
+      const gsm = d[0];
       let color = new THREE.Color("#000000");
       let size = 0.1;
       for (const key in searchHistory.sample[speciesSelection]) {
@@ -482,7 +527,7 @@ export const ScatterPlot = ({
     );
   };
 
-  // Update scatter plot colors for gene mode (no change needed)
+  // Update scatter plot colors for gene mode.
   const updateScatterPlotGeneColors = () => {
     if (!normalPointsRef.current) return;
     const colors = [];
@@ -512,7 +557,7 @@ export const ScatterPlot = ({
     );
   };
 
-  // Three.js rendering and controls
+  // Three.js rendering and controls.
   useEffect(() => {
     if (!loading) {
       const scene = new THREE.Scene();
@@ -535,7 +580,8 @@ export const ScatterPlot = ({
           500
         );
         camera.position.set(0, 0, 4.5);
-      } else {
+      }
+      else {
         const aspect = containerRef.current.clientWidth / containerRef.current.clientHeight;
         const d = 3;
         camera = new THREE.OrthographicCamera(
@@ -556,9 +602,15 @@ export const ScatterPlot = ({
       controls.enableDamping = true;
       controls.dampingFactor = 0.25;
       controls.enableZoom = true;
-      controls.enableRotate = is3D;
-      controls.enablePan = !is3D;
+      if (is3D) {
+        controls.enableRotate = true;
+        controls.enablePan = false;
+      }
+      else {
+        controls.enableRotate = false;
+      }
 
+      // Prepare points geometry.
       const pointGeo = new THREE.BufferGeometry();
       const positions = [];
       const colorsArray = [];
@@ -591,12 +643,15 @@ export const ScatterPlot = ({
       scene.add(points);
       normalPointsRef.current = points;
 
+      // Call the appropriate update function.
       if (sampleMode === "sample") {
         updateScatterPlotColors();
-      } else {
+      }
+      else {
         updateScatterPlotGeneColors();
       }
 
+      // Mouse events for 2D panning.
       const handleMouseDown = (event) => {
         if (!is3D) {
           isDragging.current = true;
@@ -614,8 +669,10 @@ export const ScatterPlot = ({
           const deltaY = event.clientY - lastMousePosition.current.y;
           const zoomFactor = camera.zoom;
           const moveFactor = 0.01;
-          normalPointsRef.current.position.x += deltaX * moveFactor / zoomFactor;
-          normalPointsRef.current.position.y -= deltaY * moveFactor / zoomFactor;
+          let adjustedMoveFactorX = (deltaX * moveFactor) / zoomFactor;
+          let adjustedMoveFactorY = (deltaY * moveFactor) / zoomFactor;
+          normalPointsRef.current.position.x += adjustedMoveFactorX;
+          normalPointsRef.current.position.y -= adjustedMoveFactorY;
           lastMousePosition.current = { x: event.clientX, y: event.clientY };
         }
       };
@@ -642,6 +699,7 @@ export const ScatterPlot = ({
       return () => {
         controls.removeEventListener("change", handleZoom);
         controls.dispose();
+        renderer.dispose();
         renderer.domElement.removeEventListener("mousedown", handleMouseDown);
         renderer.domElement.removeEventListener("mousemove", handleMouseMove);
         renderer.domElement.removeEventListener("mouseup", handleMouseUp);
@@ -650,6 +708,7 @@ export const ScatterPlot = ({
           normalPointsRef.current.material.dispose();
           scene.remove(normalPointsRef.current);
         }
+        controls.dispose();
         renderer.dispose();
         if (containerRef.current) {
           containerRef.current.removeChild(renderer.domElement);
@@ -735,22 +794,35 @@ export const ScatterPlot = ({
         </>
       )}
 
+      {/* Render the history table based on the mode */}
       <div>
         {sampleMode === "sample" ? (
           <QueryTable
             searchHistory={searchHistory.sample}
             speciesSelection={speciesSelection}
-            downloadQuerySamples={downloadQuerySamples}
-            removeQueryFromHistory={removeQueryFromHistory}
-            changeColor={changeColor}
+            downloadQuerySamples={(species, query) =>
+              downloadQuerySamples(species, query)
+            }
+            removeQueryFromHistory={(species, query) =>
+              removeQueryFromHistory(species, query)
+            }
+            changeColor={(species, query, color) =>
+              changeColor(species, query, color)
+            }
           />
         ) : (
           <QueryTableGene
             searchHistory={searchHistory.gene}
             speciesSelection={speciesSelection}
-            downloadQueryGenes={downloadQueryGenes}
-            removeQueryFromHistory={removeGeneQueryFromHistory}
-            changeColor={changeGeneColor}
+            downloadQueryGenes={(species, query) =>
+              downloadQueryGenes(species, query)
+            }
+            removeQueryFromHistory={(species, query) =>
+              removeGeneQueryFromHistory(species, query)
+            }
+            changeColor={(species, query, color) =>
+              changeGeneColor(species, query, color)
+            }
           />
         )}
       </div>

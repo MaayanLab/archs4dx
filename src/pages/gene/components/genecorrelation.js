@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Typography, TextField, Slider, Skeleton, Switch, FormControlLabel } from '@mui/material';
+import { Box, Grid, Typography, TextField, Slider, Skeleton, Switch, FormControlLabel, Button, CircularProgress } from '@mui/material';
 import correlation from '../../../image/correlation.png';
 import { CorrelationTable } from './correlationtable';
-import { ArrowUpward, ArrowDownward, ArrowForward } from '@mui/icons-material'; 
+import { ArrowUpward, ArrowDownward } from '@mui/icons-material'; 
 
 const styles = {
   button: {
@@ -14,6 +14,24 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px'
+  },
+  loadingButton: {
+    padding: '6px 15px',
+    backgroundColor: '#cccccc',
+    fontWeight: "800",
+    width: "100%",
+    color: '#666666',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'not-allowed',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px'
   },
   disabledButton: {
     padding: '6px 15px',
@@ -33,7 +51,26 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
-    marginTop: '8px'
+    marginTop: '8px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px'
+  },
+  exampleContainer: {
+    display: 'flex',
+    gap: '10px',
+    flexWrap: 'wrap'
+  },
+  exampleButton: {
+    margin: '5px 0',
+    backgroundColor: '#f0f0f0',
+    color: '#333',
+    textAlign: 'left',
+    justifyContent: 'flex-start',
+    '&:hover': {
+      backgroundColor: '#e0e0e0'
+    }
   }
 }
 
@@ -44,11 +81,18 @@ export const GeneCorrelation = ({ geneName }) => {
   const [metaData, setMetaData] = useState('');
   const [useRegexWizard, setUseRegexWizard] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [recalculateLoading, setRecalculateLoading] = useState(false);
   const [proposedRegex, setProposedRegex] = useState('');
-  const [originalRegex, setOriginalRegex] = useState(''); // Store original regex
+  const [originalRegex, setOriginalRegex] = useState('');
   const [regexExplanation, setRegexExplanation] = useState('');
   const [sampleMatchSize, setSampleMatchSize] = useState(null);
-  const [isRegexEdited, setIsRegexEdited] = useState(false); // Track if regex was edited
+  const [isRegexEdited, setIsRegexEdited] = useState(false);
+
+  const examples = [
+    { label: "Brain Cancer", value: "brain cancer" },
+    { label: "Immune Cells", value: "granulocytes and their related cell types" },
+    { label: "Fibrosis", value: "lung tissue fibrosis" }
+  ];
 
   useEffect(() => {
     setInputValue(kValue.toString());
@@ -98,6 +142,16 @@ export const GeneCorrelation = ({ geneName }) => {
     setIsRegexEdited(false);
   };
 
+  const handleExampleClick = async (exampleValue) => {
+    setLoading(true);
+    setMetaData(exampleValue);
+    setProposedRegex('');
+    setRegexExplanation('');
+    setSampleMatchSize(null);
+    setIsRegexEdited(false);
+    await generateRegex(exampleValue);
+  };
+
   const writeLog = async (additionalInfo = '') => {
     try {
       const response = await fetch('https://archs4.org/api/log', {
@@ -114,13 +168,14 @@ export const GeneCorrelation = ({ geneName }) => {
     }
   };
 
-  const generateRegex = async () => {
+  const generateRegex = async (overrideMetaData) => {
     setLoading(true);
     try {
+      const queryData = overrideMetaData || metaData;
       const searchCountResponse = await fetch('https://maayanlab.cloud/sigpy/searchcount', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "query": metaData }),
+        body: JSON.stringify({ "query": queryData }),
       });
       if (!searchCountResponse.ok) throw new Error('Search count response was not ok');
       const searchCountResult = await searchCountResponse.json();
@@ -130,14 +185,24 @@ export const GeneCorrelation = ({ geneName }) => {
       const regexResponse = await fetch('https://maayanlab.cloud/sigpy/regexwizard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "query": metaData }),
+        body: JSON.stringify({ "query": queryData }),
       });
       if (!regexResponse.ok) throw new Error('Regex generation response was not ok');
       const regexResult = await regexResponse.json();
       setProposedRegex(regexResult.regular_expression);
-      setOriginalRegex(regexResult.regular_expression); // Store original regex
+      setOriginalRegex(regexResult.regular_expression);
       setRegexExplanation(regexResult.explanation);
       setIsRegexEdited(false);
+      
+      const finalCountResponse = await fetch('https://maayanlab.cloud/sigpy/searchcount', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "query": regexResult.regular_expression }),
+      });
+      if (!finalCountResponse.ok) throw new Error('Final search count response was not ok');
+      const finalCountResult = await finalCountResponse.json();
+      setSampleMatchSize(finalCountResult.result_size || 0);
+      
       writeLog(',regex_wizard_generated');
 
       if (!regexResult.explanation) {
@@ -155,7 +220,7 @@ export const GeneCorrelation = ({ geneName }) => {
   };
 
   const recalculateSampleMatch = async () => {
-    setLoading(true);
+    setRecalculateLoading(true);
     try {
       const response = await fetch('https://maayanlab.cloud/sigpy/searchcount', {
         method: 'POST',
@@ -171,7 +236,7 @@ export const GeneCorrelation = ({ geneName }) => {
       console.error('Error recalculating sample match:', error);
       setSampleMatchSize(null);
     } finally {
-      setLoading(false);
+      setRecalculateLoading(false);
     }
   };
 
@@ -180,6 +245,21 @@ export const GeneCorrelation = ({ geneName }) => {
     writeLog(useRegexWizard ? ',regex_wizard_submitted' : '');
     try {
       const finalMetaData = useRegexWizard ? proposedRegex : metaData;
+      
+      if (useRegexWizard) {
+        const verifyResponse = await fetch('https://maayanlab.cloud/sigpy/searchcount', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ "query": proposedRegex }),
+        });
+        if (!verifyResponse.ok) throw new Error('Verify search count response was not ok');
+        const verifyResult = await verifyResponse.json();
+        setSampleMatchSize(verifyResult.result_size || 0);
+        if (verifyResult.result_size === 0) {
+          throw new Error('No matching samples found for the proposed regex');
+        }
+      }
+
       const response = await fetch('https://maayanlab.cloud/sigpy/data/correlation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -192,8 +272,27 @@ export const GeneCorrelation = ({ geneName }) => {
       });
       if (!response.ok) throw new Error('Network response was not ok');
       const result = await response.json();
-      setData(result);
+      setData({ ...result, searchterm: metaData });
       console.log(result);
+
+      fetch('https://maayanlab.cloud/Enrichr/addList', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          list: result.positive_correlated_genes.map(gene => gene.gene).join('\n'),
+          description: `${metaData} positive correlation`
+        })
+      });
+
+      fetch('https://maayanlab.cloud/Enrichr/addList', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          list: result.negative_correlated_genes.map(gene => gene.gene).join('\n'),
+          description: `${metaData} negative correlation`
+        })
+      });
+
     } catch (error) {
       console.error('Error submitting data:', error);
     } finally {
@@ -220,6 +319,7 @@ export const GeneCorrelation = ({ geneName }) => {
               <Typography variant="h6">Gene Correlation</Typography>
               <Typography>
                 Find top correlated genes for gene {geneName}. The correlation calculation can be constrained with metadata information. The service will extract up to 2000 samples matching the metadata search term and retrieve the top k genes and their Pearson correlation score.
+                Enter a free-text description of the samples you want to analyze. The Regex Wizard will use AI to suggest a regular expression (regex) based on your input. You can then modify the suggested regex manually if needed. 
               </Typography>
             </Box>
           </Box>
@@ -244,74 +344,79 @@ export const GeneCorrelation = ({ geneName }) => {
                 sx={{ width: '80px', backgroundColor: 'white' }}
               />
             </Box>
-            <Slider
-              value={kValue}
-              onChange={handleKChange}
-              aria-labelledby="k-slider"
-              min={1}
-              max={500}
-              step={1}
-              valueLabelDisplay="auto"
-              sx={{ width: { xs: '100%', sm: "400px" } }}
-            />
-            <Box 
-              sx={{ 
-                display: 'flex', 
-                flexDirection: { xs: 'column', lg: 'row' }, 
-                alignItems: { xs: 'stretch', lg: 'flex-start' }, // Updated for top alignment
-                gap: '20px', 
-                mt: 2 
-              }}
-            >
-              <Box sx={{ flex: 1, width: { xs: '100%', lg: 'auto' } }}>
-                <TextField
-                  label={useRegexWizard ? "Regex Wizard Query" : "Metadata"}
-                  value={metaData}
-                  onChange={handleMetaChange}
-                  variant="outlined"
-                  margin="normal"
-                  multiline
-                  rows={4}
-                  fullWidth
-                  sx={{
-                    backgroundColor: "white",
-                    "& .MuiInputLabel-outlined": { transform: "translate(14px, 4px) scale(1)" },
-                    "& .MuiInputLabel-outlined.MuiInputLabel-shrink": { transform: "translate(14px, -6px) scale(0.75)" },
-                  }}
-                />
-                {useRegexWizard && (
-                  <button
-                    type="button"
-                    onClick={generateRegex}
-                    style={styles.button}
-                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#48a9c7')}
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#5bc0de')}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <Slider
+                value={kValue}
+                onChange={handleKChange}
+                aria-labelledby="k-slider"
+                min={1}
+                max={500}
+                step={1}
+                valueLabelDisplay="auto"
+                sx={{ width: { xs: '60%', sm: "400px" }, mr: 2 }}
+              />
+              <Box sx={styles.exampleContainer}>
+                {examples.map((example) => (
+                  <Button
+                    key={example.label}
+                    variant="contained"
+                    sx={styles.exampleButton}
+                    onClick={() => handleExampleClick(example.value)}
+                    disabled={loading || recalculateLoading}
                   >
-                    {loading && !proposedRegex ? 'Generating...' : 'Generate Regex'}
-                  </button>
-                )}
-                {!useRegexWizard && (
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    style={styles.button}
-                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#48a9c7')}
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#5bc0de')}
-                  >
-                    {loading ? 'Loading...' : 'Submit'}
-                  </button>
-                )}
+                    {example.label}
+                  </Button>
+                ))}
               </Box>
-              
-              {useRegexWizard && proposedRegex && (
-                <>
-                  <Box sx={{ display: { xs: 'flex', lg: 'none' }, justifyContent: 'center' }}>
-                    <ArrowDownward sx={{ fontSize: 40, color: '#666' }} />
-                  </Box>
-                  <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center' }}>
-                    <ArrowForward sx={{ fontSize: 40, color: '#666', marginTop: "60px" }} />
-                  </Box>
-                  <Box sx={{ flex: 1, width: { xs: '100%', lg: 'auto' } }}>
+            </Box>
+            <Box sx={{ mt: 2 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <Box>
+                  <TextField
+                    label={useRegexWizard ? "Regex Wizard Query" : "Metadata"}
+                    value={metaData}
+                    onChange={handleMetaChange}
+                    variant="outlined"
+                    margin="normal"
+                    multiline
+                    rows={4}
+                    fullWidth
+                    sx={{
+                      backgroundColor: "white",
+                      "& .MuiInputLabel-outlined": { transform: "translate(14px, 4px) scale(1)" },
+                      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": { transform: "translate(14px, -6px) scale(0.75)" },
+                    }}
+                  />
+                  {useRegexWizard && (
+                    <button
+                      type="button"
+                      onClick={() => generateRegex()}
+                      style={loading || recalculateLoading ? styles.loadingButton : styles.button}
+                      onMouseOver={(e) => !(loading || recalculateLoading) && (e.currentTarget.style.backgroundColor = '#48a9c7')}
+                      onMouseOut={(e) => !(loading || recalculateLoading) && (e.currentTarget.style.backgroundColor = '#5bc0de')}
+                      disabled={loading || recalculateLoading}
+                    >
+                      {loading && !proposedRegex && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
+                      {loading && !proposedRegex ? 'Generating...' : 'Generate Regex'}
+                    </button>
+                  )}
+                  {!useRegexWizard && (
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      style={loading || recalculateLoading ? styles.loadingButton : styles.button}
+                      onMouseOver={(e) => !(loading || recalculateLoading) && (e.currentTarget.style.backgroundColor = '#48a9c7')}
+                      onMouseOut={(e) => !(loading || recalculateLoading) && (e.currentTarget.style.backgroundColor = '#5bc0de')}
+                      disabled={loading || recalculateLoading}
+                    >
+                      {loading && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
+                      {loading ? 'Loading...' : 'Submit'}
+                    </button>
+                  )}
+                </Box>
+                
+                {useRegexWizard && proposedRegex && (
+                  <Box>
                     <TextField
                       label="Proposed Regular Expression"
                       value={proposedRegex}
@@ -321,7 +426,7 @@ export const GeneCorrelation = ({ geneName }) => {
                       multiline
                       rows={4}
                       fullWidth
-                      disabled={!proposedRegex}
+                      disabled={loading || recalculateLoading || !proposedRegex}
                       sx={{
                         backgroundColor: "white",
                         "& .MuiInputLabel-outlined": { transform: "translate(14px, 4px) scale(1)" },
@@ -330,18 +435,20 @@ export const GeneCorrelation = ({ geneName }) => {
                     />
                     {sampleMatchSize !== null && !isRegexEdited && (
                       <Typography variant="caption" sx={{ display: 'block', color: '#666', mt: 1 }}>
-                        Sample match size: {sampleMatchSize}
+                        Matching samples: {sampleMatchSize}
                       </Typography>
                     )}
                     {isRegexEdited && (
                       <button
                         type="button"
                         onClick={recalculateSampleMatch}
-                        style={styles.recalculateButton}
-                        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#48a9c7')}
-                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#5bc0de')}
+                        style={recalculateLoading ? styles.loadingButton : styles.recalculateButton}
+                        onMouseOver={(e) => !recalculateLoading && (e.currentTarget.style.backgroundColor = '#48a9c7')}
+                        onMouseOut={(e) => !recalculateLoading && (e.currentTarget.style.backgroundColor = '#5bc0de')}
+                        disabled={recalculateLoading}
                       >
-                        {loading ? 'Recalculating...' : 'Recalculate Sample Match'}
+                        {recalculateLoading && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
+                        {recalculateLoading ? 'Recalculating...' : 'Recalculate Sample Match'}
                       </button>
                     )}
                     {regexExplanation && (
@@ -352,15 +459,16 @@ export const GeneCorrelation = ({ geneName }) => {
                     <button
                       type="button"
                       onClick={handleSubmit}
-                      style={sampleMatchSize === 0 ? styles.disabledButton : styles.button}
+                      style={sampleMatchSize === null || sampleMatchSize === 0 || loading || recalculateLoading ? styles.disabledButton : styles.button}
                       onMouseOver={(e) => {
-                        if (sampleMatchSize !== 0) e.currentTarget.style.backgroundColor = '#48a9c7';
+                        if (sampleMatchSize !== null && sampleMatchSize !== 0 && !loading && !recalculateLoading) e.currentTarget.style.backgroundColor = '#48a9c7';
                       }}
                       onMouseOut={(e) => {
-                        if (sampleMatchSize !== 0) e.currentTarget.style.backgroundColor = '#5bc0de';
+                        if (sampleMatchSize !== null && sampleMatchSize !== 0 && !loading && !recalculateLoading) e.currentTarget.style.backgroundColor = '#5bc0de';
                       }}
-                      disabled={sampleMatchSize === 0}
+                      disabled={sampleMatchSize === null || sampleMatchSize === 0 || loading || recalculateLoading}
                     >
+                      {loading && <CircularProgress size={20} sx={{ color: '#5bc0de' }} />}
                       {loading ? 'Loading...' : 'Submit'}
                     </button>
                     {sampleMatchSize === 0 && (
@@ -369,8 +477,8 @@ export const GeneCorrelation = ({ geneName }) => {
                       </Typography>
                     )}
                   </Box>
-                </>
-              )}
+                )}
+              </Box>
             </Box>
 
             <Box sx={{ mt: 2 }}>
@@ -401,20 +509,23 @@ export const GeneCorrelation = ({ geneName }) => {
                   Low expression of {geneName} in {data.searchterm} can lead to biased correlations.
                 </Typography>
               )}
+              <Typography variant="h6" sx={{ mt: 2 }}>
+                Correlation results for search term: {data.searchterm}
+              </Typography>
             </Grid>
             <Grid item md={12} lg={6} sx={{ padding: '20px' }}>
               <Typography variant="h6">
                 <ArrowUpward style={{ verticalAlign: 'middle', marginRight: '8px'}} />
-                Positive correlation ({data.searchterm})
+                Positive correlation
               </Typography>
-              <CorrelationTable tableData={data.positive_correlated_genes} />
+              <CorrelationTable tableData={data.positive_correlated_genes} searchTerm={metaData} gene={geneName} direction={"positive"}/>
             </Grid>
             <Grid item md={12} lg={6} sx={{ padding: '20px' }}>
               <Typography variant="h6">
                 <ArrowDownward style={{ verticalAlign: 'middle', marginRight: '8px' }} />
-                Negative correlation ({data.searchterm})
+                Negative correlation
               </Typography>
-              <CorrelationTable tableData={data.negative_correlated_genes} />
+              <CorrelationTable tableData={data.negative_correlated_genes} searchTerm={metaData} gene={geneName} direction={"negative"}/>
             </Grid>
           </Grid>
         </Box>
