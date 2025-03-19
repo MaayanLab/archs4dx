@@ -17,7 +17,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px', // Ensures spacing between elements
+    gap: '8px',
     minHeight: '36px',
   },
   loadingButton: {
@@ -32,7 +32,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px', // Ensures spacing between spinner and text
+    gap: '8px',
     minHeight: '36px',
   },
   disabledButton: {
@@ -75,6 +75,9 @@ const styles = {
     '&:hover': {
       backgroundColor: '#e0e0e0'
     }
+  },
+  loadingText: {
+    lineHeight: '20px', // Matches the spinner size for vertical alignment
   }
 }
 
@@ -403,7 +406,7 @@ export const GeneCorrelation = ({ geneName }) => {
                       {loading && !proposedRegex && (
                         <>
                           <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
-                          Generating...
+                          <span style={styles.loadingText}>Generating...</span>
                         </>
                       )}
                       {!(loading && !proposedRegex) && 'Generate Regex'}
@@ -421,7 +424,7 @@ export const GeneCorrelation = ({ geneName }) => {
                       {loading && (
                         <>
                           <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
-                          Loading...
+                          <span style={styles.loadingText}>Loading...</span>
                         </>
                       )}
                       {!loading && 'Submit'}
@@ -464,7 +467,7 @@ export const GeneCorrelation = ({ geneName }) => {
                         {recalculateLoading && (
                           <>
                             <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
-                            Recalculating...
+                            <span style={styles.loadingText}>Recalculating...</span>
                           </>
                         )}
                         {!recalculateLoading && 'Recalculate Sample Match'}
@@ -490,7 +493,7 @@ export const GeneCorrelation = ({ geneName }) => {
                       {loading && (
                         <>
                           <CircularProgress size={20} sx={{ color: '#666666', marginRight: '8px' }} />
-                          Loading...
+                          <span style={styles.loadingText}>Loading...</span>
                         </>
                       )}
                       {!loading && 'Submit'}
