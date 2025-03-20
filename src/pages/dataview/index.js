@@ -27,7 +27,8 @@ import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
 import { NavBar } from "../../layout/navbar";
 import { SigpyStatusCheck } from "../../layout/sigpystatus";
-import { RegexSearchTab } from './components/regexwizard'; // Adjust path as needed
+import { RegexSearchTab } from './components/regexwizard';
+import { RegexSearchTabGene } from './components/regexwizardgene';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -163,8 +164,9 @@ export const DataView = () => {
     checkUserId();
   }, []);
 
+  // Reset tab value to 0 when sampleMode changes to ensure correct initial tab
   useEffect(() => {
-    setValue(sampleMode === "sample" ? 0 : 1);
+    setValue(0);
   }, [sampleMode]);
 
   const handleSearchField = () => {
@@ -311,7 +313,7 @@ export const DataView = () => {
             <div>
               <Box sx={{ borderBottom: 1, borderColor: 'divider', fontSize: "10px" }}>
                 <Tabs value={value} onChange={handleChange} aria-label="">
-                  {sampleMode === "sample" ? (
+                  {sampleMode === "sample" && (
                     <Tab
                       label={
                         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -321,7 +323,7 @@ export const DataView = () => {
                       }
                       {...a11yProps(0)}
                     />
-                  ) : (<></>)}
+                  )}
                   <Tab
                     label={
                       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -329,7 +331,7 @@ export const DataView = () => {
                         {sampleMode === "sample" ? "Data" : "Marker Genes"}
                       </div>
                     }
-                    {...a11yProps(1)}
+                    {...a11yProps(sampleMode === "sample" ? 1 : 0)}
                   />
                   <Tab
                     label={
@@ -338,96 +340,104 @@ export const DataView = () => {
                         Regex
                       </div>
                     }
-                    {...a11yProps(2)}
+                    {...a11yProps(sampleMode === "sample" ? 2 : 1)}
                   />
                 </Tabs>
               </Box>
-              <CustomTabPanel value={value} index={0} style={{ padding: "5px" }}>
-                <div style={{ fontSize: "14px" }}>
-                  Examples:<br />
-                  {['GSE98386', 'GSM2679484', 'Macrophage', 'Neuron'].map((example, index) => (
-                    <React.Fragment key={index}>
-                      {index > 0 && ", "}
-                      <a
-                        style={{
-                          color: '#007bff',
-                          transition: 'color 0.3s',
-                          textDecoration: 'none',
-                          marginLeft: index === 0 ? '0' : '4px'
-                        }}
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleExampleClick(example);
-                        }}
-                      >
-                        {example}
-                      </a>
-                    </React.Fragment>
-                  ))}
-                </div>
-                <Box
-                  sx={{
-                    flex: '1 0 auto',
-                    display: 'flex',
-                    gap: "6px",
-                    flexDirection: 'row',
-                  }}
-                >
-                  <TextField
-                    variant="outlined"
-                    placeholder="Search..."
-                    fullWidth
-                    value={searchTerm}
-                    inputRef={textFieldRef}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <SearchIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <AnimatedButton
-                    type="button"
-                    className="btn btn-info"
-                    onClick={() => handleSearchField()}
-                    style={{
-                      width: "120px",
-                      fontSize: "14px",
-                      height: "34px",
-                      backgroundColor: "#5bc0de",
-                      color: "white",
-                      border: "1px solid transparent",
-                      borderRadius: "5px",
-                      fontWeight: "800",
-                      cursor: "pointer",
-                      transition: "background-color 0.3s ease"
-                    }}
-                    id="animation-target"
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#48a9c7"}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#5bc0de"}
-                  >
-                    Search
-                  </AnimatedButton>
-                </Box>
-                <CellList menuId="sidemenu" setSearchQuery={updateSearchQueryFromCellList} />
-                <CellLineList species={species} menuId="sidemenu2" setSearchQuery={updateSearchQueryFromCellList} />
-              </CustomTabPanel>
+              
               {sampleMode === "sample" ? (
-                <CustomTabPanel value={value} index={1}>
-                  <SignatureSearch setNewSearchResult={setNewSearchResult} species={species} />
-                </CustomTabPanel>
+                <>
+                  <CustomTabPanel value={value} index={0} style={{ padding: "5px" }}>
+                    <div style={{ fontSize: "14px" }}>
+                      Examples:<br />
+                      {['GSE98386', 'GSM2679484', 'Macrophage', 'Neuron'].map((example, index) => (
+                        <React.Fragment key={index}>
+                          {index > 0 && ", "}
+                          <a
+                            style={{
+                              color: '#007bff',
+                              transition: 'color 0.3s',
+                              textDecoration: 'none',
+                              marginLeft: index === 0 ? '0' : '4px'
+                            }}
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleExampleClick(example);
+                            }}
+                          >
+                            {example}
+                          </a>
+                        </React.Fragment>
+                      ))}
+                    </div>
+                    <Box
+                      sx={{
+                        flex: '1 0 auto',
+                        display: 'flex',
+                        gap: "6px",
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <TextField
+                        variant="outlined"
+                        placeholder="Search..."
+                        fullWidth
+                        value={searchTerm}
+                        inputRef={textFieldRef}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <SearchIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                      <AnimatedButton
+                        type="button"
+                        className="btn btn-info"
+                        onClick={() => handleSearchField()}
+                        style={{
+                          width: "120px",
+                          fontSize: "14px",
+                          height: "34px",
+                          backgroundColor: "#5bc0de",
+                          color: "white",
+                          border: "1px solid transparent",
+                          borderRadius: "5px",
+                          fontWeight: "800",
+                          cursor: "pointer",
+                          transition: "background-color 0.3s ease"
+                        }}
+                        id="animation-target"
+                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#48a9c7"}
+                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#5bc0de"}
+                      >
+                        Search
+                      </AnimatedButton>
+                    </Box>
+                    <CellList menuId="sidemenu" setSearchQuery={updateSearchQueryFromCellList} />
+                    <CellLineList species={species} menuId="sidemenu2" setSearchQuery={updateSearchQueryFromCellList} />
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={1}>
+                    <SignatureSearch setNewSearchResult={setNewSearchResult} species={species} />
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={2}>
+                    <RegexSearchTab species={species} setNewSearchResult={setNewSearchResult} />
+                  </CustomTabPanel>
+                </>
               ) : (
-                <CustomTabPanel value={value} index={1}>
-                  <DiffExpQuery setNewGeneSearchResult={setNewGeneSearchResult} species={species} />
-                </CustomTabPanel>
+                <>
+                  <CustomTabPanel value={value} index={0}>
+                    <DiffExpQuery setNewGeneSearchResult={setNewGeneSearchResult} species={species} />
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={1}>
+                    <RegexSearchTabGene species={species} setNewGeneSearchResult={setNewGeneSearchResult} />
+                  </CustomTabPanel>
+                </>
               )}
-              <CustomTabPanel value={value} index={2}>
-                <RegexSearchTab species={species} setNewSearchResult={setNewSearchResult} />
-              </CustomTabPanel>
             </div>
           </Paper>
         </div>
