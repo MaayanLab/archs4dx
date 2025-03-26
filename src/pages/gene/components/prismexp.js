@@ -27,25 +27,26 @@ export const PrismExp = ({ geneSymbol }) => {
     fetchData();
   }, [geneSymbol]);
 
-  const downloadCSV = (dataToDownload, filename) => {
+  const downloadCSV = (dataToDownload, filename, includeDataset = false) => {
     // Normalize data to ensure is_gold is explicitly true or false
     const normalizedData = dataToDownload.map(row => ({
       ...row,
-      is_gold: row.is_gold === true ? true : false // Explicitly set to true or false
+      is_gold: row.is_gold === true ? true : false
     }));
 
-    // Define headers with dataset at the beginning
-    const headers = ['dataset', 'term', 'score', 'term_auc', 'is_gold'];
+    // Define headers based on whether dataset should be included
+    const headers = includeDataset 
+      ? ['dataset', 'term', 'score', 'term_auc', 'is_gold']
+      : ['term', 'score', 'term_auc', 'is_gold'];
+    
     const csvRows = [
       headers.join(','),
       ...normalizedData.map(row => 
         headers.map(header => {
           const value = row[header];
-          // Handle is_gold specifically to ensure "true" or "false" strings
           if (header === 'is_gold') {
             return value ? 'true' : 'false';
           }
-          // For other fields, use JSON.stringify with fallback
           return JSON.stringify(value ?? '').replace(/"/g, '');
         }).join(',')
       )
@@ -67,14 +68,14 @@ export const PrismExp = ({ geneSymbol }) => {
     const allData = Object.entries(predictions).flatMap(([key, value]) => 
       value.prediction.map(row => ({
         ...row,
-        dataset: key // Include the key as dataset
+        dataset: key
       }))
     );
-    downloadCSV(allData, `${geneSymbol}_all_predictions.csv`);
+    downloadCSV(allData, `${geneSymbol}_all_predictions.csv`, true);
   };
 
   const downloadIndividualCSV = (tableData, datasetName) => {
-    downloadCSV(tableData, `${geneSymbol}_${datasetName}_predictions.csv`);
+    downloadCSV(tableData, `${geneSymbol}_${datasetName}_predictions.csv`, false);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -92,92 +93,99 @@ export const PrismExp = ({ geneSymbol }) => {
         </Typography>
       </Box>
       <Grid container spacing={6}>
-        {Object.entries(predictions).map(([key, value]) => (
-          <Grid key={key} item xs={12} xl={6}>
-            <Box sx={{ marginBottom: '1rem' }}>
-              <Box 
-                sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  marginBottom: '0.5rem'
-                }}
-              >
-                <Typography 
-                  variant="h6" 
+        {Object.entries(predictions).map(([key, value]) => {
+          const geneAUC = value.auc === -1 ? 'N/A' : Number(value.auc).toFixed(3);
+          const tooltipText = value.auc === -1 
+            ? `No gene AUC exists for ${geneSymbol} for this gene set library`
+            : (
+              <span>
+                The gene AUC reflects how well known gene functions of {geneSymbol} could be retrieved. 
+                An AUC of 1 would represent perfect ranking of gene functions and 0.5 would be random. 
+                Entries colored <span style={{ 
+                  display: 'inline-block', 
+                  width: '10px', 
+                  height: '10px', 
+                  backgroundColor: '#b0f9e9', 
+                  margin: '0 4px', 
+                  verticalAlign: 'middle' 
+                }}></span> represent known gene functions.
+              </span>
+            );
+
+          return (
+            <Grid key={key} item xs={12} xl={6}>
+              <Box sx={{ marginBottom: '1rem' }}>
+                <Box 
                   sx={{ 
-                    fontWeight: 500,
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center',
+                    marginBottom: '0.5rem'
                   }}
                 >
-                  {key.replaceAll("_", " ")}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography 
                     variant="h6" 
                     sx={{ 
-                      fontWeight: 400,
-                      color: 'text.secondary',
-                      marginRight: '0.25rem'
+                      fontWeight: 500,
                     }}
                   >
-                    Gene AUC: {value.auc ? Number(value.auc).toFixed(3) : 'N/A'}
+                    {key.replaceAll("_", " ")}
                   </Typography>
-                  <Tooltip 
-                    title={
-                      <span>
-                        The gene AUC reflects how well known gene functions of {geneSymbol} could be retrieved. 
-                        An AUC of 1 would represent perfect ranking of gene functions and 0.5 would be random. 
-                        Entries colored <span style={{ 
-                          display: 'inline-block', 
-                          width: '10px', 
-                          height: '10px', 
-                          backgroundColor: '#b0f9e9', 
-                          margin: '0 4px', 
-                          verticalAlign: 'middle' 
-                        }}></span> represent known gene functions.
-                      </span>
-                    }
-                    arrow
-                  >
-                    <HelpOutlineIcon 
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography 
+                      variant="h6" 
                       sx={{ 
-                        fontSize: '1rem', 
+                        fontWeight: 400,
                         color: 'text.secondary',
-                        cursor: 'pointer'
-                      }} 
-                    />
-                  </Tooltip>
+                        marginRight: '0.25rem'
+                      }}
+                    >
+                      Gene AUC: {geneAUC}
+                    </Typography>
+                    <Tooltip 
+                      title={tooltipText}
+                      arrow
+                    >
+                      <HelpOutlineIcon 
+                        sx={{ 
+                          fontSize: '1rem', 
+                          color: 'text.secondary',
+                          cursor: 'pointer'
+                        }} 
+                      />
+                    </Tooltip>
+                  </Box>
                 </Box>
-              </Box>
-              <Table 
-                tableData={value.prediction} 
-                title={key} 
-                goldFlagKey="is_gold"
-              />
-              <Box 
-                sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'flex-start', 
-                  marginTop: '0.5rem'
-                }}
-              >
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => downloadIndividualCSV(value.prediction, key)}
+                <Table 
+                  tableData={value.prediction} 
+                  title={key} 
+                  goldFlagKey="is_gold"
+                />
+                <Box 
                   sx={{ 
-                    textTransform: 'none',
-                    fontSize: '0.8rem',
-                    height: '30px',
-                    marginTop: '-50px'
+                    display: 'flex', 
+                    justifyContent: 'flex-start', 
+                    marginTop: '0.5rem'
                   }}
                 >
-                  Download
-                </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => downloadIndividualCSV(value.prediction, key)}
+                    sx={{ 
+                      textTransform: 'none',
+                      fontSize: '0.8rem',
+                      height: '30px',
+                      marginTop: '-50px'
+                    }}
+                  >
+                    Download
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-          </Grid>
-        ))}
+            </Grid>
+          );
+        })}
       </Grid>
       <Box sx={{ textAlign: 'center', marginTop: '1.5rem' }}>
         <Button

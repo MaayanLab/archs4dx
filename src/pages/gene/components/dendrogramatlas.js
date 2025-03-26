@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import domToImage from 'dom-to-image';
+import { Canvg } from 'canvg';
 import { saveAs } from 'file-saver';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -27,31 +27,35 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
     const svgElement = svgRef.current.querySelector('svg');
     if (!svgElement) return;
 
-    if (format === 'svg') {
-      const svgClone = svgElement.cloneNode(true);
-      const styleSheets = Array.from(document.styleSheets)
-        .filter(sheet => sheet.href && sheet.href.includes('dendrogram.css') || !sheet.href);
-      if (styleSheets.length > 0) {
-        const relevantClasses = ['link', 'node', 'node--internal', 'node--leaf', 'shadow', 'line', 'xAxis', 'grid'];
-        const cssRules = [];
-        styleSheets.forEach(sheet => {
-          try {
-            const rules = Array.from(sheet.cssRules || []);
-            rules.forEach(rule => {
-              if (rule.selectorText && relevantClasses.some(cls => rule.selectorText.includes(cls))) {
-                cssRules.push(rule.cssText);
-              }
-            });
-          } catch (e) {
-            console.warn('Could not access some CSS rules:', e);
-          }
-        });
-        if (cssRules.length > 0) {
-          const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-          styleElement.textContent = cssRules.join('\n');
-          svgClone.insertBefore(styleElement, svgClone.firstChild);
+    // Clone the SVG to modify it
+    const svgClone = svgElement.cloneNode(true);
+
+    // Embed local CSS rules
+    const styleSheets = Array.from(document.styleSheets)
+      .filter(sheet => sheet.href && sheet.href.includes('dendrogram.css') || !sheet.href); // Local styles only
+    if (styleSheets.length > 0) {
+      const relevantClasses = ['link', 'node', 'node--internal', 'node--leaf', 'shadow', 'line', 'xAxis', 'grid'];
+      const cssRules = [];
+      styleSheets.forEach(sheet => {
+        try {
+          const rules = Array.from(sheet.cssRules || []);
+          rules.forEach(rule => {
+            if (rule.selectorText && relevantClasses.some(cls => rule.selectorText.includes(cls))) {
+              cssRules.push(rule.cssText);
+            }
+          });
+        } catch (e) {
+          console.warn('Could not access some CSS rules:', e);
         }
+      });
+      if (cssRules.length > 0) {
+        const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+        styleElement.textContent = cssRules.join('\n');
+        svgClone.insertBefore(styleElement, svgClone.firstChild);
       }
+    }
+
+    if (format === 'svg') {
       const serializer = new XMLSerializer();
       let svgString = serializer.serializeToString(svgClone);
       svgString = '<?xml version="1.0" standalone="no"?>\n' +
@@ -60,20 +64,19 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
       const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
       saveAs(svgBlob, `dendrogram_${gene}_${species}_${type}.svg`);
     } else if (format === 'png') {
-      domToImage
-        .toPng(svgElement, {
-          bgcolor: window.getComputedStyle(document.body).backgroundColor || '#ffffff',
-          width: parseInt(svgElement.getAttribute('width')),
-          height: parseInt(svgElement.getAttribute('height')),
-          quality: 1.0,
-          style: { 'transform': 'none', 'position': 'static' }
-        })
-        .then(dataUrl => {
-          fetch(dataUrl).then(res => res.blob()).then(blob => {
+      const serializer = new XMLSerializer();
+      const svgString = serializer.serializeToString(svgClone);
+      const canvas = document.createElement('canvas');
+      canvas.width = parseInt(svgElement.getAttribute('width'));
+      canvas.height = parseInt(svgElement.getAttribute('height'));
+      const ctx = canvas.getContext('2d');
+      Canvg.from(ctx, svgString).then(v => {
+        v.render().then(() => {
+          canvas.toBlob(blob => {
             saveAs(blob, `dendrogram_${gene}_${species}_${type}.png`);
-          });
-        })
-        .catch(err => console.error('Error saving PNG:', err));
+          }, 'image/png', 1.0);
+        });
+      }).catch(err => console.error('Error rendering SVG to canvas:', err));
     }
   };
 
@@ -153,24 +156,20 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
         return result;
       };
 
-      // Prune the tree to remove leaves with no data
       const pruneTree = (node) => {
         if (!node.children) {
-          // Leaf node
           if (node.data.sample_count === 0) {
-            return null; // Remove leaf with no samples
+            return null;
           }
           return node;
         }
-        // Internal node: prune children and filter out nulls
         node.children = node.children.map(pruneTree).filter(child => child !== null);
         if (node.children.length === 0) {
-          return null; // Remove internal node with no children
+          return null;
         }
         return node;
       };
 
-      // Function to calculate relative luminance (WCAG standard)
       const getLuminance = (color) => {
         const rgb = d3.rgb(color);
         const r = rgb.r / 255;
@@ -205,7 +204,6 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
         let root = stratify(data);
         console.log("Stratified Root Before Pruning:", root);
 
-        // Apply pruning
         root = pruneTree(root);
         if (root === null) {
           svg.selectAll("*").remove();
@@ -322,14 +320,14 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
           .attr("dy", 11)
           .attr("x", 1)
           .style("text-anchor", "right")
-          .style("fill", "#000000") // Explicitly set to black
+          .style("fill", "#000000")
           .text(d => d.data.id.substring(d.data.id.lastIndexOf(".") + 1));
 
         const internalNode = g.selectAll(".node--internal");
         internalNode.append("text")
           .attr("y", -6)
           .style("text-anchor", "middle")
-          .style("fill", "#000000") // Explicitly set to black
+          .style("fill", "#000000")
           .text(d => d.data.id.substring(d.data.id.lastIndexOf(".") + 1));
 
         const firstEndNode = g.select(".node--leaf");
@@ -358,7 +356,6 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
           .style("stroke-dasharray", "0,1")
           .style("stroke", "green");
 
-        // Info box group
         const infoBoxG = svg.append("g")
           .attr("class", `infoBoxG-${svgId}`)
           .style("opacity", 0);
@@ -385,7 +382,7 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
           .attr("y", 16)
           .style("font-weight", "bold")
           .style("font-size", "12px")
-          .style("fill", "#000"); // Initial color, will be adjusted dynamically
+          .style("fill", "#000");
 
         infoBoxG.append("text")
           .attr("class", "info-samples-label")
@@ -464,7 +461,6 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
               .attr("width", currentBoxWidth)
               .style("fill", d.data.color);
 
-            // Calculate contrast ratio for header text color
             const bgLuminance = getLuminance(d.data.color);
             const blackLuminance = getLuminance("#000000");
             const whiteLuminance = getLuminance("#ffffff");
