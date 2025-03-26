@@ -175,9 +175,7 @@ export const GeneInfo = ({ geneName }) => {
                               {citations.map((citation) => (
                                 <li key={citation.pmid} style={{ marginBottom: "10px" }}>
                                   <Typography>
-                                   <strong>[{citation.number}]</strong> {formatAuthors(citation.authors)} <strong>{citation.title}</strong>
-                                    
-                                    <em>{citation.journal} ({citation.year})</em>
+                                   <strong>[{citation.number}]</strong> {formatAuthors(citation.authors)} <strong>{citation.title}</strong> <em>{citation.journal} ({citation.year})</em>
                                     {citation.doi && (
                                       <>
                                         {" "}—{" "}

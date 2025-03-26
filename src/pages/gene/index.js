@@ -17,6 +17,7 @@ import { PrismExp } from "./components/prismexp";
 
 import prismexp from "../../image/prismexp.png";
 import { Dendrogram } from "./components/dendrogram";
+import { DendrogramAtlas } from "./components/dendrogramatlas";
 import { GeneCorrelation } from "./components/genecorrelation";
 
 const drawerWidth = 344;
@@ -159,7 +160,7 @@ export const GenePage = () => {
                 <Grid container sx={{justifyContent: "center"}}>
                     <Grid item lg={12} xl={6} sx={{textAlign: "center", marginBottom: "20px"}}>
                         <h2 id="tissueexpression">Tissue expression</h2>
-                        <Dendrogram gene={geneName} species="human" type="tissue"/>
+                        <DendrogramAtlas gene={geneName} species="human" type="tissue"/>
                     </Grid>
 
                     <Grid item lg={12} xl={6} sx={{textAlign: "center"}}>

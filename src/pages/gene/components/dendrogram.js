@@ -1,10 +1,103 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import domToImage from 'dom-to-image';
+import { saveAs } from 'file-saver';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import "./dendrogram.css";
 
 export const Dendrogram = ({ species, gene, type }) => {
   const svgRef = useRef();
   const [loading, setLoading] = useState(true);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedFormat, setSelectedFormat] = useState('svg'); // Default to SVG
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleFormatSelect = (format) => {
+    setSelectedFormat(format);
+    saveAsImage(format);
+    handleClose();
+  };
+
+  const saveAsImage = (format) => {
+    const svgElement = svgRef.current.querySelector('svg');
+    if (!svgElement) return;
+
+    if (format === 'svg') {
+      // Clone the SVG to avoid modifying the original
+      const svgClone = svgElement.cloneNode(true);
+
+      // Inline CSS styles
+      const styleSheets = Array.from(document.styleSheets)
+        .filter(sheet => sheet.href && sheet.href.includes('dendrogram.css') || !sheet.href); // Include local stylesheets
+        
+      if (styleSheets.length > 0) {
+        const relevantClasses = ['link', 'node', 'node--internal', 'node--leaf', 'shadow', 'line', 'xAxis', 'grid'];
+        const cssRules = [];
+        
+        styleSheets.forEach(sheet => {
+          try {
+            const rules = Array.from(sheet.cssRules || []);
+            rules.forEach(rule => {
+              if (rule.selectorText && relevantClasses.some(cls => rule.selectorText.includes(cls))) {
+                cssRules.push(rule.cssText);
+              }
+            });
+          } catch (e) {
+            console.warn('Could not access some CSS rules:', e);
+          }
+        });
+
+        if (cssRules.length > 0) {
+          const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+          styleElement.textContent = cssRules.join('\n');
+          svgClone.insertBefore(styleElement, svgClone.firstChild);
+        }
+      }
+
+      // Add XML declaration and DOCTYPE
+      const serializer = new XMLSerializer();
+      let svgString = serializer.serializeToString(svgClone);
+      svgString = '<?xml version="1.0" standalone="no"?>\n' +
+                  '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' +
+                  svgString;
+
+      const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      saveAs(svgBlob, `dendrogram_${gene}_${species}_${type}.svg`);
+    } else if (format === 'png') {
+      // Save as PNG using dom-to-image
+      domToImage
+        .toPng(svgElement, {
+          bgcolor: window.getComputedStyle(document.body).backgroundColor || '#ffffff',
+          width: parseInt(svgElement.getAttribute('width')),
+          height: parseInt(svgElement.getAttribute('height')),
+          quality: 1.0,
+          style: {
+            'transform': 'none',
+            'position': 'static'
+          }
+        })
+        .then(dataUrl => {
+          fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+              saveAs(blob, `dendrogram_${gene}_${species}_${type}.png`);
+            });
+        })
+        .catch(err => {
+          console.error('Error saving PNG:', err);
+        });
+    }
+  };
 
   useEffect(() => {
     const drawDendrogram = () => {
@@ -14,14 +107,15 @@ export const Dendrogram = ({ species, gene, type }) => {
       const svgElement = d3.select(svgRef.current);
       svgElement.selectAll("*").remove();
 
-      const fullHeight = 1000; // Height for dendrogram
-      const compactHeight = 200; // Height for missing data
+      const fullHeight = 1000;
+      const compactHeight = 200;
       const width = 1000;
 
       const svg = svgElement.append("svg")
         .attr("id", svgId)
         .attr("width", width)
-        .attr("height", fullHeight);
+        .attr("height", fullHeight)
+        .attr("xmlns", "http://www.w3.org/2000/svg");
 
       svg.append("text")
         .attr("x", width / 2)
@@ -61,7 +155,6 @@ export const Dendrogram = ({ species, gene, type }) => {
 
       d3.csv(link, parseRow)
         .then(data => {
-          // Check for invalid data cases
           if (!data || data.length === 0 || (data.length === 1 && data[0].id === "System") ||
               (data.length === 1 && 
                data[0].median === 0 && 
@@ -69,8 +162,7 @@ export const Dendrogram = ({ species, gene, type }) => {
                data[0].q3 === 0 && 
                data[0].min === 0 && 
                data[0].max === 0)) {
-            console.log("No valid data:", data);
-            svg.selectAll("*").remove(); // Clear loading text
+            svg.selectAll("*").remove();
             svg.attr("height", compactHeight);
             svg.append("text")
               .attr("x", width / 2)
@@ -79,16 +171,14 @@ export const Dendrogram = ({ species, gene, type }) => {
               .attr("fill", "black")
               .text("Coming soon!");
             setLoading(false);
-            return; // Exit early
+            return;
           }
 
-          // Valid data: proceed with dendrogram
-          svg.selectAll("text").remove(); // Only remove loading text, keep <g>
+          svg.selectAll("text").remove();
 
           const root = stratify(data);
           tree(root);
 
-          // Draw links
           g.selectAll(".link")
             .data(root.descendants().slice(1))
             .enter().append("path")
@@ -97,7 +187,6 @@ export const Dendrogram = ({ species, gene, type }) => {
               return `M${d.y},${d.x}C${d.parent.y + 100},${d.x} ${d.parent.y + 100},${d.parent.x} ${d.parent.y},${d.parent.x}`;
             });
 
-          // Setup nodes
           const node = g.selectAll(".node")
             .data(root.descendants())
             .enter().append("g")
@@ -212,7 +301,7 @@ export const Dendrogram = ({ species, gene, type }) => {
               .tickSize(-fullHeight, 0, 0)
               .tickFormat("")
             );
-          
+
           firstEndNode.insert("text")
             .style("text-anchor", "middle")
             .attr("x", 285)
@@ -224,47 +313,50 @@ export const Dendrogram = ({ species, gene, type }) => {
             .attr("transform", `translate(127,${fullHeight - 15})`)
             .style("stroke", "green");
 
-          const ballG = svg.insert("g")
-            .attr("class", "ballG")
-            .attr("transform", `translate(1150,${fullHeight / 2})`);
-          ballG.insert("circle")
+          const ballG = svg.append("g")
+            .attr("class", `ballG-${svgId}`)
+            .style("opacity", 0);
+
+          ballG.append("circle")
             .attr("class", "shadow")
             .style("fill", "steelblue")
             .attr("r", 2);
-          ballG.insert("text")
+
+          ballG.append("text")
             .style("text-anchor", "middle")
             .attr("dy", 4)
             .text("0.0");
 
-          d3.selectAll(".node--leaf-g")
-            .on("mouseover", handleMouseOver)
-            .on("mouseout", handleMouseOut);
+          svg.selectAll(".node--leaf-g")
+            .on("mouseover", function(event, d) {
+              const leafG = d3.select(this);
 
-          function handleMouseOver(d) {
-            const leafG = d3.select(this);
+              leafG.select("rect")
+                .attr("stroke", "#4D4D4D")
+                .attr("stroke-width", "2");
 
-            leafG.select("rect")
-              .attr("stroke", "#4D4D4D")
-              .attr("stroke-width", "2");
-          
-            const ballGMovement = ballG.transition()
-              .duration(1)
-              .attr("transform", `translate(${780},${d.target.__data__.x+19})`);
+              const ballGMovement = ballG.transition()
+                .duration(1)
+                .style("opacity", 1)
+                .attr("transform", `translate(780,${d.x+28})`);
 
-            ballGMovement.select("circle")
-              .style("fill", d.target.__data__.data.color)
-              .attr("r", 18);
+              ballGMovement.select("circle")
+                .style("fill", d.data.color)
+                .attr("r", 18);
 
-            ballGMovement.select("text")
-              .delay(300)
-              .text(Number(d.target.__data__.data.median).toFixed(1));
-          }
+              ballGMovement.select("text")
+                .delay(300)
+                .text(Number(d.data.median).toFixed(1));
+            })
+            .on("mouseout", function() {
+              const leafG = d3.select(this);
+              leafG.select("rect")
+                .attr("stroke-width", "0");
 
-          function handleMouseOut() {
-            const leafG = d3.select(this);
-            leafG.select("rect")
-              .attr("stroke-width", "0");
-          }
+              ballG.transition()
+                .duration(200)
+                .style("opacity", 0);
+            });
 
           if (window.location.hash.length > 2) {
             const elementId = window.location.hash.slice(1);
@@ -294,6 +386,33 @@ export const Dendrogram = ({ species, gene, type }) => {
   }, [species, gene, type]);
 
   return (
-    <div ref={svgRef} />
+    <div>
+      <div ref={svgRef} />
+      {!loading && (
+        <div>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={handleClick}
+            sx={{ 
+              textTransform: 'none',
+              fontSize: '0.8rem',
+              mt: 1
+            }}
+            endIcon={<ArrowDropDownIcon />}
+          >
+            Save as {selectedFormat.toUpperCase()}
+          </Button>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => handleFormatSelect('svg')}>SVG</MenuItem>
+            <MenuItem onClick={() => handleFormatSelect('png')}>PNG</MenuItem>
+          </Menu>
+        </div>
+      )}
+    </div>
   );
 };
