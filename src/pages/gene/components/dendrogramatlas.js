@@ -180,14 +180,17 @@ export const DendrogramAtlas = ({ species, gene, type }) => {
       };
 
       try {
-        const response = await fetch(`https://maayanlab.cloud/sigpy/atlas?gene=${gene}`);
+        let url = `https://maayanlab.cloud/sigpy/atlas?gene=${gene}&mode=tissue`;
+        if (type == "cellline"){
+          url = `https://maayanlab.cloud/sigpy/atlas?gene=${gene}&mode=cellline`;
+        }
+        console.log(url);
+        const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const jsonData = await response.json();
-        console.log("Raw API Response:", jsonData);
-
+        
         const data = transformData(jsonData.data || jsonData);
-        console.log("Transformed Data:", data);
-
+        
         if (!data || data.length <= 1) {
           svg.selectAll("*").remove();
           svg.attr("height", compactHeight);

@@ -165,7 +165,7 @@ export const GenePage = () => {
 
                     <Grid item lg={12} xl={6} sx={{textAlign: "center"}}>
                         <h2 id="celllineexpression">Cell line expression</h2>
-                        <Dendrogram gene={geneName} species="human" type="cellline"/>
+                        <DendrogramAtlas gene={geneName} species="human" type="cellline"/>
                     </Grid>
                 
                 </Grid>
