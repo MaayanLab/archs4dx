@@ -16,7 +16,7 @@ export const LetterSignup = () => {
     const addEmail = async (e) => {
         const payload = { "email": email }; // Prepare the payload
 
-        const url = 'http://127.0.0.1:5000/api/mailchimp/subscribe';
+        const url = 'https://archs4.org/api/mailchimp/subscribe';
         
         try {
             const response = await fetch(url, {
