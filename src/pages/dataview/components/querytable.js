@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faCode } from '@fortawesome/free-solid-svg-icons';
 import { HexColorPicker } from 'react-colorful';
 import { ExpressionDownload } from './expressiondownload';
+import { Tooltip } from '@mui/material';
 
 // Utility function to lighten a hex color
 const lightenColor = (color, percent) => {
@@ -17,6 +18,61 @@ const lightenColor = (color, percent) => {
     (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 + 
     (B < 255 ? B < 1 ? 0 : B : 255))
     .toString(16).slice(1).toUpperCase();
+};
+
+const downloadQueryMetadata = async (species, samples, queryKey) => {
+  const ENDPOINT = 'https://maayanlab.cloud/sigpy/meta/samplemeta';
+  const safeQueryKey = (queryKey || 'metadata')
+    .replace(/[^a-zA-Z0-9_-]/g, '_')
+    .slice(0, 50); 
+  const formattedSamples = (Array.from(samples) || []).map((sample) =>
+    typeof sample === 'number' ? `GSM${sample}` : sample
+  );
+
+  // Payload matching your example
+  const payload = {
+    species: species || 'human',
+    samples: formattedSamples || [],
+  };
+
+  try {
+    // Make the POST request
+    const response = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    console.log(payload);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // Parse the response as JSON
+    const jsonData = await response.json();
+
+    // Convert JSON to a string and create a Blob
+    const jsonString = JSON.stringify(jsonData, null, 2); // Pretty-print with indentation
+    const blob = new Blob([jsonString], { type: 'application/json' });
+
+    // Create a temporary URL and trigger download
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${safeQueryKey}.json`;
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error('Error downloading metadata:', error);
+    alert('Failed to download metadata. Check the console for details.');
+  }
 };
 
 const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromHistory, changeColor }) => {
@@ -113,8 +169,27 @@ const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromH
         </a>
       </td>
       <td style={{ padding: "5px" }}>{queryValue.series_count}</td>
-      <td style={{ padding: "5px" }}>
-        <ExpressionDownload queryKey={queryKey} species={queryValue.species} samples={queryValue.samples} />
+      <td style={{ padding: '5px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <Tooltip title="Download metadata as JSON" arrow>
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          downloadQueryMetadata(queryValue.species, queryValue.samples, queryKey);
+        }}
+        data-tooltip-id="download-tooltip"
+        data-tooltip-content="Download metadata as JSON"
+      >
+        <FontAwesomeIcon style={{ color: 'black' }} icon={faCode} />
+      </a>
+      </Tooltip>
+
+      {/* ExpressionDownload Component */}
+      <ExpressionDownload
+        queryKey={queryKey}
+        species={queryValue.species}
+        samples={queryValue.samples}
+      />
       </td>
       <td style={{ padding: "5px" }}>
         <a href="#" onClick={handleRemove}>
