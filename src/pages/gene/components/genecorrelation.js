@@ -300,7 +300,7 @@ export const GeneCorrelation = ({ geneName }) => {
 
   return (
     <Box>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} id="correlation">
         <Box sx={{ width: '100%', mb: '30px' }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '30px' }}>
             <img

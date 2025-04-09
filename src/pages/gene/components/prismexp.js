@@ -124,7 +124,8 @@ export const PrismExp = ({ geneSymbol }) => {
                   }}
                 >
                   <Typography 
-                    variant="h6" 
+                    variant="h6"
+                    id={key}
                     sx={{ 
                       fontWeight: 500,
                     }}
