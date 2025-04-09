@@ -497,7 +497,7 @@ export const Jumbotron = () => {
                 >
                   The ARCHS4 database now includes 35,000 samples from additional species, such as C. elegans
                   and D. melanogaster. Expression data for genes and transcripts can be downloaded in H5 format from the
-                  <a href="/archs4zoo"> ARCHS4 Zoo download section</a>.
+                  <a href="/zoo"> ARCHS4 Zoo download section</a>.
                 </Typography>
               </Box>
             </Paper>

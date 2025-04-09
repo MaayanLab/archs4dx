@@ -79,7 +79,7 @@ const QueryRow = ({ queryKey, queryValue, downloadQuerySamples, removeQueryFromH
   const [isHovered, setIsHovered] = useState(false);
   const [isPickerOpen, setPickerOpen] = useState(false);
   const [currentColor, setCurrentColor] = useState(queryValue.color);
-  const [isFading, setIsFading] = useState(false); // New state for fading
+  const [isFading, setIsFading] = useState(false);
   const lighterColor = lightenColor(currentColor, 60);
 
   const setPickerOpenWrapper = (species, searchterm, opened) => {
