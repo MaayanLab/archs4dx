@@ -179,16 +179,7 @@ export const GeneCorrelation = ({ geneName }) => {
     setLoading(true);
     try {
       const queryData = overrideMetaData || metaData;
-      const searchCountResponse = await fetch('https://maayanlab.cloud/sigpy/searchcount', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "query": queryData }),
-      });
-      if (!searchCountResponse.ok) throw new Error('Search count response was not ok');
-      const searchCountResult = await searchCountResponse.json();
-      const sampleSize = searchCountResult.result_size || 0;
-      setSampleMatchSize(sampleSize);
-
+      
       const regexResponse = await fetch('https://maayanlab.cloud/sigpy/regexwizard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

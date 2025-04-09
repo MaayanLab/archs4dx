@@ -123,6 +123,8 @@ export const RegexSearchTab = ({species, setNewSearchResult }) => {
     setLoading(true);
     try {
       const query = overrideQuery || metaData;
+      
+      /*
       const searchCountResponse = await fetch('https://maayanlab.cloud/sigpy/searchcount', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -131,7 +133,8 @@ export const RegexSearchTab = ({species, setNewSearchResult }) => {
       if (!searchCountResponse.ok) throw new Error('Search count response was not ok');
       const searchCountResult = await searchCountResponse.json();
       setSampleMatchSize(searchCountResult.result_size || 0);
-
+      */
+     
       const regexResponse = await fetch('https://maayanlab.cloud/sigpy/regexwizard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
