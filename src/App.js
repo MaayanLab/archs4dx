@@ -14,6 +14,7 @@ import { DataView } from "./pages/dataview";
 import { GenePage } from "./pages/gene";
 import { HelpPage } from "./pages/help";
 import { ZooPage } from "./pages/zoo";
+import { LogsPage } from "./pages/logs";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/gene/:geneName" element={<GenePage />} />
             <Route path="/help" element={<HelpPage />} />
             <Route path="/zoo" element={<ZooPage />} />
+            <Route path="/logs" element={<LogsPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
