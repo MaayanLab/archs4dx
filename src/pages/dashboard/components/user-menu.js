@@ -33,7 +33,7 @@ import { useState } from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCaretUp, faUnlock, faUpload, faFolderTree } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faUnlock, faUpload, faFolderTree, faHistory } from '@fortawesome/free-solid-svg-icons';
 
 import { useNavigate } from 'react-router-dom';
 import { IconButton, Drawer, List, ListItem,ListItemIcon, ListItemText, Hidden } from '@mui/material';
@@ -355,12 +355,20 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
             </Link>
           </MenuItem>
           {roles.includes("admin") && (
+            <>
+            <MenuItem onClick={handleCloseMenu}>
+              <Link to="/logs" style={{ color: "darkred", fontWeight: 'bold', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                <FontAwesomeIcon icon={faHistory} style={{ marginRight: '14px', color: "#1ebcbb" }} />
+                System Logs
+              </Link>
+            </MenuItem>
             <MenuItem onClick={handleCloseMenu}>
               <Link to="/admin/users" style={{ color: "darkred", fontWeight: 'bold', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
                 <FontAwesomeIcon icon={faUnlock} style={{ marginRight: '14px', color: "#1ebcbb" }} />
                 Admin Dashboard
               </Link>
             </MenuItem>
+            </>
           )}
 
           {/*
