@@ -9,6 +9,7 @@ import { styled } from "@mui/material/styles";
 import Paper from '@mui/material/Paper';
 import { Box, Typography, Grid, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import LogsChart from './components/LogsChart';
 
 const drawerWidth = 344;
 
@@ -46,6 +47,7 @@ export const LogsPage = () => {
     const statusRef = useRef(null);
     const tasksRef = useRef(null);
     const logShowRef = useRef(null);
+    const chartRef = useRef(null);
 
     const toggle = () => {
         setOpen(!open);
@@ -357,6 +359,7 @@ export const LogsPage = () => {
                 minHeight: '80vh',
             }}>
                 <Paper sx={{ margin: "40px", padding: "40px", width: '80%' }}>
+                    
                     <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                         <Button variant="contained" onClick={() => scrollToSection(categoryRef)}>Category Counts</Button>
                         <Button variant="contained" onClick={() => scrollToSection(versionRef)}>Version Files</Button>
@@ -365,6 +368,9 @@ export const LogsPage = () => {
                         <Button variant="contained" onClick={() => scrollToSection(logShowRef)}>Log Show</Button>
                     </Box>
                     <Grid container spacing={3}>
+                        <Grid item xs={12} ref={chartRef}>
+                            <LogsChart logShowData={logShowData} />
+                        </Grid>
                         {/* Category Counts */}
                         <Grid item xs={12} ref={categoryRef}>
                             <Typography variant="h5" gutterBottom>Category Counts</Typography>
