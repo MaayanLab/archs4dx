@@ -7,6 +7,7 @@ export const SidebarContent = ({ user }) => {
   const location = useLocation();
   const { pathname } = location;
   const splitLocation = pathname.split("/");
+
   return (
     <Box sx={{ position: "relative", height: "100vh" }}>
       <SidebarSearch />
@@ -64,6 +65,15 @@ export const SidebarContent = ({ user }) => {
         >
           <Link to="/admin/policies" className="sidebarLink">
             Policies
+          </Link>
+        </Box>
+        <Box
+          className={
+            splitLocation[2] === "retry" ? "userButtonActive" : "userButton"
+          }
+        >
+          <Link to="/admin/retry" className="sidebarLink">
+            Sample Retry
           </Link>
         </Box>
       </Box>

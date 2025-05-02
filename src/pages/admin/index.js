@@ -24,6 +24,7 @@ import { MainUsersTable } from "./users/main-table";
 import { FooterSection } from "../../layout/compactfooter";
 import { useNavigate } from 'react-router-dom';
 import logo from "../../image/archs4vector.svg";
+import { RetryJobs } from "./components/RetryJobs";
 
 const drawerWidth = 344;
 
@@ -75,15 +76,13 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export const Admin = () => {
-
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/logout');
-    }, 60*1000*10);
-    return () => clearTimeout(timer); // Cleanup the timer when component unmounts
+    }, 60 * 1000 * 10);
+    return () => clearTimeout(timer);
   }, [navigate]);
-
 
   const [open, setOpen] = useState(true);
   const toggle = () => setOpen((state) => !state);
@@ -93,6 +92,7 @@ export const Admin = () => {
   const isAdminRoles = params.page === "roles";
   const isAdminPolicies = params.page === "policies";
   const isAdminUsers = params.page === "users";
+  const isAdminRetry = params.page === "retry";
   const {
     data: user,
     isLoading,
@@ -100,12 +100,11 @@ export const Admin = () => {
   } = useQuery(["user/getLoggedUser"], () => getLoggedUser());
 
   if (isLoading) return "Loading...";
-  if (error){
-    setTimeout(() => navigate("/logout"), 0); // Redirect after a tick to avoid React state update warnings
-    // Alternatively, you can show an error message or a button to retry or logout.
+  if (error) {
+    setTimeout(() => navigate("/logout"), 0);
     return "There was a problem loading this page";
   }
-  
+
   return (
     <>
       <Helmet>
@@ -137,16 +136,15 @@ export const Admin = () => {
             open={open}
           >
             <DrawerHeader>
-                <a href="/" style={{margin: "30px auto" }}>
-                  <img
-                    style={{ width: "180px", marginTop: "6px" }}
-                    src={logo}
-                    alt="project logo"
-                    
-                  />
-                </a>
+              <a href="/" style={{ margin: "30px auto" }}>
+                <img
+                  style={{ width: "180px", marginTop: "6px" }}
+                  src={logo}
+                  alt="project logo"
+                />
+              </a>
             </DrawerHeader>
-            <SidebarContent toggleSidebar={toggle} user={user} />
+            <SidebarContent user={user} />
           </Drawer>
           <Main open={open}>
             <DrawerHeader />
@@ -200,11 +198,13 @@ export const Admin = () => {
                 />
               </>
             )}
+            {isAdminRetry && (
+              <RetryJobs />
+            )}
             <FooterSection />
           </Main>
         </Box>
       </FilterContextProvider>
-      
     </>
   );
 };
