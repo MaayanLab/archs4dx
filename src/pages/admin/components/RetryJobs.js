@@ -11,7 +11,7 @@ import {
     CircularProgress 
 } from '@mui/material';
 
-const RetryJobs = () => {
+export const RetryJobs = () => {
     const [days, setDays] = useState(100);
     const [retryCount, setRetryCount] = useState(null);
     const [retryJobs, setRetryJobs] = useState(null);
@@ -146,5 +146,3 @@ const RetryJobs = () => {
         </Container>
     );
 };
-
-export default RetryJobs;
