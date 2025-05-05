@@ -70,16 +70,21 @@ export const RetryJobs = () => {
             <Typography variant="h4" component="h1" gutterBottom>
                 Pipeline Retry Dashboard
             </Typography>
-
+            <Typography variant="body3" paragraph>
+                Sometimes samples fail to process. The error can stem from networking issues from the SRA database, or sample accessibility at the time of processing. Another common occurrence is that jobs are stuck in "submission". This happens when samples are actively processed and the instance working on the task is shut down prematurely. Since the instances are using spot pricing this can happen. Rerunning failed samples occasionally helps to recover some of them.
+            </Typography>
+            <Typography variant="body3" paragraph>
+                Select how far back you want to go in reprocessing samples. Once clicking the "Compute retry count" button you can see how many samples will be affected by the reprocessing. Then continue by clicking on "Retry Jobs". The jobs will be resubmitted to the pipeline. 
+            </Typography>
             <Box sx={{ mb: 4 }}>
                 <Typography gutterBottom>
-                    Days (1-365): {days}
+                    Days (1-1000): {days}
                 </Typography>
                 <Slider
                     value={days}
                     onChange={handleDaysChange}
                     min={1}
-                    max={365}
+                    max={1000}
                     step={1}
                     valueLabelDisplay="auto"
                 />
@@ -93,15 +98,16 @@ export const RetryJobs = () => {
                 />
             </Box>
 
-            <Button
-                variant="contained"
-                onClick={fetchRetryCount}
-                disabled={loading}
-                fullWidth
-                sx={{ mb: 2 }}
-            >
-                {loading ? <CircularProgress size={24} /> : 'Compute Retry Count'}
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                <Button
+                    variant="contained"
+                    onClick={fetchRetryCount}
+                    disabled={loading}
+                    sx={{ maxWidth: 200, width: '100%' }}
+                >
+                    {loading ? <CircularProgress size={24} /> : 'Compute Retry Count'}
+                </Button>
+            </Box>
 
             {error && (
                 <Alert severity="error" sx={{ mb: 2 }}>
@@ -120,16 +126,17 @@ export const RetryJobs = () => {
                     <Typography variant="body1">
                         Submitted: {retryCount.submitted}
                     </Typography>
-                    <Button
-                        variant="contained"
-                        color="success"
-                        onClick={handleRetryJobs}
-                        disabled={loading}
-                        fullWidth
-                        sx={{ mt: 2 }}
-                    >
-                        {loading ? <CircularProgress size={24} /> : 'Retry Jobs'}
-                    </Button>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={handleRetryJobs}
+                            disabled={loading}
+                            sx={{ maxWidth: 200, width: '100%' }}
+                        >
+                            {loading ? <CircularProgress size={24} /> : 'Retry Jobs'}
+                        </Button>
+                    </Box>
                 </Paper>
             )}
 
