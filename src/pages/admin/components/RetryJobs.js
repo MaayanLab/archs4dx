@@ -103,7 +103,7 @@ export const RetryJobs = () => {
                     variant="contained"
                     onClick={fetchRetryCount}
                     disabled={loading}
-                    sx={{ maxWidth: 200, width: '100%' }}
+                    sx={{ maxWidth: 300, width: '100%' }}
                 >
                     {loading ? <CircularProgress size={24} /> : 'Compute Retry Count'}
                 </Button>
@@ -132,7 +132,7 @@ export const RetryJobs = () => {
                             color="success"
                             onClick={handleRetryJobs}
                             disabled={loading}
-                            sx={{ maxWidth: 200, width: '100%' }}
+                            sx={{ maxWidth: 300, width: '100%' }}
                         >
                             {loading ? <CircularProgress size={24} /> : 'Retry Jobs'}
                         </Button>
