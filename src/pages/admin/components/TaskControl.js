@@ -50,7 +50,7 @@ export const TaskControl = () => {
   };
 
   const renderTask = (task, taskName) => (
-    <Grid item xs={12} sm={6} md={4} sx={{margin: "40px"}}>
+    <Grid item xs={12} sm={6} md={4} sx={{margin: "20px"}}>
       <Card className="shadow-lg">
         <CardContent>
           <Typography variant="subtitle1" className="font-bold mb-2" sx={{ fontSize: '1rem' }}>
@@ -90,7 +90,7 @@ export const TaskControl = () => {
                 <i className="fa fa-rocket"></i>
               )
             }
-            sx={{ fontSize: '0.75rem' }}
+            sx={{ fontSize: '0.75rem', marginTop: "14px" }}
           >
             Launch Task
           </Button>
@@ -100,7 +100,7 @@ export const TaskControl = () => {
   );
 
   const renderCategory = (category, categoryName) => (
-    <Box className="mb-8">
+    <Box className="mb-8" sx={{margin: "20px"}}>
       <Typography variant="h5" className="font-bold mb-4 capitalize" sx={{ fontSize: '1.25rem' }}>
         {categoryName}
       </Typography>
