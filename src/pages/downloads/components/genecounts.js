@@ -302,7 +302,7 @@ export const GeneCountSection = () => {
             </Grid>
           </Box>
 
-        <Box id="exp_trans" sx={{borderRadius: '0px 0px 12px 12px', backgroundColor: "#f4f7f4", minHeight: "200px", padding: "30px", marginLeft: "-20px", marginRight: "-20px", paddingTop: "10px"}}>
+        <Box id="exp_trans" sx={{borderRadius: '0px 0px 0px 0px', backgroundColor: "#e8e8e8", minHeight: "200px", padding: "30px", marginLeft: "-20px", marginRight: "-20px", paddingTop: "10px"}}>
         <Grid container spacing={2} >
               <Grid item>
                 <h2>Transcript-level Expression</h2>
@@ -417,6 +417,120 @@ export const GeneCountSection = () => {
         </Grid>
         </Box>
         
+        <Box id="exp_trans" sx={{borderRadius: '0px 0px 12px 12px', backgroundColor: "#f4f7f4", minHeight: "200px", padding: "30px", marginLeft: "-20px", marginRight: "-20px", paddingTop: "10px"}}>
+        <Grid container spacing={2} >
+              <Grid item>
+                <h2>TPM Transcript-level Expression</h2>
+              </Grid>
+              <Grid item>
+                Expression files for mouse and human in HDF5 format. All TPM counts are at Ensembl transcript ID level. TPM values are computed using the effective length estimated by Kallisto.
+              </Grid>
+
+              <Grid item sx={{
+                marginTop: "10px",
+                marginLeft: "20px",
+                width: "340px",
+                '&:hover': {
+                    borderRadius: "18px",
+                    background: 'linear-gradient(to right, transparent, white 1%, white 0%, transparent)',  // Gradient effect
+                    transition: 'background 12.3s ease-in-out',  // Smooth transition
+                  },
+                }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sx={{marginBottom: "-20px", marginTop: "-10px"}}>
+                    <h3>Human</h3>
+                  </Grid>
+      
+                  {files['human_tpm'] ? (
+                      <Grid item key={files['human_tpm'].id}>
+                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['human_tpm'].species}_${files['human_tpm'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                              {`${files['human_tpm'].species}_${files['human_tpm'].data_level}_v${selectedVersion}.h5`}
+                          </a><br />
+                          <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
+                          Date: {new Date(files['human_tpm'].timestamp).toLocaleDateString()}<br/>
+                          Samples: {files['human_tpm'].samples}<br />
+                          Size: {Math.round(files['human_tpm'].file_size / (1024 * 1024 * 1024))} GB<br />
+                          </div>
+                          <Tooltip title={"SHA1 hash"} arrow>
+                              <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label={files['human_tpm'].checksum} sx={{
+                                  marginLeft: "-15px",
+                                  fontSize: "10px",
+                                  maxWidth: 'none',
+                                  overflow: 'visible',
+                                  whiteSpace: 'nowrap'
+                              }} />
+                          </Tooltip>
+                      </Grid>
+                  ):(
+                    <Grid item sx={{
+                        display: 'flex',
+                        alignItems: 'center', // Align items vertically center
+                        color: 'grey',
+                        marginTop: '10px', // Optional: adds some spacing from the top, if needed
+                        paddingBottom: "15px"
+                    }}>
+                        <img src={missingfile} alt="Missing file" style={{ width: '50px', marginRight: '8px' }} />
+                        <span>File not available. Please try a different version.</span>
+                    </Grid>
+                  )}
+
+                </Grid>
+              </Grid>
+      
+              <Grid item  sx={{
+                marginTop: "10px",
+                marginLeft: "20px",
+                width: "300px",
+                '&:hover': {
+                    borderRadius: "18px",
+                    background: 'linear-gradient(to right, transparent, white 1%, white 0%, transparent)',  // Gradient effect
+                    transition: 'background 12.3s ease-in-out',  // Smooth transition
+                  },
+                }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sx={{marginBottom: "-20px", marginTop: "-10px"}}>
+                    <h3>Mouse</h3>
+                  </Grid>
+      
+                  {files['mouse_tpm'] ? (
+                      <Grid item key={files['mouse_tpm'].id}>
+                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['mouse_tpm'].species}_${files['mouse_tpm'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                              {`${files['mouse_tpm'].species}_${files['mouse_tpm'].data_level}_v${selectedVersion}.h5`}
+                          </a><br />
+                          <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
+                          Date: {new Date(files['mouse_tpm'].timestamp).toLocaleDateString()}<br/>
+                          Samples: {files['mouse_tpm'].samples}<br />
+                          Size: {Math.round(files['mouse_tpm'].file_size / (1024 * 1024 * 1024))} GB<br />
+                          </div>
+                          <Tooltip title={"SHA1 hash"} arrow>
+                              <Chip icon={<TagIcon sx={{ fontSize: "16px" }} />} label={files['mouse_tpm'].checksum} sx={{
+                                  marginLeft: "-15px",
+                                  fontSize: "10px",
+                                  maxWidth: 'none',
+                                  overflow: 'visible',
+                                  whiteSpace: 'nowrap'
+                              }} />
+                          </Tooltip>
+                      </Grid>
+                  ):(
+                    <Grid item sx={{
+                        display: 'flex',
+                        alignItems: 'center', // Align items vertically center
+                        color: 'grey',
+                        marginTop: '10px', // Optional: adds some spacing from the top, if needed
+                        paddingBottom: "15px"
+                    }}>
+                        <img src={missingfile} alt="Missing file" style={{ width: '50px', marginRight: '8px' }} />
+                        <span>File not available. Please try a different version.</span>
+                    </Grid>
+                  )}
+
+
+                </Grid>
+              </Grid>
+
+        </Grid>
+        </Box>
 
         <Box
             id="exp_affy"
@@ -806,47 +920,6 @@ export const GeneCountSection = () => {
 
             </Grid>
         </Box>
-
-
-        <Box
-            id="exp_tpm"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={handleClickOpenDialog}
-            sx={{
-                cursor: 'pointer',
-                marginTop: '40px',
-                backgroundColor: '#f4f7f4',
-                padding: '20px',
-                paddingTop: '10px',
-                borderRadius: '12px',
-                transition: 'background-color 0.3s ease-in-out',
-                '&:hover': {
-                backgroundColor: '#d4d7d4',
-                },
-            }}
-            >
-            <Grid container spacing={2}>
-            {isHovered && (
-                <Grid item xs={1} sx={{marginTop: "11px"}}><FontAwesomeIcon icon={faMessage} style={{ fontSize: '44px', color: "white" }} /> </Grid>
-            )}
-                <Grid item xs={10}>
-                    <Grid container>
-                        <Grid item><h2>TPM Transcript-level Expression</h2></Grid>
-                    </Grid>
-                    <Grid
-                    item
-                    xs={10}
-                    
-                >
-                    To request data access please contact our support email.
-                </Grid>
-                </Grid>
-                
-                
-                
-            </Grid>
-            </Box>
 
 
         <RequestRole open={openDialog} onClose={handleCloseDialog} />
