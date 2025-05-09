@@ -27,16 +27,13 @@ export const TaskControl = () => {
   const launchTask = async (taskArn) => {
     setLaunchStatus((prev) => ({ ...prev, [taskArn]: 'loading' }));
     try {
-      // Extract version number or use full ARN (adjust based on backend expectation)
-      const taskParam = taskArn.split(':').pop(); // e.g., '2' from 'archs4packaging_human_gene:2'
-      const response = await fetch(`https://archs4.org/api/pipeline/launchtask?task=${encodeURIComponent(taskParam)}`, {
+      const response = await fetch(`https://archs4.org/api/pipeline/launchtask?task=${encodeURIComponent(taskArn)}`, {
         method: 'GET'
       });
       if (!response.ok) throw new Error('Failed to launch task');
       const result = await response.json();
       setLaunchStatus((prev) => ({ ...prev, [taskArn]: 'success' }));
       setSnackbar({ open: true, message: `Task ${taskArn} launched successfully`, severity: 'success' });
-      // Refresh task status
       const statusResponse = await fetch('https://archs4.org/api/pipeline/taskstatus');
       if (statusResponse.ok) {
         const newData = await statusResponse.json();
@@ -107,7 +104,7 @@ export const TaskControl = () => {
       <Typography variant="h5" className="font-bold mb-4 capitalize" sx={{ fontSize: '1.25rem' }}>
         {categoryName}
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={4}> {/* Increased spacing between cards */}
         {Object.entries(category).map(([taskName, task]) =>
           renderTask(task, taskName.charAt(0).toUpperCase() + taskName.slice(1))
         )}
@@ -134,7 +131,7 @@ export const TaskControl = () => {
   }
 
   return (
-    <Box className="p-12 max-w-7xl mx-auto">
+    <Box className="p-16 max-w-7xl mx-auto"> {/* Increased outer margin */}
       <Typography variant="h4" className="font-bold mb-6 text-center" sx={{ fontSize: '1.5rem' }}>
         ECS Task Status
       </Typography>
