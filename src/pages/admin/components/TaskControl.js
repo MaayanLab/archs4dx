@@ -50,7 +50,7 @@ export const TaskControl = () => {
   };
 
   const renderTask = (task, taskName) => (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={4} sx={{margin: "40px"}}>
       <Card className="shadow-lg">
         <CardContent>
           <Typography variant="subtitle1" className="font-bold mb-2" sx={{ fontSize: '1rem' }}>
@@ -133,7 +133,7 @@ export const TaskControl = () => {
   return (
     <Box className="p-16 max-w-7xl mx-auto"> {/* Increased outer margin */}
       <Typography variant="h4" className="font-bold mb-6 text-center" sx={{ fontSize: '1.5rem' }}>
-        ECS Task Status
+        ECS Tasks for sample discovery and packaging
       </Typography>
       {data.sample_discovery && renderTask(data.sample_discovery, 'Sample Discovery')}
       {data.human && renderCategory(data.human, 'Human')}
