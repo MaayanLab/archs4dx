@@ -425,7 +425,7 @@ export const GeneCountSection = () => {
               <Grid item>
                 Expression files for mouse and human in HDF5 format. All TPM counts are at Ensembl transcript ID level. TPM values are computed using the effective length estimated by Kallisto.
               </Grid>
-
+            
               <Grid item sx={{
                 marginTop: "10px",
                 marginLeft: "20px",

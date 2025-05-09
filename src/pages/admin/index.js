@@ -25,6 +25,7 @@ import { FooterSection } from "../../layout/compactfooter";
 import { useNavigate } from 'react-router-dom';
 import logo from "../../image/archs4vector.svg";
 import { RetryJobs } from "./components/RetryJobs";
+import { TaskControl } from "./components/TaskControl";
 
 const drawerWidth = 344;
 
@@ -93,6 +94,7 @@ export const Admin = () => {
   const isAdminPolicies = params.page === "policies";
   const isAdminUsers = params.page === "users";
   const isAdminRetry = params.page === "retry";
+  const isAdminTasks = params.page === "tasks";
   const {
     data: user,
     isLoading,
@@ -200,6 +202,9 @@ export const Admin = () => {
             )}
             {isAdminRetry && (
               <RetryJobs />
+            )}
+            {isAdminTasks && (
+              <TaskControl />
             )}
             <FooterSection />
           </Main>
