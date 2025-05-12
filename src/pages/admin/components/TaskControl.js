@@ -59,19 +59,21 @@ export const TaskControl = () => {
   };
 
   const renderTask = (task, taskName) => (
-    <Grid item xs={12} sm={6} md={4} sx={{ margin: '24px' }}>
+    <Grid item xs={12} sx={{ margin: '24px' }}>
       <Card sx={{ boxShadow: '0 4px 12px rgba(0,0,0,0.1)', borderRadius: '12px' }}>
-        <CardContent sx={{ padding: '24px' }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: '16px', fontSize: '1.1rem' }}>
-            {taskName}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" sx={{ marginBottom: '12px', fontSize: '0.9rem' }}>
-            <strong>ARN:</strong> {task.task_arn}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" sx={{ marginBottom: '12px', fontSize: '0.9rem' }}>
-            <strong>Created At:</strong> {task.created_at}
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+        <CardContent sx={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: '16px', fontSize: '1.1rem' }}>
+              {taskName}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" sx={{ marginBottom: '12px', fontSize: '0.9rem' }}>
+              <strong>ARN:</strong> {task.task_arn}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" sx={{ marginBottom: '12px', fontSize: '0.9rem' }}>
+              <strong>Created At:</strong> {task.created_at}
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '16px' }}>
             {launchStatus[task.task_arn] === 'loading' ? (
               <CircularProgress size={24} sx={{ color: '#1976d2' }} />
             ) : (
@@ -88,24 +90,24 @@ export const TaskControl = () => {
                 sx={{ fontWeight: 'medium', fontSize: '0.85rem', padding: '4px 8px' }}
               />
             )}
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => launchTask(task.task_arn)}
+              disabled={launchStatus[task.task_arn] === 'loading' || task.status === 'running'}
+              startIcon={
+                launchStatus[task.task_arn] === 'loading' ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : (
+                  <i className="fa fa-rocket"></i>
+                )
+              }
+              sx={{ fontSize: '0.85rem', padding: '8px 16px', borderRadius: '8px' }}
+            >
+              Launch Task
+            </Button>
           </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => launchTask(task.task_arn)}
-            disabled={launchStatus[task.task_arn] === 'loading' || task.status === 'running'}
-            startIcon={
-              launchStatus[task.task_arn] === 'loading' ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : (
-                <i className="fa fa-rocket"></i>
-              )
-            }
-            sx={{ fontSize: '0.85rem', padding: '8px 16px', borderRadius: '8px' }}
-          >
-            Launch Task
-          </Button>
         </CardContent>
       </Card>
     </Grid>
