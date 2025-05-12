@@ -60,10 +60,10 @@ export const TaskControl = () => {
 
   const renderTask = (task, taskName) => (
     <Grid item xs={12} sx={{ margin: '24px' }}>
-      <Card sx={{ boxShadow: '0 4px 12px rgba(0,0,0,0.1)', borderRadius: '12px' }}>
-        <CardContent sx={{ padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Card sx={{ boxShadow: '0 4px 12px rgba(0,0,0,0.1)', borderRadius: '12px', marginLeft: "10px" }}>
+        <CardContent sx={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'right' }}>
           <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '1.1rem' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: '8px', fontSize: '1.1rem' }}>
               {taskName}
             </Typography>
             <Typography variant="body2" color="textSecondary" sx={{ marginBottom: '12px', fontSize: '0.9rem' }}>
@@ -114,8 +114,8 @@ export const TaskControl = () => {
   );
 
   const renderCategory = (category, categoryName) => (
-    <Box sx={{ margin: '22px' }}>
-      <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '8px', fontSize: '1.5rem' }}>
+    <Box sx={{ margin: '22px'}}>
+      <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '1.5rem', textAlign: 'left' }}>
         {categoryName}
       </Typography>
       <Grid container spacing={0}>
