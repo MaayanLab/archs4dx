@@ -85,6 +85,15 @@ export const SidebarContent = ({ user }) => {
             Pipeline Tasks
           </Link>
         </Box>
+        <Box
+          className={
+            splitLocation[2] === "tasks" ? "userButtonActive" : "userButton"
+          }
+        >
+          <Link to="/logs" className="sidebarLink">
+            Logs
+          </Link>
+        </Box>
       </Box>
     </Box>
   );
