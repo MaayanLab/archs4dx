@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Collapse, Button } from "@mui/material";
+import { Grid, Box, Typography, Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import pipeline from "../../../image/pipeline.png";
 import archs4py from "../../../image/archs4py.png";
@@ -6,7 +6,7 @@ import archs4r from "../../../image/archs4r.png";
 import archs4zoo from "../../../image/archs4zoo.png";
 import natcom from "../../../image/naturecomm.png";
 import data from "../../../data/config.json";
-import { fontSize, styled } from "@mui/system";
+import { styled, keyframes as muiKeyframes } from "@mui/system";
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Tooltip } from "@mui/material";
 
@@ -26,7 +26,6 @@ import Skeleton from '@mui/material/Skeleton';
 import { NewsFeed } from "./news-feed";
 import { DonutCharts } from "./donut2";
 import { PipelineStatusChart } from "./recentbarchart.js";
-import { keyframes } from "@mui/system";
 import { Sun } from "./RotatingSun";
 import moon from "../../../image/moonsleeping.svg";
 import tasktime from "../../../image/checklist.svg";
@@ -40,12 +39,65 @@ import { LetterSignup } from "../../../layout/newslettersignup";
 import Menu from '@mui/material/Menu';
 import { useMediaQuery } from '@mui/material';
 
+// Keyframes for the glowing animation
+const glowingAnimation = muiKeyframes`
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+`;
+
+// Styled Paper component with glow effect
+const GlowingPaper = styled(Paper)(({ theme }) => ({
+  position: 'relative',
+  zIndex: 0,
+  borderRadius: '6px',
+  border: '2px solid black',
+  background: '#ffffff',
+  transition: 'transform 0.3s, box-shadow 0.3s',
+  '&:hover': {
+    transform: 'translateY(-5px)',
+    boxShadow: '0px 4px 8px rgba(0,0,0,0.2)',
+  },
+  '&:before': {
+    content: '""',
+    position: 'absolute',
+    top: '-2px',
+    left: '-2px',
+    background: 'linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000)',
+    backgroundSize: '400%',
+    zIndex: -1,
+    filter: 'blur(5px)',
+    width: 'calc(100% + 4px)',
+    height: 'calc(100% + 4px)',
+    animation: `${glowingAnimation} 20s linear infinite`,
+    transition: 'opacity 0.3s ease-in-out',
+    borderRadius: '6px',
+  },
+  '&:after': {
+    zIndex: -1,
+    content: '""',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    background: '#ffffff',
+    left: '0',
+    top: '0',
+    borderRadius: '6px',
+  },
+}));
+
 const MButton = styled(Button)(({ theme }) => ({
   transition: 'color 0.3s ease, background-color 0.3s ease',
   '&:hover': {
     color: '#fff',
     backgroundColor: '#0F7F90',
-  }
+  },
 }));
 
 const Container = styled("div")(({ theme }) => ({
@@ -75,33 +127,33 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const animation = keyframes`
-0% { -webkit-transform: matrix3d(0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-3.4% { -webkit-transform: matrix3d(0.658, 0, 0, 0, 0, 0.703, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.658, 0, 0, 0, 0, 0.703, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-4.7% { -webkit-transform: matrix3d(0.725, 0, 0, 0, 0, 0.8, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.725, 0, 0, 0, 0, 0.8, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-6.81% { -webkit-transform: matrix3d(0.83, 0, 0, 0, 0, 0.946, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.83, 0, 0, 0, 0, 0.946, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-9.41% { -webkit-transform: matrix3d(0.942, 0, 0, 0, 0, 1.084, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.942, 0, 0, 0, 0, 1.084, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-10.21% { -webkit-transform: matrix3d(0.971, 0, 0, 0, 0, 1.113, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.971, 0, 0, 0, 0, 1.113, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-13.61% { -webkit-transform: matrix3d(1.062, 0, 0, 0, 0, 1.166, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.062, 0, 0, 0, 0, 1.166, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-14.11% { -webkit-transform: matrix3d(1.07, 0, 0, 0, 0, 1.165, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.07, 0, 0, 0, 0, 1.165, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-17.52% { -webkit-transform: matrix3d(1.104, 0, 0, 0, 0, 1.12, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.104, 0, 0, 0, 0, 1.12, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-18.72% { -webkit-transform: matrix3d(1.106, 0, 0, 0, 0, 1.094, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.106, 0, 0, 0, 0, 1.094, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-21.32% { -webkit-transform: matrix3d(1.098, 0, 0, 0, 0, 1.035, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.098, 0, 0, 0, 0, 1.035, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-24.32% { -webkit-transform: matrix3d(1.075, 0, 0, 0, 0, 0.98, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.075, 0, 0, 0, 0, 0.98, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-25.23% { -webkit-transform: matrix3d(1.067, 0, 0, 0, 0, 0.969, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.067, 0, 0, 0, 0, 0.969, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-29.03% { -webkit-transform: matrix3d(1.031, 0, 0, 0, 0, 0.948, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.031, 0, 0, 0, 0, 0.948, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-29.93% { -webkit-transform: matrix3d(1.024, 0, 0, 0, 0, 0.949, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.024, 0, 0, 0, 0, 0.949, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-35.54% { -webkit-transform: matrix3d(0.99, 0, 0, 0, 0, 0.981, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.99, 0, 0, 0, 0, 0.981, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-36.74% { -webkit-transform: matrix3d(0.986, 0, 0, 0, 0, 0.989, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.986, 0, 0, 0, 0, 0.989, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-41.04% { -webkit-transform: matrix3d(0.98, 0, 0, 0, 0, 1.011, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.98, 0, 0, 0, 0, 1.011, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-44.44% { -webkit-transform: matrix3d(0.983, 0, 0, 0, 0, 1.016, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.983, 0, 0, 0, 0, 1.016, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-52.15% { -webkit-transform: matrix3d(0.996, 0, 0, 0, 0, 1.003, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.996, 0, 0, 0, 0, 1.003, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-59.86% { -webkit-transform: matrix3d(1.003, 0, 0, 0, 0, 0.995, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.003, 0, 0, 0, 0, 0.995, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-63.26% { -webkit-transform: matrix3d(1.004, 0, 0, 0, 0, 0.996, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.004, 0, 0, 0, 0, 0.996, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-75.28% { -webkit-transform: matrix3d(1.001, 0, 0, 0, 0, 1.002, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.001, 0, 0, 0, 0, 1.002, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-85.49% { -webkit-transform: matrix3d(0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-90.69% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
-100% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+const animation = muiKeyframes`
+  0% { transform: matrix3d(0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  3.4% { transform: matrix3d(0.658, 0, 0, 0, 0, 0.703, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.7% { transform: matrix3d(0.725, 0, 0, 0, 0, 0.8, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  6.81% { transform: matrix3d(0.83, 0, 0, 0, 0, 0.946, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  9.41% { transform: matrix3d(0.942, 0, 0, 0, 0, 1.084, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  10.21% { transform: matrix3d(0.971, 0, 0, 0, 0, 1.113, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  13.61% { transform: matrix3d(1.062, 0, 0, 0, 0, 1.166, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  14.11% { transform: matrix3d(1.07, 0, 0, 0, 0, 1.165, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  17.52% { transform: matrix3d(1.104, 0, 0, 0, 0, 1.12, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  18.72% { transform: matrix3d(1.106, 0, 0, 0, 0, 1.094, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  21.32% { transform: matrix3d(1.098, 0, 0, 0, 0, 1.035, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  24.32% { transform: matrix3d(1.075, 0, 0, 0, 0, 0.98, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  25.23% { transform: matrix3d(1.067, 0, 0, 0, 0, 0.969, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  29.03% { transform: matrix3d(1.031, 0, 0, 0, 0, 0.948, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  29.93% { transform: matrix3d(1.024, 0, 0, 0, 0, 0.949, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  35.54% { transform: matrix3d(0.99, 0, 0, 0, 0, 0.981, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  36.74% { transform: matrix3d(0.986, 0, 0, 0, 0, 0.989, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  41.04% { transform: matrix3d(0.98, 0, 0, 0, 0, 1.011, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  44.44% { transform: matrix3d(0.983, 0, 0, 0, 0, 1.016, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  52.15% { transform: matrix3d(0.996, 0, 0, 0, 0, 1.003, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  59.86% { transform: matrix3d(1.003, 0, 0, 0, 0, 0.995, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  63.26% { transform: matrix3d(1.004, 0, 0, 0, 0, 0.996, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  75.28% { transform: matrix3d(1.001, 0, 0, 0, 0, 1.002, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  85.49% { transform: matrix3d(0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  90.69% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  100% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
 `;
 
 const translations = {
@@ -124,17 +176,23 @@ const AnimatedButton = styled("button")`
 
 export const Jumbotron = () => {
   const [jobQueue, setJobQueue] = useState([]);
-  const [logStats, setLogStats] = useState({"download":0,"download_custom":0,"genesearch":0});
-  const [logTasks, setLogTasks] = useState({"pipeline/packaging_human_gene":{"date":"2025-01-21 22:56:10.753990","entry":"complete"},"pipeline/packaging_human_transcript":{"date":"2025-01-21 22:55:46.813525","entry":"complete"},"pipeline/packaging_mouse_gene":{"date":"2025-01-21 22:56:01.305827","entry":"complete"},"pipeline/packaging_mouse_transcript":{"date":"2025-01-21 22:55:54.521404","entry":"complete"},"pipeline/samplediscovery":{"date":"2025-01-21 22:55:23.484645","entry":"234"}});
+  const [logStats, setLogStats] = useState({ download: 0, download_custom: 0, genesearch: 0 });
+  const [logTasks, setLogTasks] = useState({
+    "pipeline/packaging_human_gene": { date: "2025-01-21 22:56:10.753990", entry: "complete" },
+    "pipeline/packaging_human_transcript": { date: "2025-01-21 22:55:46.813525", entry: "complete" },
+    "pipeline/packaging_mouse_gene": { date: "2025-01-21 22:56:01.305827", entry: "complete" },
+    "pipeline/packaging_mouse_transcript": { date: "2025-01-21 22:55:54.521404", entry: "complete" },
+    "pipeline/samplediscovery": { date: "2025-01-21 22:55:23.484645", entry: "234" },
+  });
   const [pipelineOverview, setPipelineOverview] = useState({});
   const [pipelineStatus, setPipelineStatus] = useState([]);
-  const itemRefs = useRef([]); // Create ref array for each element
+  const itemRefs = useRef([]);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('md'));
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  
+
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
@@ -173,7 +231,7 @@ export const Jumbotron = () => {
       try {
         const response = await fetch('https://archs4.org/api/pipeline/jobqueue');
         if (!response.ok) {
-          throw new Error('could not load jobqueue');
+          throw new Error('Could not load job queue');
         }
         const data = await response.json();
         setJobQueue(data["jobs"]);
@@ -186,7 +244,7 @@ export const Jumbotron = () => {
       try {
         const response = await fetch('https://archs4.org/api/pipeline/overview');
         if (!response.ok) {
-          throw new Error('could not load overview');
+          throw new Error('Could not load overview');
         }
         const data = await response.json();
         setPipelineOverview(data["status"]);
@@ -199,7 +257,7 @@ export const Jumbotron = () => {
       try {
         const response = await fetch('https://archs4.org/api/log/pipeline/tasks');
         if (!response.ok) {
-          throw new Error('could not load tasks');
+          throw new Error('Could not load tasks');
         }
         const data = await response.json();
         setLogTasks(data["log"]);
@@ -212,7 +270,7 @@ export const Jumbotron = () => {
       try {
         const response = await fetch('https://archs4.org/api/pipeline/status');
         if (!response.ok) {
-          throw new Error('could not load pipeline status');
+          throw new Error('Could not load pipeline status');
         }
         const data = await response.json();
         setPipelineStatus(data["status"]);
@@ -225,12 +283,12 @@ export const Jumbotron = () => {
       try {
         const response = await fetch('https://archs4.org/api/log/categorycounts');
         if (!response.ok) {
-          throw new Error('could not load pipeline status');
+          throw new Error('Could not load log stats');
         }
         const data = await response.json();
         setLogStats(data["counts"]);
       } catch (error) {
-        console.error('Error fetching pipeline status:', error);
+        console.error('Error fetching log stats:', error);
       }
     };
 
@@ -285,7 +343,7 @@ export const Jumbotron = () => {
           display: "flex",
           minHeight: "460px",
           alignContent: "center",
-          boxShadow: 'inset 0px -4px 8px rgba(0,0,0,0.2)'
+          boxShadow: 'inset 0px -4px 8px rgba(0,0,0,0.2)',
         }}
       >
         <Grid
@@ -307,21 +365,23 @@ export const Jumbotron = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Box
             sx={{ maxWidth: "900px", marginTop: "20px" }}
             className="jumbotronText"
           >
-            <Typography variant="subtitle2" className="headerTitle"
+            <Typography
+              variant="subtitle2"
+              className="headerTitle"
               sx={{
                 textAlign: "center",
-                fontSize: " 30px",
+                fontSize: "30px",
                 lineHeight: "32px",
                 letterSpacing: "0px",
                 marginBottom: "20px",
-                marginTop: "30px"
+                marginTop: "30px",
               }}
             >
               ARCHS4: Massive Mining of Publicly Available RNA-seq Data from Human and Mouse
@@ -334,7 +394,10 @@ export const Jumbotron = () => {
                 overflow: 'hidden',
               }}
             >
-              <object data="pipeline.svg" type="image/svg+xml" id="fadeInObject"
+              <object
+                data="pipeline.svg"
+                type="image/svg+xml"
+                id="fadeInObject"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -346,25 +409,13 @@ export const Jumbotron = () => {
             </Box>
 
             <Typography
-              className="headerSubtitle"
-              sx={{
-                textAlign: "center",
-                fontSize: " 24px",
-                lineHeight: "32px",
-                letterSpacing: "0px",
-                marginBottom: "20px",
-              }}
-            >
-            </Typography>
-
-            <Typography
               className="headerAbout"
               sx={{
                 textAlign: "center",
                 fontSize: "16px",
                 fontWeight: "400",
                 lineHeight: "20px",
-                letterSpacing: " 0.15px",
+                letterSpacing: "0.15px",
               }}
             >
               <AnimatedButton
@@ -372,17 +423,22 @@ export const Jumbotron = () => {
                 className="btn btn-info"
                 onClick={() => window.location.href = 'data'}
                 style={{
-                  width: "300px", fontSize: "16px", height: "40px", backgroundColor: "#5bc0de", color: "white",
+                  width: "300px",
+                  fontSize: "16px",
+                  height: "40px",
+                  backgroundColor: "#5bc0de",
+                  color: "white",
                   border: "1px solid transparent",
-                  borderRadius: "5px", fontWeight: "800",
+                  borderRadius: "5px",
+                  fontWeight: "800",
                   cursor: "pointer",
-                  transition: "background-color 0.3s ease"
+                  transition: "background-color 0.3s ease",
                 }}
                 id="animation-target"
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#48a9c7"}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#5bc0de"}
                 sx={{
-                  backgroundColor: "#5bc0de"
+                  backgroundColor: "#5bc0de",
                 }}
               >
                 Get Started
@@ -391,7 +447,7 @@ export const Jumbotron = () => {
 
             <Grid container spacing={2} sx={{ marginY: '40px' }}>
               <Grid item xs={12} md={7}>
-                <Typography variant="body1" component="div" sx={{margin: { xs: "6px", sm: "10px" },}}>
+                <Typography variant="body1" component="div" sx={{ margin: { xs: "6px", sm: "10px" } }}>
                   <h2>About</h2>
                   All RNA-seq and ChIP-seq sample and signature search (ARCHS4) is a resource that provides access to gene and transcript counts uniformly processed from all human and mouse RNA-seq experiments from 
                   the <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">Gene Expression Omnibus (GEO)</a> and 
@@ -405,7 +461,7 @@ export const Jumbotron = () => {
                   Please acknowledge ARCHS4 in your publications by citing the following reference:<br />
                   Lachmann A, Torre D, Keenan AB, et al. Massive mining of publicly available RNA-seq data from human and mouse. Nature Communications 9. Article number: 1366 (2018), doi:10.1038/s41467-018-03751-6
 
-                  <a href="https://www.nature.com/articles/s41467-018-03751-6" target="_blank" style={{marginLeft: "5px"}}> 
+                  <a href="https://www.nature.com/articles/s41467-018-03751-6" target="_blank" style={{ marginLeft: "5px" }}> 
                     <span className="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
                     <img
                       src={natcom}
@@ -416,8 +472,8 @@ export const Jumbotron = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} md={5} >
-                <h2 sx={{margin: { xs: "8px !important", sm: "10px" },}}>News</h2>
+              <Grid item xs={12} md={5}>
+                <h2 style={{ margin: { xs: "8px", sm: "10px" } }}>News</h2>
                 <Paper elevation={3} sx={{ padding: '10px' }}>
                   <NewsFeed />
                 </Paper>
@@ -426,31 +482,28 @@ export const Jumbotron = () => {
           </Box>
         </Grid>
 
-        <Grid container sx={{ 
-          backgroundImage: 'url(congruent_pentagon2.png)', 
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          padding: "20px",
-        }}>
-          {/* Adjusted Grid Items for 2x2 on lg, 1x4 on sm and below */}
+        <Grid
+          container
+          sx={{ 
+            backgroundImage: 'url(congruent_pentagon2.png)', 
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            padding: "20px",
+          }}
+        >
           <Grid item xs={12} sm={12} md={6} lg={3}>
-            <Paper 
+            <GlowingPaper 
               key={0}
               ref={el => (itemRefs.current[0] = el)}
               className="fade-in"
               sx={{
                 margin: { sm: "5px", md: "20px" },
                 padding: "20px",
-                transition: 'transform 0.3s, box-shadow 0.3s',
-                '&:hover': {
-                  transform: 'translateY(-5px)',
-                  boxShadow: '0px 4px 8px rgba(0,0,0,0.2)',
-                },
               }}
             >
-              <LetterSignup/>
-            </Paper>
+              <LetterSignup />
+            </GlowingPaper>
           </Grid>
 
           <Grid item xs={12} sm={12} md={6} lg={3}>
@@ -507,7 +560,7 @@ export const Jumbotron = () => {
             <Paper 
               key={3}
               ref={el => (itemRefs.current[3] = el)}
-              className='fade-in'
+              className="fade-in"
               sx={{ 
                 margin: { sm: "5px", md: "20px" }, 
                 marginTop: "20px !important", 
@@ -602,7 +655,7 @@ export const Jumbotron = () => {
               </Box>
             </Paper>
           </Grid>
-                    
+
           <Paper 
             key={5}
             ref={el => (itemRefs.current[5] = el)}
@@ -613,7 +666,7 @@ export const Jumbotron = () => {
               marginTop: "30px !important",
               minHeight: "460px",
               display: "flex",
-              flexDirection: "column"
+              flexDirection: "column",
             }}
           >
             <Grid 
@@ -621,7 +674,7 @@ export const Jumbotron = () => {
               xs={12} 
               sx={{
                 flex: "1 0 auto",
-                padding: "0px"
+                padding: "0px",
               }}
             >
               <Grid container>
@@ -629,7 +682,7 @@ export const Jumbotron = () => {
                   item 
                   xs={12} 
                   sx={{
-                    height: "400px"
+                    height: "400px",
                   }}
                 >
                   <iframe 
@@ -637,7 +690,7 @@ export const Jumbotron = () => {
                     style={{
                       width: "100%",
                       height: "100%",
-                      border: "none"
+                      border: "none",
                     }}
                   ></iframe>
                 </Grid>
@@ -653,14 +706,14 @@ export const Jumbotron = () => {
                   flexDirection: { xs: "column", sm: "row" },
                   gap: { xs: "4px", sm: "8px" },
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
-                <span><b>Gene lookups</b> {logStats["genesearch"]+9232056}</span>
+                <span><b>Gene lookups</b> {logStats["genesearch"] + 9232056}</span>
                 <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>|</Box>
-                <span><b>Bulk file downloads</b> {logStats["download"]+11892}</span>
+                <span><b>Bulk file downloads</b> {logStats["download"] + 11892}</span>
                 <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>|</Box>
-                <span><b>Sample search downloads</b> {logStats["metadownload"]+9344}</span>
+                <span><b>Sample search downloads</b> {logStats["metadownload"] + 9344}</span>
               </Typography>
             </Grid>
           </Paper>
@@ -700,7 +753,7 @@ export const Jumbotron = () => {
                       direction: 'column',
                       position: isSmallScreen ? { vertical: 'middle', horizontal: 'right' } : { vertical: 'top', horizontal: 'right' },
                       padding: 0,
-                    }
+                    },
                   }}
                   height={300}
                   borderRadius={3}
@@ -708,8 +761,8 @@ export const Jumbotron = () => {
                     label: 'Count', 
                     labelStyle: { 
                       transform: 'translateX(-70px) rotate(-90deg)', 
-                      transformOrigin: 'left center' 
-                    }
+                      transformOrigin: 'left center',
+                    },
                   }]}
                   margin={isSmallScreen 
                     ? { left: 50, right: 20, top: 30, bottom: 30 }
@@ -720,7 +773,7 @@ export const Jumbotron = () => {
                     "& .MuiChartsLegend-series text": {
                       fontSize: "1.0em !important",
                       marginBottom: "20px !important",
-                    }
+                    },
                   }}
                 />
               ) : (
@@ -738,7 +791,7 @@ export const Jumbotron = () => {
                 container 
                 spacing={2} 
                 sx={{ 
-                  alignItems: { sm: 'stretch' }
+                  alignItems: { sm: 'stretch' },
                 }}
               >
                 <Grid 
@@ -752,7 +805,7 @@ export const Jumbotron = () => {
                       display: "flex", 
                       padding: "10px", 
                       width: "100%", 
-                      height: { sm: '100%' }
+                      height: { sm: '100%' },
                     }}
                   >
                     <div style={{ width: '100px', height: '100px', marginLeft: "10px", marginRight: "10px" }}>
@@ -796,7 +849,7 @@ export const Jumbotron = () => {
                       padding: "10px", 
                       width: "100%", 
                       textAlign: "left",
-                      height: { sm: '100%' }
+                      height: { sm: '100%' },
                     }}
                   >
                     <GaugeChart 
@@ -804,7 +857,7 @@ export const Jumbotron = () => {
                       nrOfLevels={20} 
                       percent={0.2}
                       textColor={"black"}
-                      hideText={"true"}
+                      hideText={true}
                       style={{ width: "110px", marginLeft: "6px", marginRight: "25px" }} 
                     />
                     <Typography>
@@ -830,7 +883,7 @@ export const Jumbotron = () => {
                         display: 'flex', 
                         alignItems: 'center', 
                         cursor: 'pointer',
-                        justifyContent: 'space-between'
+                        justifyContent: 'space-between',
                       }}
                       onClick={() => setIsExpanded(!isExpanded)}
                     >
@@ -866,7 +919,7 @@ export const Jumbotron = () => {
                       }}
                     >
                       <Box sx={{ paddingLeft: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginLeft: "-12px" }}>
-                        <Typography variant="subtitle4" sx={{ fontSize: "22px" }} gutterBottom>
+                        <Typography variant="subtitle2" sx={{ fontSize: "22px" }} gutterBottom>
                           ARCHS4 Task History
                         </Typography>
                       </Box>
@@ -891,7 +944,7 @@ export const Jumbotron = () => {
                             </Box>
                             {pipelineOverview && (
                               <Box sx={{ mb: 1.5 }}>
-                                <Typography variant="subtitle4" gutterBottom sx={{ fontSize: "22px" }}>
+                                <Typography variant="subtitle2" gutterBottom sx={{ fontSize: "22px" }}>
                                   Pipeline Overview
                                 </Typography>
                                 <Typography variant="body1"><strong>Waiting:</strong> {pipelineOverview.waiting}</Typography>
