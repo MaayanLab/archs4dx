@@ -299,7 +299,7 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
         </Hidden>
 
         
-      {(roles.includes("uploader") || roles.includes("admin")) && (
+      {(roles.includes("uploader") || roles.includes("admin") || roles.length == 0) && (
       
 <>
       <MButton
@@ -348,12 +348,15 @@ export const UserMenu = ({ sidebarOpen, toggleSidebar, landingPage=false }) => {
             </Link>
           </MenuItem>
 
+          {roles.includes("uploader") && (
           <MenuItem onClick={handleCloseMenu}>
             <Link to="/myfiles" style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
               <FontAwesomeIcon icon={faUpload} style={{ marginRight: '14px', color: "#1ebcbb" }} />
               Upload Files
             </Link>
           </MenuItem>
+          )}
+
           {roles.includes("admin") && (
             <>
             <MenuItem onClick={handleCloseMenu}>

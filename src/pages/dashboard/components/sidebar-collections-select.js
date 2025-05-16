@@ -38,7 +38,7 @@ export const SidebarCollectionsSelect = () => {
           <ListItemButton>
             <ListItemText>
               <StyledFormGroup>
-                {collections.slice(1).map(({ id, name, files }) => (
+                {collections.map(({ id, name, files }) => (
                   <SidebarCollectionItem key={id} id={id} name={name} files={files} />
                 ))}
               </StyledFormGroup>
