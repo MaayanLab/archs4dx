@@ -113,8 +113,8 @@ export const GeneInfo = ({ geneName }) => {
   // Function to abbreviate authors
   const formatAuthors = (authors) => {
     if (!authors) return "Unknown Authors";
-    const authorList = authors.split(", ");
-    if (authorList.length <= 3) return authors;
+    const authorList = authors.map(a => a.fullName);
+    if (authorList.length <= 3) return `${authorList.join(", ")}`;
     return `${authorList.slice(0, 3).join(", ")}, et al.`;
   };
 
@@ -175,7 +175,7 @@ export const GeneInfo = ({ geneName }) => {
                               {citations.map((citation) => (
                                 <li key={citation.pmid} style={{ marginBottom: "10px" }}>
                                   <Typography>
-                                   <strong>[{citation.number}]</strong> {formatAuthors(citation.authors)} <strong>{citation.title}</strong> <em>{citation.journal} ({citation.year})</em>
+                                  <strong>[{citation.number}]</strong> {formatAuthors(citation.authors)} <strong>{citation.title}</strong> <em>{citation.journal} ({citation.year})</em>
                                     {citation.doi && (
                                       <>
                                         {" "}—{" "}
