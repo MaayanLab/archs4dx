@@ -316,7 +316,7 @@ export const GeneCorrelation = ({ geneName }) => {
             <Box>
               <Typography variant="h6">Gene Correlation</Typography>
               <Typography>
-                Find top correlated genes for gene {geneName}. The correlation calculation can be constrained with metadata information. The service will extract up to 2000 samples matching the metadata search term and retrieve the top k genes and their Pearson correlation score.
+                Find top correlated genes for gene {geneName}. The correlation calculation can be constrained with metadata information. The service will extract up to 200 samples matching the metadata search term and retrieve the top k genes and their Pearson correlation score.
                 Enter a free-text description of the samples you want to analyze. The Regex Wizard will use AI to suggest a regular expression (regex) based on your input. You can then modify the suggested regex manually if needed. 
               </Typography>
             </Box>
