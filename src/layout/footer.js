@@ -140,7 +140,7 @@ export const FooterSection = () => {
                 fontWeight: 400,
               }}
             >
-              © 2025 {data.general.projectname}. All rights reserved.
+              © 2026 {data.general.projectname}. All rights reserved.
             </Typography>
           </Grid>
 
