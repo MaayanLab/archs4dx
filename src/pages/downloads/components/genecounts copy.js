@@ -163,7 +163,7 @@ export const GeneCountSection = () => {
                   </Grid>
       
                   <Grid item>
-                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/human_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
+                    <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/human_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
                     {`human_gene_v${version}.h5`}
                     </a><br />
                     Date: 8-24-2024<br />
@@ -196,7 +196,7 @@ export const GeneCountSection = () => {
                   </Grid>
       
                   <Grid item>
-                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/mouse_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
+                    <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/mouse_gene_v${version}.h5`} onClick={(event) => writeLog(event, "download")}>
                     {`mouse_gene_v${version}.h5`}
                     </a><br />
                     Date: 8-24-2024<br />

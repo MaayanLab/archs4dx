@@ -215,7 +215,7 @@ export const GeneCountSection = () => {
 
                             {files['human_gene'] ? (
                                 <Grid item key={files['human_gene'].id}>
-                                    <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['human_gene'].species}_${files['human_gene'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                                    <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/${files['human_gene'].species}_${files['human_gene'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
                                         {`${files['human_gene'].species}_${files['human_gene'].data_level}_v${selectedVersion}.h5`}
                                     </a><br />
                                     <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
@@ -264,7 +264,7 @@ export const GeneCountSection = () => {
       
                   {files['mouse_gene'] ? (
                       <Grid item key={files['mouse_gene'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['mouse_gene'].species}_${files['mouse_gene'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                          <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/${files['mouse_gene'].species}_${files['mouse_gene'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
                               {`${files['mouse_gene'].species}_${files['mouse_gene'].data_level}_v${selectedVersion}.h5`}
                           </a><br />
                           <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
@@ -328,7 +328,7 @@ export const GeneCountSection = () => {
       
                   {files['human_transcript'] ? (
                       <Grid item key={files['human_transcript'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['human_transcript'].species}_${files['human_transcript'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                          <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/${files['human_transcript'].species}_${files['human_transcript'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
                               {`${files['human_transcript'].species}_${files['human_transcript'].data_level}_v${selectedVersion}.h5`}
                           </a><br />
                           <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
@@ -379,7 +379,7 @@ export const GeneCountSection = () => {
       
                   {files['mouse_transcript'] ? (
                       <Grid item key={files['mouse_transcript'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['mouse_transcript'].species}_${files['mouse_transcript'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                          <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/${files['mouse_transcript'].species}_${files['mouse_transcript'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
                               {`${files['mouse_transcript'].species}_${files['mouse_transcript'].data_level}_v${selectedVersion}.h5`}
                           </a><br />
                           <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
@@ -443,7 +443,7 @@ export const GeneCountSection = () => {
       
                   {files['human_tpm'] ? (
                       <Grid item key={files['human_tpm'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['human_tpm'].species}_${files['human_tpm'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                          <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/${files['human_tpm'].species}_${files['human_tpm'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
                               {`${files['human_tpm'].species}_${files['human_tpm'].data_level}_v${selectedVersion}.h5`}
                           </a><br />
                           <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>
@@ -494,7 +494,7 @@ export const GeneCountSection = () => {
       
                   {files['mouse_tpm'] ? (
                       <Grid item key={files['mouse_tpm'].id}>
-                          <a href={`https://s3.dev.maayanlab.cloud/archs4/files/${files['mouse_tpm'].species}_${files['mouse_tpm'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
+                          <a href={`https://s3.k8s.maayanlab.cloud/archs4/files/${files['mouse_tpm'].species}_${files['mouse_tpm'].data_level}_v${selectedVersion}.h5`} onClick={(event) => writeLog(event, "download")}>
                               {`${files['mouse_tpm'].species}_${files['mouse_tpm'].data_level}_v${selectedVersion}.h5`}
                           </a><br />
                           <div style={{fontSize: "13px", lineHeight: "1.2", marginBottom: "6px"}}>

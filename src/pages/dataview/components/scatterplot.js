@@ -183,7 +183,7 @@ export const ScatterPlot = ({
   // Fetch embedding CSV data
   const fetchData = async () => {
     try {
-      const url = `https://s3.dev.maayanlab.cloud/archs4/files/${speciesSelection}_embedding_${isSampleView ? "samples" : "genes"}_${is3D ? "3d" : "2d"}.csv.gz`;
+      const url = `https://s3.k8s.maayanlab.cloud/archs4/files/${speciesSelection}_embedding_${isSampleView ? "samples" : "genes"}_${is3D ? "3d" : "2d"}.csv.gz`;
       const response = await fetch(url);
       const contentLength = response.headers.get("Content-Length");
       const reader = response.body.getReader();

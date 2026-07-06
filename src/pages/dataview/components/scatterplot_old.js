@@ -92,7 +92,7 @@ export const ScatterPlot =  ({ sampleMode, speciesMode, query, newSearchResult }
    const fetchData = async () => {
     try {
       const response = await fetch(
-        `https://s3.dev.maayanlab.cloud/archs4/files/${speciesSelection}_embedding_${isSampleView ? "samples" : "genes"}_${is3D ? "3d" : "2d"}.csv.gz`
+        `https://s3.k8s.maayanlab.cloud/archs4/files/${speciesSelection}_embedding_${isSampleView ? "samples" : "genes"}_${is3D ? "3d" : "2d"}.csv.gz`
       );
       
       // Get the total length from headers if available

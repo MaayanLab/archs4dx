@@ -111,7 +111,7 @@ export const HelpPage = () => {
 library("rhdf5") # can be installed using Bioconductor
 destination_file = "human_matrix_v9.h5"
 extracted_expression_file = "GSM2679484_expression_matrix.tsv"
-url = "https://s3.dev.maayanlab.cloud/archs4/files/human_gene_v2.latest.h5"
+url = "https://s3.k8s.maayanlab.cloud/archs4/files/human_gene_v2.latest.h5"
 
 # Check if gene expression file was already downloaded, if not in current directory download file form repository
 if (!file.exists(destination_file)) {
